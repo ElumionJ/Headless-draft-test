@@ -22,5 +22,6 @@ export {SortFilter} from './SortFilter';
 export {Grid} from './Grid';
 export {FeaturedProducts} from './FeaturedProducts';
 export {AddToCartButton} from './AddToCartButton';
+export {HeroBanner} from './HeroBaner';
 // Sue me
 export * from './Icon';

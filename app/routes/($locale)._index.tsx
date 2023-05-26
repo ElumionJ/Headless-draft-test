@@ -7,7 +7,12 @@ import type {
 } from '@shopify/hydrogen/storefront-api-types';
 import {AnalyticsPageType} from '@shopify/hydrogen';
 
-import {ProductSwimlane, FeaturedCollections, Hero} from '~/components';
+import {
+  ProductSwimlane,
+  FeaturedCollections,
+  Hero,
+  HeroBanner,
+} from '~/components';
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
 import {getHeroPlaceholder} from '~/lib/placeholders';
 import {seoPayload} from '~/lib/seo.server';
@@ -42,10 +47,64 @@ export async function loader({params, context}: LoaderArgs) {
     variables: {handle: 'freestyle'},
   });
 
+  const IMAGE_QUERY = `
+  query ImageUrl($id: ID!) {
+    node(id: $id) {
+      id
+      ... on MediaImage {
+        image {
+          url
+        }
+      }
+    }
+  }
+`;
+
+  const heroBannerMetaData = await context.storefront.query(`
+  #graphql
+  query {
+    metaobjects(type: "hero_baner", first: 15) {
+      nodes {
+        fields {
+          type
+          key
+          value
+        }
+      }
+    }
+
+  }`);
+
+  const metaObjectsArr = await Promise.all(
+    heroBannerMetaData.metaobjects.nodes.map(async (element: any) => {
+      const parsedMetaobject = {};
+      await Promise.all(
+        element.fields.map(async (el: any) => {
+          if (el.type === 'file_reference') {
+            const imgUrl = await context.storefront.query(IMAGE_QUERY, {
+              variables: {id: el.value},
+            });
+            parsedMetaobject[el.key] = {...el, value: imgUrl.node.image.url};
+            return;
+          } else if (el.type === 'number_integer') {
+            parsedMetaobject[el.key] = {
+              ...el,
+              value: isNaN(+el.value) ? 0 : +el.value,
+            };
+            return;
+          }
+          parsedMetaobject[el.key] = {...el};
+        }),
+      );
+      return parsedMetaobject;
+    }),
+  );
+
   const seo = seoPayload.home();
 
   return defer(
     {
+      metaObjectsArr,
       shop,
       primaryHero: hero,
       // These different queries are separated to illustrate how 3rd party content
@@ -111,6 +170,7 @@ export default function Homepage() {
     tertiaryHero,
     featuredCollections,
     featuredProducts,
+    metaObjectsArr,
   } = useLoaderData<typeof loader>();
 
   // TODO: skeletons vs placeholders
@@ -118,6 +178,13 @@ export default function Homepage() {
 
   return (
     <>
+      <ul>
+        {metaObjectsArr.map((el: any) => (
+          <li className="w-[100%]" key={el.value}>
+            <HeroBanner data={el} />
+          </li>
+        ))}
+      </ul>
       {primaryHero && (
         <Hero {...primaryHero} height="full" top loading="eager" />
       )}
