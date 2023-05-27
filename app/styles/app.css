@@ -180,3 +180,29 @@ shop-pay-button {
     }
   }
 }
+
+.bannerFirst {
+  display: flex;
+  justify-content: center;
+  background-size: cover;
+  height: 50vh;
+}
+
+.bannerFirst-image {
+  width: 100%;
+}
+
+.bannerFirst-block {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.bannerFirst-block-title {
+  display: block;
+  font-size: 45px;
+}
+
+.bannerFirst-block-description {
+  display: block;
+}

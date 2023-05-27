@@ -11,7 +11,7 @@ interface Props {
 }
 
 export function HeroBanner({data}: Props) {
-  console.log(data);
+  // console.log(data);
   return (
     <div className="flex my-[50px] h-[500px] w-[100%] justify-center mb-[100px]">
       <div className="w-[100%] relative flex flex-col ">

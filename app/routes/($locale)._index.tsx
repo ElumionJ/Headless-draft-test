@@ -12,6 +12,7 @@ import {
   FeaturedCollections,
   Hero,
   HeroBanner,
+  HeroBannerFirst,
 } from '~/components';
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
 import {getHeroPlaceholder} from '~/lib/placeholders';
@@ -75,6 +76,46 @@ export async function loader({params, context}: LoaderArgs) {
 
   }`);
 
+  const heroBannerMetaDataFirst = await context.storefront.query(`
+  #graphql
+  query {
+    metaobjects(type: "hero_banner_first", first: 15) {
+      nodes {
+        fields {
+          type
+          key
+          value
+        }
+      }
+    }
+
+  }`);
+
+  const metaObjectsArrFirst = await Promise.all(
+    heroBannerMetaDataFirst.metaobjects.nodes.map(async (element: any) => {
+      const parsedMetaobject = {};
+      await Promise.all(
+        element.fields.map(async (el: any) => {
+          if (el.type === 'file_reference') {
+            const imgUrl = await context.storefront.query(IMAGE_QUERY, {
+              variables: {id: el.value},
+            });
+            parsedMetaobject[el.key] = {...el, value: imgUrl.node.image.url};
+            return;
+          } else if (el.type === 'number_integer') {
+            parsedMetaobject[el.key] = {
+              ...el,
+              value: isNaN(+el.value) ? 0 : +el.value,
+            };
+            return;
+          }
+          parsedMetaobject[el.key] = {...el};
+        }),
+      );
+      return parsedMetaobject;
+    }),
+  );
+
   const metaObjectsArr = await Promise.all(
     heroBannerMetaData.metaobjects.nodes.map(async (element: any) => {
       const parsedMetaobject = {};
@@ -100,11 +141,14 @@ export async function loader({params, context}: LoaderArgs) {
     }),
   );
 
+  console.log(metaObjectsArrFirst[0]);
+
   const seo = seoPayload.home();
 
   return defer(
     {
       metaObjectsArr,
+      metaObjectsArrFirst,
       shop,
       primaryHero: hero,
       // These different queries are separated to illustrate how 3rd party content
@@ -171,6 +215,7 @@ export default function Homepage() {
     featuredCollections,
     featuredProducts,
     metaObjectsArr,
+    metaObjectsArrFirst,
   } = useLoaderData<typeof loader>();
 
   // TODO: skeletons vs placeholders
@@ -178,6 +223,8 @@ export default function Homepage() {
 
   return (
     <>
+      {metaObjectsArrFirst && <HeroBannerFirst data={metaObjectsArrFirst[0]} />}
+
       <ul>
         {metaObjectsArr.map((el: any) => (
           <li className="w-[100%]" key={el.value}>
