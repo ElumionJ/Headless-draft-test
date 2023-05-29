@@ -91,6 +91,33 @@ export async function loader({params, context}: LoaderArgs) {
 
   }`);
 
+  const heroBannerMetaDataAll = await context.storefront.query(`
+  #graphql
+  query {
+  bannerMetaobjects: metaobjects(type: "hero_banner_first", first: 15) {
+    nodes {
+      fields {
+        value
+        key
+      }
+    }
+  }
+  designerMetaobjects: metaobjects(type: "hero_baner", first: 15) {
+    nodes {
+      fields {
+        value
+        key
+      }
+    }
+  }
+}`);
+
+  // const metaObjectsArrAll = await Promise.all(
+  //   for (const key in heroBannerMetaDataAll) {
+  //     console.log(`Key: ${key}`);
+  //   }
+  // );
+
   const metaObjectsArrFirst = await Promise.all(
     heroBannerMetaDataFirst.metaobjects.nodes.map(async (element: any) => {
       const parsedMetaobject = {};
@@ -141,7 +168,7 @@ export async function loader({params, context}: LoaderArgs) {
     }),
   );
 
-  console.log(metaObjectsArrFirst[0]);
+  console.log(heroBannerMetaDataAll);
 
   const seo = seoPayload.home();
 
@@ -223,7 +250,7 @@ export default function Homepage() {
 
   return (
     <>
-      {metaObjectsArrFirst && <HeroBannerFirst data={metaObjectsArrFirst[0]} />}
+      <HeroBannerFirst data={metaObjectsArrFirst[0]} />
 
       <ul>
         {metaObjectsArr.map((el: any) => (
