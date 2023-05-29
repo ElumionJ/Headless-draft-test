@@ -14,6 +14,7 @@ export function CustomData({data}: Props) {
       className={`flex gap-4 ${
         data.revert.value === 'true' ? 'flex-row' : 'flex-row-reverse'
       }`}
+      style={{marginBottom: `${data.margin_bottom.value}px`}}
     >
       <div>
         <img src={data.image.value} alt={data.name.value} />

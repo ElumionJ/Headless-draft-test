@@ -11,7 +11,7 @@ interface Props {
 export function HeroBannerFirst({data}: Props) {
   const backgroundStyle = {
     backgroundImage: `url(${data.image.value})`,
-    // marginBottom: `${data.margin.value}px`,
+    marginBottom: `${data.margin.value}px`,
     padding: `${data.padding.value}px`,
   };
 

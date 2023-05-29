@@ -13,7 +13,10 @@ interface Props {
 export function HeroBanner({data}: Props) {
   // console.log(data);
   return (
-    <div className="flex my-[50px] h-[500px] w-[100%] justify-center mb-[100px]">
+    <div
+      className="flex h-[500px] w-[100%] justify-center"
+      style={{marginBottom: `${data.margin_bottom.value}px`}}
+    >
       <div className="w-[100%] relative flex flex-col ">
         <img
           className="w-[100%] h-[100%] object-cover"
