@@ -13,6 +13,7 @@ import {
   Hero,
   HeroBanner,
   HeroBannerFirst,
+  CustomData,
 } from '~/components';
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
 import {getHeroPlaceholder} from '~/lib/placeholders';
@@ -141,12 +142,60 @@ export async function loader({params, context}: LoaderArgs) {
     }),
   );
 
-  console.log(metaObjectsArrFirst[0]);
+  //Kate
+
+  const customData = await context.storefront.query(`
+  #graphql
+
+    query {
+      shop {
+        name
+      }
+      metaobjects(type: "developers", first: 5) {
+        nodes {
+          handle
+          id
+          fields {
+            key
+            value
+            type
+          }
+        }
+      }
+    }`);
+
+  const metaObjectsKate = await Promise.all(
+    customData.metaobjects.nodes.map(async (element: any) => {
+      const parsedMetaobject = {};
+      await Promise.all(
+        element.fields.map(async (el: any) => {
+          if (el.type === 'file_reference') {
+            const imgUrl = await context.storefront.query(IMAGE_QUERY, {
+              variables: {id: el.value},
+            });
+            parsedMetaobject[el.key] = {...el, value: imgUrl.node.image.url};
+            return;
+          } else if (el.type === 'number_integer') {
+            parsedMetaobject[el.key] = {
+              ...el,
+              value: isNaN(+el.value) ? 0 : +el.value,
+            };
+            return;
+          }
+          parsedMetaobject[el.key] = {...el};
+        }),
+      );
+      return parsedMetaobject;
+    }),
+  );
+
+  // console.log(metaObjectsArrFirst[0]);
 
   const seo = seoPayload.home();
 
   return defer(
     {
+      metaObjectsKate,
       metaObjectsArr,
       metaObjectsArrFirst,
       shop,
@@ -216,6 +265,8 @@ export default function Homepage() {
     featuredProducts,
     metaObjectsArr,
     metaObjectsArrFirst,
+
+    metaObjectsKate,
   } = useLoaderData<typeof loader>();
 
   // TODO: skeletons vs placeholders
@@ -232,6 +283,9 @@ export default function Homepage() {
           </li>
         ))}
       </ul>
+
+      <CustomData data={metaObjectsKate[0]} />
+
       {primaryHero && (
         <Hero {...primaryHero} height="full" top loading="eager" />
       )}
