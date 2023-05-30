@@ -25,5 +25,6 @@ export {AddToCartButton} from './AddToCartButton';
 export {HeroBanner} from './HeroBaner';
 export {HeroBannerFirst} from './HeroBannerFirst';
 export {CustomData} from './CustomData';
+export {ProductQuantity} from './ProductQuantity';
 // Sue me
 export * from './Icon';

@@ -1,4 +1,11 @@
-import {type ReactNode, useRef, Suspense, useMemo} from 'react';
+import {
+  type ReactNode,
+  useRef,
+  Suspense,
+  useMemo,
+  useState,
+  useEffect,
+} from 'react';
 import {Disclosure, Listbox} from '@headlessui/react';
 import {defer, type LoaderArgs} from '@shopify/remix-oxygen';
 import {
@@ -33,6 +40,7 @@ import {
   Link,
   AddToCartButton,
   Button,
+  ProductQuantity,
 } from '~/components';
 import {getExcerpt} from '~/lib/utils';
 import {seoPayload} from '~/lib/seo.server';
@@ -180,6 +188,25 @@ export function ProductForm() {
   const [currentSearchParams] = useSearchParams();
   const {location} = useNavigation();
 
+  const [quantity, setQuantity] = useState<number>(1); //---------
+
+  const changeQuantity = (action: 'plus' | 'minus') => {
+    if (action === 'plus') {
+      setQuantity((prev) => Math.max(1, prev + 1));
+    } else if (action === 'minus') {
+      setQuantity((prev) => Math.max(1, prev - 1));
+    }
+  };
+
+  useEffect(() => {
+    if (!product.totalInventory) return;
+    if (product.totalInventory >= quantity) {
+      console.log('AVAILABLE');
+    } else {
+      console.log('Not AVAILABLE');
+    }
+  }, [quantity]);
+
   /**
    * We update `searchParams` with in-flight request data from `location` (if available)
    * to create an optimistic UI, e.g. check the product option before the
@@ -216,6 +243,7 @@ export function ProductForm() {
    * of add to cart if there is none returned from the loader.
    * A developer can opt out of this, too.
    */
+  // product.selectedVariant?.quantityAvailable;
   const selectedVariant = product.selectedVariant ?? firstVariant;
   const isOutOfStock = !selectedVariant?.availableForSale;
 
@@ -226,7 +254,7 @@ export function ProductForm() {
 
   const productAnalytics: ShopifyAnalyticsProduct = {
     ...analytics.products[0],
-    quantity: 1,
+    quantity,
   };
 
   return (
@@ -243,40 +271,48 @@ export function ProductForm() {
                 <Text>Sold out</Text>
               </Button>
             ) : (
-              <AddToCartButton
-                lines={[
-                  {
-                    merchandiseId: selectedVariant.id,
-                    quantity: 1,
-                  },
-                ]}
-                variant="primary"
-                data-test="add-to-cart"
-                analytics={{
-                  products: [productAnalytics],
-                  totalValue: parseFloat(productAnalytics.price),
-                }}
-              >
-                <Text
-                  as="span"
-                  className="flex items-center justify-center gap-2"
-                >
-                  <span>Add to Cart</span> <span>·</span>{' '}
-                  <Money
-                    withoutTrailingZeros
-                    data={selectedVariant?.price!}
-                    as="span"
-                  />
-                  {isOnSale && (
-                    <Money
-                      withoutTrailingZeros
-                      data={selectedVariant?.compareAtPrice!}
+              <div className="flex gap-[16px]">
+                <ProductQuantity
+                  quantity={quantity}
+                  changeQuantity={changeQuantity}
+                />
+                <div className="w-[100%]">
+                  <AddToCartButton
+                    lines={[
+                      {
+                        merchandiseId: selectedVariant.id,
+                        quantity,
+                      },
+                    ]}
+                    variant="primary"
+                    data-test="add-to-cart"
+                    analytics={{
+                      products: [productAnalytics],
+                      totalValue: parseFloat(productAnalytics.price),
+                    }}
+                  >
+                    <Text
                       as="span"
-                      className="opacity-50 strike"
-                    />
-                  )}
-                </Text>
-              </AddToCartButton>
+                      className="flex items-center justify-center gap-2"
+                    >
+                      <span>Add to Cart</span> <span>·</span>{' '}
+                      <Money
+                        withoutTrailingZeros
+                        data={selectedVariant?.price!}
+                        as="span"
+                      />
+                      {isOnSale && (
+                        <Money
+                          withoutTrailingZeros
+                          data={selectedVariant?.compareAtPrice!}
+                          as="span"
+                          className="opacity-50 strike"
+                        />
+                      )}
+                    </Text>
+                  </AddToCartButton>
+                </div>
+              </div>
             )}
             {!isOutOfStock && (
               <ShopPayButton
@@ -540,6 +576,7 @@ const PRODUCT_QUERY = `#graphql
     $selectedOptions: [SelectedOptionInput!]!
   ) @inContext(country: $country, language: $language) {
     product(handle: $handle) {
+      totalInventory
       id
       title
       vendor
