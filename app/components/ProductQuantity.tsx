@@ -7,7 +7,7 @@ interface Props {
 
 export function ProductQuantity({quantity, changeQuantity}: Props) {
   return (
-    <div className="flex w-fit items-center gap-2 border-[1px] border-[#000]">
+    <div className="flex w-fit relative items-center gap-2 border-[1px] border-[#000] rounded">
       <button
         type="button"
         data-minus
@@ -17,7 +17,10 @@ export function ProductQuantity({quantity, changeQuantity}: Props) {
         }}
       ></button>
 
-      <span data-quantity className="">
+      <span
+        data-quantity
+        className="w-[20px] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-center"
+      >
         {quantity}
       </span>
       <button
