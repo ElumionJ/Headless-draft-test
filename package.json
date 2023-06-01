@@ -25,6 +25,7 @@
     "@shopify/remix-oxygen": "^1.0.7",
     "clsx": "^1.2.1",
     "cross-env": "^7.0.3",
+    "dompurify": "^3.0.3",
     "graphql": "^16.6.0",
     "graphql-tag": "^2.12.6",
     "isbot": "^3.6.5",
