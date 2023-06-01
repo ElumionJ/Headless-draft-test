@@ -210,7 +210,7 @@ export default function Product() {
   return (
     <>
       <Section>
-        <div className=" justify-center !gap-[63px] !flex px-0 md:px-8 lg:px-12 ">
+        <div className=" justify-center !gap-[63px] !flex px-0 md:px-8 lg:px-12 gt-l:flex-col  gt-l:items-center">
           <div className=" px-[4px] max-w-[325px]">
             <Heading as="h1" className="text-5xl  mb-8">
               {title}
@@ -222,7 +222,7 @@ export default function Product() {
               ></p>
             )}
           </div>
-          <div className="w-[350px]">
+          <div className="w-[320px] gt-ssm:w-[280px]">
             <ProductGallery
               media={media.nodes}
               className="w-full lg:col-span-2"
@@ -230,7 +230,7 @@ export default function Product() {
           </div>
 
           <div className="sticky md:-mb-nav md:top-nav md:-translate-y-nav md:pt-nav hiddenScroll md:overflow-y-scroll">
-            <section className="flex flex-col w-full max-w-xl gap-8 p-6 md:mx-auto md:max-w-sm md:px-0">
+            <section className="flex flex-col w-full max-w-xl gap-8 p-6 md:mx-auto md:max-w-sm md:px-0 gt-ssm:p-1">
               {vendor && (
                 <div className="flex gap-[8px] items-end">
                   <span className="text-xl text-[#000] uppercase">Brand:</span>
@@ -370,7 +370,7 @@ export function ProductForm() {
                 <Text>Sold out</Text>
               </Button>
             ) : (
-              <div className="flex gap-[16px]">
+              <div className="flex gap-[16px] gt-xl:flex-col">
                 <ProductQuantity
                   quantity={quantity}
                   changeQuantity={changeQuantity}

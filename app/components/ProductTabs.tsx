@@ -35,7 +35,7 @@ export const ProductTabs = ({
     <div data-tabs-container>
       <div
         data-tabs-btns
-        className=" border-t-[1px] border-[#000] border-solid "
+        className=" border-t-[1px] border-[#000] border-solid gt-l:flex-col gt-l:flex"
       >
         <button
           data-name="description"
@@ -44,7 +44,7 @@ export const ProductTabs = ({
             activeTab === 'description'
               ? 'block bg-[#4d4d4d] text-[#f2f2f2]'
               : 'none'
-          } w-[280px] text-center py-3 inline-block text-[20px] uppercase`}
+          } w-[280px] text-center py-3 inline-block text-[20px] uppercase gt-l:w-full gt-l:text-center gt-l:border-y-[1px] gt-l:border-y-[#00000063]`}
         >
           DESCRIPTION
         </button>
@@ -55,7 +55,7 @@ export const ProductTabs = ({
             activeTab === 'shipping'
               ? 'block bg-[#4d4d4d] text-[#f2f2f2]'
               : 'none'
-          } w-[280px] text-center py-3 inline-block text-[20px] uppercase`}
+          } w-[280px] text-center py-3 inline-block text-[20px] uppercase gt-l:w-full gt-l:text-center gt-l:border-y-[1px] gt-l:border-y-[#00000063]`}
         >
           SHIPPING INFORMATION
         </button>
@@ -66,7 +66,7 @@ export const ProductTabs = ({
             activeTab === 'payments'
               ? 'block bg-[#4d4d4d] text-[#f2f2f2]'
               : 'none'
-          } w-[280px] text-center py-3 inline-block text-[20px] uppercase`}
+          } w-[280px] text-center py-3 inline-block text-[20px] uppercase gt-l:w-full gt-l:text-center gt-l:border-y-[1px] gt-l:border-y-[#00000063]`}
         >
           Payments
         </button>
@@ -99,9 +99,9 @@ function Description({
   title: string;
 }) {
   return (
-    <div className="flex  gap-[170px] ">
+    <div className="flex  gap-[170px] gt-l:flex-col gt-l:gap-[40px]">
       {attributes?.length > 0 && (
-        <div className="min-w-[500px]">
+        <div className="min-w-[500px] gt-l:w-full gt-l:min-w-0">
           <h3 className=" text-[24px] uppercase mb-[24px]">
             {attributesTitle}
           </h3>
@@ -109,12 +109,12 @@ function Description({
             {attributes?.map((el) => (
               <li
                 key={el.key.value}
-                className="flex gap-[30px] w-full border-b-[#D0D0D0] border-b-[1px] py-[24px] last:border-b-0"
+                className="flex gap-[30px] w-full border-b-[#D0D0D0] border-b-[1px] py-[24px] last:border-b-0 gt-m:grid gt-m:grid-cols-2"
               >
-                <h4 className="min-w-[180px] text-[16px] font-bold leading-[150%]">
+                <h4 className="min-w-[180px] gt-l:w-full gt-l:text-[14px] gt-l:min-w-0 text-[16px] font-bold leading-[150%]">
                   {el.title.value}
                 </h4>
-                <p className=" w-full text-[16px] leading-[150%]">
+                <p className=" w-full text-[16px] gt-l:text-[14px] leading-[150%]">
                   {el.meaning.value}
                 </p>
               </li>
@@ -132,9 +132,9 @@ function Description({
 
 function ShippingInfo({text}: {text: string}) {
   return (
-    <div>
+    <div className=" gt-l:w-full">
       <h3 className="text-[24px] uppercase mb-[24px]">Shipping Info</h3>
-      <p className=" text-[16px] leading-[150%]">{text}</p>
+      <p className=" text-[16px] leading-[150%] gt-l:text-[14px]">{text}</p>
     </div>
   );
 }
