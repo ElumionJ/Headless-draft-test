@@ -1,7 +1,9 @@
 import {Fragment, useState} from 'react';
 import {Dialog, Transition} from '@headlessui/react';
+import {useAsyncValue} from '@remix-run/react';
 
 import {Heading, IconClose} from '~/components';
+import {Cart} from '~/components';
 
 /**
  * Drawer component that opens on user click.
@@ -11,6 +13,7 @@ import {Heading, IconClose} from '~/components';
  * @param openFrom - right, left
  * @param children - react children node.
  */
+
 export function Drawer({
   heading,
   open,
@@ -28,7 +31,7 @@ export function Drawer({
     right: 'translate-x-full',
     left: '-translate-x-full',
   };
-
+  const cart = useAsyncValue();
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -60,29 +63,36 @@ export function Drawer({
                 leaveFrom="translate-x-0"
                 leaveTo={offScreen[openFrom]}
               >
-                <Dialog.Panel className="w-screen max-w-lg text-left align-middle transition-all transform shadow-xl h-screen-dynamic bg-contrast">
+                {/* bg-[#FFFEFA] */}
+                <Dialog.Panel className="w-screen max-w-lg text-left align-middle transition-all transform shadow-xl h-screen-dynamic bg-[#FFFEFA]">
                   <header
-                    className={`sticky top-0 flex items-center px-6 h-nav sm:px-8 md:px-12 ${
+                    className={`text-black sticky top-0 flex items-center px-6 h-nav sm:px-8 md:px-12 border-b-[1px] border-black mb-8 ${
                       heading ? 'justify-between' : 'justify-end'
                     }`}
                   >
                     {heading !== null && (
                       <Dialog.Title>
                         <Heading as="span" size="lead" id="cart-contents">
-                          {heading}
+                          {/* {heading}  */}
+                          <span className="uppercase">
+                            Your bag ({cart?.totalQuantity})
+                          </span>
                         </Heading>
                       </Dialog.Title>
                     )}
+
                     <button
                       type="button"
-                      className="p-4 -m-4 transition text-primary hover:text-primary/50"
+                      className="p-4 -m-4 text-black transition hover:text-primary/30"
                       onClick={onClose}
                       data-test="close-cart"
                     >
                       <IconClose aria-label="Close panel" />
                     </button>
                   </header>
-                  {children}
+                  <div className="grid">
+                    <Cart layout="drawer" onClose={onClose} cart={cart} />
+                  </div>
                 </Dialog.Panel>
               </Transition.Child>
             </div>
