@@ -161,6 +161,7 @@ export async function action({request, context}: ActionArgs) {
   }
 
   const {cart, errors} = result;
+  console.log({cart});
   return json(
     {
       cart,
