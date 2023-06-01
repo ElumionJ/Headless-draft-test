@@ -46,6 +46,7 @@ import {
   Button,
   ProductQuantity,
   ProductTabs,
+  SwiperImages,
 } from '~/components';
 import {getExcerpt} from '~/lib/utils';
 import {seoPayload} from '~/lib/seo.server';
@@ -223,10 +224,11 @@ export default function Product() {
             )}
           </div>
           <div className="w-[320px] gt-ssm:w-[280px]">
-            <ProductGallery
+            {/* <ProductGallery
               media={media.nodes}
               className="w-full lg:col-span-2"
-            />
+            /> */}
+            <SwiperImages media={media.nodes} />
           </div>
 
           <div className="sticky md:-mb-nav md:top-nav md:-translate-y-nav md:pt-nav hiddenScroll md:overflow-y-scroll">
