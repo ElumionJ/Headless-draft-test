@@ -11,12 +11,20 @@ interface Attribute {
 }
 
 interface Props {
-  attributes: Attribute[];
+  attributes?: Attribute[];
+  attributesTitle?: string;
   description: string;
   title: string;
+  shippingInfoText: string;
 }
 
-export const ProductTabs = ({attributes, title, description}: Props) => {
+export const ProductTabs = ({
+  attributes,
+  title,
+  description,
+  attributesTitle,
+  shippingInfoText,
+}: Props) => {
   type Tabs = 'description' | 'shipping' | 'payments';
   const [activeTab, setActiveTab] = useState<Tabs>('description');
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -63,42 +71,77 @@ export const ProductTabs = ({attributes, title, description}: Props) => {
           Payments
         </button>
       </div>
-      <div className="border-y-[1px] border-[#000]">
+      <div className="border-y-[1px] border-[#000] min-h-[360px] py-[50px]">
         {activeTab === 'description' && (
           <Description
             attributes={attributes}
             description={description}
             title={title}
+            attributesTitle={attributesTitle}
           />
         )}
+        {activeTab === 'shipping' && <ShippingInfo text={shippingInfoText} />}
+        {activeTab === 'payments' && <Payments />}
       </div>
     </div>
   );
 };
 
 function Description({
-  attributes,
+  attributes = [],
   description,
   title,
+  attributesTitle,
 }: {
-  attributes: Attribute[];
+  attributes?: Attribute[];
+  attributesTitle?: string;
   description: string;
   title: string;
 }) {
   return (
-    <div>
-      <ul>
-        {attributes.map((el) => (
-          <li key={el.key.value}>
-            <h4>{el.title.value}</h4>
-            <p>{el.meaning.value}</p>
-          </li>
-        ))}
-      </ul>
-      <div>
-        <h3>{title}</h3>
-        <p>{description}</p>
+    <div className="flex  gap-[170px] ">
+      {attributes?.length > 0 && (
+        <div className="min-w-[500px]">
+          <h3 className=" text-[24px] uppercase mb-[24px]">
+            {attributesTitle}
+          </h3>
+          <ul className="w-full">
+            {attributes?.map((el) => (
+              <li
+                key={el.key.value}
+                className="flex gap-[30px] w-full border-b-[#D0D0D0] border-b-[1px] py-[24px] last:border-b-0"
+              >
+                <h4 className="min-w-[180px] text-[16px] font-bold leading-[150%]">
+                  {el.title.value}
+                </h4>
+                <p className=" w-full text-[16px] leading-[150%]">
+                  {el.meaning.value}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <div className="">
+        <h3 className="text-[24px] pb-[24px] uppercase">About {title}</h3>
+        <p className="text-[16px] leading-[150%]">{description}</p>
       </div>
+    </div>
+  );
+}
+
+function ShippingInfo({text}: {text: string}) {
+  return (
+    <div>
+      <h3 className="text-[24px] uppercase mb-[24px]">Shipping Info</h3>
+      <p className=" text-[16px] leading-[150%]">{text}</p>
+    </div>
+  );
+}
+function Payments() {
+  return (
+    <div>
+      <h3 className="text-[24px] uppercase mb-[24px]">Payments</h3>
     </div>
   );
 }
