@@ -26,5 +26,6 @@ export {HeroBanner} from './HeroBaner';
 export {HeroBannerFirst} from './HeroBannerFirst';
 export {CustomData} from './CustomData';
 export {ProductQuantity} from './ProductQuantity';
+export {ProductTabs} from './ProductTabs';
 // Sue me
 export * from './Icon';
