@@ -28,6 +28,7 @@ import type {
   ProductConnection,
   Metafield,
   Metaobject,
+  MetaobjectField,
 } from '@shopify/hydrogen/storefront-api-types';
 
 import {
@@ -52,9 +53,19 @@ import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
 import type {Storefront} from '~/lib/type';
 import {routeHeaders, CACHE_SHORT} from '~/data/cache';
 
-const DESCRIPTION_METAFIELD_VARIABLE = {
-  key: 'attributes',
-  namespace: 'custom',
+const DESCRIPTION_METAFIELD_VARIABLE = [
+  {
+    key: 'attributes',
+    namespace: 'custom',
+  },
+  {
+    namespace: 'custom',
+    key: 'attributes_title',
+  },
+];
+const SHIPPING_INFO_METAOBJECT_VARIABLE = {
+  handle: 'shipping-information-wndmvoiu',
+  type: 'shipping_information',
 };
 
 export const headers = routeHeaders;
@@ -80,6 +91,7 @@ export async function loader({params, request, context}: LoaderArgs) {
       country: context.storefront.i18n.country,
       language: context.storefront.i18n.language,
       identifiers: DESCRIPTION_METAFIELD_VARIABLE,
+      handleShippingInfo: SHIPPING_INFO_METAOBJECT_VARIABLE,
     },
   });
 
@@ -87,18 +99,28 @@ export async function loader({params, request, context}: LoaderArgs) {
     throw new Response('product', {status: 404});
   }
 
+  const shippingInfo = await context.storefront.query(SHIPPING_INFO_QUERY, {
+    variables: {
+      handleShippingInfo: SHIPPING_INFO_METAOBJECT_VARIABLE,
+    },
+  });
+  const shippingInfoText = shippingInfo.metaobject.fields.find(
+    (el: MetaobjectField) => el.key === 'text',
+  ).value;
+
   const attributesMetaobjectsString = product.metafields.find(
     (el) => el?.key === 'attributes',
+  )?.value;
+
+  const attributesTitleString = product.metafields.find(
+    (el) => el?.key === 'attributes_title',
   )?.value;
 
   const attributesMetaobjectsArr: string[] | [] = JSON.parse(
     attributesMetaobjectsString || '[]',
   );
   const metaobjectsPromises = attributesMetaobjectsArr.map(async (el) => {
-    return context.storefront.query<{
-      product: ProductType & {selectedVariant?: ProductVariant};
-      shop: Shop;
-    }>(
+    return context.storefront.query(
       `query($id:ID!){
       metaobject(id:$id){
         fields{
@@ -144,6 +166,8 @@ export async function loader({params, request, context}: LoaderArgs) {
 
   return defer(
     {
+      shippingInfoText,
+      attributesTitleString,
       attributesArr,
       product,
       shop,
@@ -166,8 +190,14 @@ export async function loader({params, request, context}: LoaderArgs) {
 }
 
 export default function Product() {
-  const {product, shop, recommended, attributesArr} =
-    useLoaderData<typeof loader>();
+  const {
+    product,
+    shop,
+    recommended,
+    attributesArr,
+    attributesTitleString,
+    shippingInfoText,
+  } = useLoaderData<typeof loader>();
   const {media, title, vendor, descriptionHtml} = product;
   const {shippingPolicy, refundPolicy} = shop;
   const descriptionRef = useRef(null);
@@ -229,6 +259,8 @@ export default function Product() {
         </div>
         <div className="mt-24">
           <ProductTabs
+            shippingInfoText={shippingInfoText}
+            attributesTitle={attributesTitleString}
             attributes={attributesArr}
             description={product.description}
             title={product.title}
@@ -635,6 +667,19 @@ const PRODUCT_VARIANT_FRAGMENT = `#graphql
   }
 `;
 
+const SHIPPING_INFO_QUERY = `
+  #graphql
+  query ShippingInfo($handleShippingInfo: MetaobjectHandleInput) {
+    metaobject(handle: $handleShippingInfo) {
+      fields {
+        key
+        type
+        value
+      }
+    }
+  }
+`;
+
 const PRODUCT_QUERY = `#graphql
   query Product(
     $country: CountryCode
@@ -642,6 +687,7 @@ const PRODUCT_QUERY = `#graphql
     $handle: String!
     $selectedOptions: [SelectedOptionInput!]!
     $identifiers: [HasMetafieldsIdentifier!]!
+    
   ) @inContext(country: $country, language: $language) {
     product(handle: $handle) {
       totalInventory
@@ -655,6 +701,7 @@ const PRODUCT_QUERY = `#graphql
         name
         values
       }
+
       metafields(identifiers: $identifiers) {
         id
         value
@@ -695,6 +742,8 @@ const PRODUCT_QUERY = `#graphql
   }
   ${MEDIA_FRAGMENT}
   ${PRODUCT_VARIANT_FRAGMENT}
+
+
 `;
 
 const RECOMMENDED_PRODUCTS_QUERY = `#graphql
