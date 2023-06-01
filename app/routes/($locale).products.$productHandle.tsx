@@ -6,6 +6,7 @@ import {
   useState,
   useEffect,
 } from 'react';
+import DOMPurify from 'dompurify';
 import {Disclosure, Listbox} from '@headlessui/react';
 import {defer, type LoaderArgs} from '@shopify/remix-oxygen';
 import {
@@ -25,6 +26,8 @@ import type {
   Product as ProductType,
   Shop,
   ProductConnection,
+  Metafield,
+  Metaobject,
 } from '@shopify/hydrogen/storefront-api-types';
 
 import {
@@ -41,12 +44,18 @@ import {
   AddToCartButton,
   Button,
   ProductQuantity,
+  ProductTabs,
 } from '~/components';
 import {getExcerpt} from '~/lib/utils';
 import {seoPayload} from '~/lib/seo.server';
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
 import type {Storefront} from '~/lib/type';
 import {routeHeaders, CACHE_SHORT} from '~/data/cache';
+
+const DESCRIPTION_METAFIELD_VARIABLE = {
+  key: 'attributes',
+  namespace: 'custom',
+};
 
 export const headers = routeHeaders;
 
@@ -70,12 +79,49 @@ export async function loader({params, request, context}: LoaderArgs) {
       selectedOptions,
       country: context.storefront.i18n.country,
       language: context.storefront.i18n.language,
+      identifiers: DESCRIPTION_METAFIELD_VARIABLE,
     },
   });
 
   if (!product?.id) {
     throw new Response('product', {status: 404});
   }
+
+  const attributesMetaobjectsString = product.metafields.find(
+    (el) => el?.key === 'attributes',
+  )?.value;
+
+  const attributesMetaobjectsArr: string[] | [] = JSON.parse(
+    attributesMetaobjectsString || '[]',
+  );
+  const metaobjectsPromises = attributesMetaobjectsArr.map(async (el) => {
+    return context.storefront.query<{
+      product: ProductType & {selectedVariant?: ProductVariant};
+      shop: Shop;
+    }>(
+      `query($id:ID!){
+      metaobject(id:$id){
+        fields{
+          value
+          key
+        }
+      }
+    }`,
+      {
+        variables: {
+          id: el,
+        },
+      },
+    );
+  });
+  const metaobjectsArr = await Promise.all(metaobjectsPromises);
+  const attributesArr = metaobjectsArr.map((meta) => {
+    const obj = {};
+    (meta.metaobject as unknown as Metaobject).fields.forEach((field) => {
+      obj[field.key] = {...field};
+    });
+    return obj;
+  });
 
   const recommended = getRecommendedProducts(context.storefront, product.id);
   const firstVariant = product.variants.nodes[0];
@@ -98,6 +144,7 @@ export async function loader({params, request, context}: LoaderArgs) {
 
   return defer(
     {
+      attributesArr,
       product,
       shop,
       storeDomain: shop.primaryDomain.url,
@@ -119,57 +166,73 @@ export async function loader({params, request, context}: LoaderArgs) {
 }
 
 export default function Product() {
-  const {product, shop, recommended} = useLoaderData<typeof loader>();
+  const {product, shop, recommended, attributesArr} =
+    useLoaderData<typeof loader>();
   const {media, title, vendor, descriptionHtml} = product;
   const {shippingPolicy, refundPolicy} = shop;
+  const descriptionRef = useRef(null);
 
+  useEffect(() => {
+    const sanitizedHtml = DOMPurify.sanitize(descriptionHtml);
+    (descriptionRef.current as unknown as HTMLParagraphElement).innerHTML =
+      sanitizedHtml;
+  }, []);
   return (
     <>
-      <Section className=" justify-center !gap-[63px] !flex px-0 md:px-8 lg:px-12 ">
-        <div className=" px-[4px] max-w-[325px]">
-          <Heading as="h1" className="text-5xl  mb-8">
-            {title}
-          </Heading>
-          {descriptionHtml && (
-            <p
-              className="text-[16px] text-[#333333]"
-              dangerouslySetInnerHTML={{__html: descriptionHtml}}
-            ></p>
-          )}
-        </div>
-        <div className="w-[350px]">
-          <ProductGallery
-            media={media.nodes}
-            className="w-full lg:col-span-2"
-          />
-        </div>
-
-        <div className="sticky md:-mb-nav md:top-nav md:-translate-y-nav md:pt-nav hiddenScroll md:overflow-y-scroll">
-          <section className="flex flex-col w-full max-w-xl gap-8 p-6 md:mx-auto md:max-w-sm md:px-0">
-            {vendor && (
-              <div className="flex gap-[8px] items-end">
-                <span className="text-xl text-[#000] uppercase">Brand:</span>
-                <span className="text-[#333]">{vendor}</span>
-              </div>
+      <Section>
+        <div className=" justify-center !gap-[63px] !flex px-0 md:px-8 lg:px-12 ">
+          <div className=" px-[4px] max-w-[325px]">
+            <Heading as="h1" className="text-5xl  mb-8">
+              {title}
+            </Heading>
+            {descriptionHtml && (
+              <p
+                ref={descriptionRef}
+                className="text-[16px] text-[#333333]"
+              ></p>
             )}
-            <ProductForm />
-            <div className="grid gap-4 py-4">
-              {shippingPolicy?.body && (
-                <ProductDetail
-                  title="Shipping"
-                  content={getExcerpt(shippingPolicy.body)}
-                  learnMore={`/policies/${shippingPolicy.handle}`}
-                />
+          </div>
+          <div className="w-[350px]">
+            <ProductGallery
+              media={media.nodes}
+              className="w-full lg:col-span-2"
+            />
+          </div>
+
+          <div className="sticky md:-mb-nav md:top-nav md:-translate-y-nav md:pt-nav hiddenScroll md:overflow-y-scroll">
+            <section className="flex flex-col w-full max-w-xl gap-8 p-6 md:mx-auto md:max-w-sm md:px-0">
+              {vendor && (
+                <div className="flex gap-[8px] items-end">
+                  <span className="text-xl text-[#000] uppercase">Brand:</span>
+                  <span className="text-[#333]">{vendor}</span>
+                </div>
               )}
-              {refundPolicy?.body && (
-                <ProductDetail
-                  title="Returns"
-                  content={getExcerpt(refundPolicy.body)}
-                  learnMore={`/policies/${refundPolicy.handle}`}
-                />
-              )}
-            </div>
-          </section>
+              <ProductForm />
+              <div className="grid gap-4 py-4">
+                {shippingPolicy?.body && (
+                  <ProductDetail
+                    title="Shipping"
+                    content={getExcerpt(shippingPolicy.body)}
+                    learnMore={`/policies/${shippingPolicy.handle}`}
+                  />
+                )}
+                {refundPolicy?.body && (
+                  <ProductDetail
+                    title="Returns"
+                    content={getExcerpt(refundPolicy.body)}
+                    learnMore={`/policies/${refundPolicy.handle}`}
+                  />
+                )}
+              </div>
+            </section>
+          </div>
+        </div>
+        <div className="mt-24">
+          <ProductTabs
+            attributes={attributesArr}
+            description={product.description}
+            title={product.title}
+          />
         </div>
       </Section>
       <Suspense fallback={<Skeleton className="h-32" />}>
@@ -578,6 +641,7 @@ const PRODUCT_QUERY = `#graphql
     $language: LanguageCode
     $handle: String!
     $selectedOptions: [SelectedOptionInput!]!
+    $identifiers: [HasMetafieldsIdentifier!]!
   ) @inContext(country: $country, language: $language) {
     product(handle: $handle) {
       totalInventory
@@ -590,6 +654,11 @@ const PRODUCT_QUERY = `#graphql
       options {
         name
         values
+      }
+      metafields(identifiers: $identifiers) {
+        id
+        value
+        key
       }
       selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
         ...ProductVariantFragment
