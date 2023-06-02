@@ -390,20 +390,13 @@ function Badge({
 
   //Kate
   return isHydrated ? (
-    <button
-      // onClick={openCart}
-      className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
-    >
-      {BadgeCounter}
-    </button>
-  ) : (
     <Link
       to="/cart"
       className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
     >
       {BadgeCounter}
     </Link>
-  );
+  ) : null;
 }
 
 function Footer({menu}: {menu?: EnhancedMenu}) {
