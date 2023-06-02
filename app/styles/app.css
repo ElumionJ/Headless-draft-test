@@ -206,3 +206,8 @@ shop-pay-button {
 .bannerFirst-block-description {
   display: block;
 }
+
+.swiper-pagination-bullet-active {
+  opacity: 1;
+  background-color: #f00;
+}

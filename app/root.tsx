@@ -87,6 +87,15 @@ export default function App() {
         <Seo />
         <Meta />
         <Links />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
+        />
+
+        <script
+          src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"
+          defer
+        ></script>
       </head>
       <body>
         <Layout
