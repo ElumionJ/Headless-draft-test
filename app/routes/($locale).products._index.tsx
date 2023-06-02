@@ -13,6 +13,7 @@ import type {
 import invariant from 'tiny-invariant';
 import {
   Pagination__unstable as Pagination,
+  flattenConnection,
   getClientBrowserParameters,
   getPaginationVariables__unstable as getPaginationVariables,
 } from '@shopify/hydrogen';
@@ -24,7 +25,7 @@ import {getImageLoadingPriority} from '~/lib/const';
 import {seoPayload} from '~/lib/seo.server';
 import {routeHeaders, CACHE_SHORT} from '~/data/cache';
 
-const PAGE_BY = 8;
+const PAGE_BY = 249;
 
 export const headers = routeHeaders;
 
@@ -86,6 +87,7 @@ export default function AllProducts() {
     order: valuesParams.order || 'asc',
   });
   const navigate = useNavigate();
+  console.log(valuesParams)
 
   useEffect(() => {
     // const url = getClientBrowserParameters();
@@ -98,6 +100,26 @@ export default function AllProducts() {
     console.log(valuesParams);
     firstRender = true;
   }, []);
+
+  useEffect(() => {
+    productsFiltered.nodes.sort((currentProduct, nextProduct) => {
+      const currentVariant = flattenConnection(currentProduct.variants)[0];
+      const nextVariant = flattenConnection(nextProduct.variants)[0];
+      const orderArr =
+        params.order === 'asc'
+          ? [currentVariant, nextVariant]
+          : [nextVariant, currentVariant];
+      let result;
+      if (params.filter === 'price') {
+        result = +orderArr[0].price.amount - +orderArr[1].price.amount;
+      } else {
+        result = orderArr[0].product.title.localeCompare(
+          orderArr[1].product.title,
+        );
+      }
+      return result;
+    });
+  }, [params.order, params.filter]);
 
   useEffect(() => {
     navigate(`/products?filter=${params.filter}&order=${params.order}`);
@@ -130,7 +152,7 @@ export default function AllProducts() {
             <option value={'name'}>Name</option>
           </select>
         </div>
-        <Pagination connection={products}>
+        <Pagination connection={productsFiltered}>
           {({nodes, isLoading, NextLink, PreviousLink}) => {
             const itemsMarkup = nodes.map((product, i) => (
               <ProductCard
