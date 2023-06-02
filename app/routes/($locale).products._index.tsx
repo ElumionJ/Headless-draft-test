@@ -1,5 +1,11 @@
-import {json, type LoaderArgs} from '@shopify/remix-oxygen';
-import {useLoaderData} from '@remix-run/react';
+import {json, redirect, type LoaderArgs} from '@shopify/remix-oxygen';
+import {LuArrowDownUp} from 'react-icons/lu';
+import {
+  useLoaderData,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from '@remix-run/react';
 import type {
   ProductConnection,
   Collection,
@@ -7,8 +13,10 @@ import type {
 import invariant from 'tiny-invariant';
 import {
   Pagination__unstable as Pagination,
+  getClientBrowserParameters,
   getPaginationVariables__unstable as getPaginationVariables,
 } from '@shopify/hydrogen';
+import {useEffect, useState} from 'react';
 
 import {PageHeader, Section, ProductCard, Grid, Button} from '~/components';
 import {PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
@@ -21,8 +29,8 @@ const PAGE_BY = 8;
 export const headers = routeHeaders;
 
 export async function loader({request, context: {storefront}}: LoaderArgs) {
+  const url = new URL(request.url);
   const variables = getPaginationVariables(request, {pageBy: PAGE_BY});
-
   const data = await storefront.query<{
     products: ProductConnection;
   }>(ALL_PRODUCTS_QUERY, {
@@ -57,6 +65,7 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
 
   return json(
     {
+      valuesParams: Object.fromEntries(url.searchParams.entries()),
       products: data.products,
       seo,
     },
@@ -69,12 +78,58 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
 }
 
 export default function AllProducts() {
-  const {products} = useLoaderData<typeof loader>();
+  const {products, valuesParams} = useLoaderData<typeof loader>();
+  const [productsFiltered, setProductsFiltered] = useState(products);
+  let firstRender = false;
+  const [params, setParams] = useState({
+    filter: valuesParams.filter || 'name',
+    order: valuesParams.order || 'asc',
+  });
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // const url = getClientBrowserParameters();
+    if (valuesParams.filter) {
+      setParams({...params, order: valuesParams.filter});
+    }
+    if (valuesParams.order) {
+      setParams({...params, order: valuesParams.order});
+    }
+    console.log(valuesParams);
+    firstRender = true;
+  }, []);
+
+  useEffect(() => {
+    navigate(`/products?filter=${params.filter}&order=${params.order}`);
+  }, [params.filter, params.order, firstRender]);
 
   return (
     <>
       <PageHeader heading="All Products" variant="allCollections" />
       <Section>
+        <div>
+          <button
+            onClick={() => {
+              setParams({
+                ...params,
+                order: params.order === 'asc' ? 'desc' : 'asc',
+              });
+            }}
+          >
+            <LuArrowDownUp />
+          </button>
+          <select
+            name="sort"
+            id="sort"
+            defaultValue={valuesParams.filter}
+            onChange={(e) => {
+              setParams({...params, filter: e.target.value});
+            }}
+          >
+            <option value={'price'}>Price</option>
+            <option value={'name'}>Name</option>
+          </select>
+        </div>
         <Pagination connection={products}>
           {({nodes, isLoading, NextLink, PreviousLink}) => {
             const itemsMarkup = nodes.map((product, i) => (
