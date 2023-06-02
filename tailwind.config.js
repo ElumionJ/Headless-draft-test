@@ -24,6 +24,10 @@ export default {
         'lg-only': {min: '64em', max: '80em'},
         'xl-only': {min: '80em', max: '96em'},
         '2xl-only': {min: '96em'},
+        'gt-xl': {max: '80em'},
+        'gt-l': {max: '58em'},
+        'gt-m': {max: '37em'},
+        'gt-ssm': {max: '30em'},
       },
       spacing: {
         nav: 'var(--height-nav)',
