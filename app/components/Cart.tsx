@@ -61,13 +61,13 @@ export function CartDetails({
   const cartHasItems = !!cart && cart.totalQuantity > 0;
   const container = {
     drawer: 'grid grid-cols-1 h-screen-no-nav grid-rows-[1fr_auto] ',
-    page: 'w-full pt-8 pb-12 grid md:grid-cols-2 md:items-start gap-8 md:gap-8 lg:gap-x-[100px] lg:px-[155px] lg:pt-0 min-h-screen ',
+    page: 'w-full pt-4 pb-12 grid  md:pt-8 md:items-start gap-8 md:gap-8 lg:grid-cols-2 lg:gap-x-[155px] lg:px-[27px] xl:px-[155px] lg:pt-0 min-h-screen ',
   };
 
   return (
     <div className="flex flex-col w-full bg-[#FFFEFA] text-black ">
       {layout === 'page' && (
-        <span className="pt-8 pb-6 pl-[159px] font-semibold uppercase">
+        <span className="pl-6 pt-3 lg:pt-8 lg:pb-6 lg:pl-[32px] xl:pl-[159px] font-semibold uppercase">
           My bag ({cart?.totalQuantity})
         </span>
       )}
@@ -201,7 +201,7 @@ function CartLines({
     // y > 0 ? 'border-t' : '',
     y > 0 ? '' : '',
     layout === 'page'
-      ? 'flex-grow md:translate-y-4 pr-6 pl-12 lg:pl-0 border-y-[1px] border-black pt-[40px]'
+      ? 'flex-grow md:translate-y-4 pr-6 pl-6  lg:pl-0 lg:pr-[488px] xl:pl-0 border-y-[1px] border-black pt-[40px]  xl:pl-12'
       : 'px-6 pb-6 sm-max:pt-2 overflow-auto transition md:px-12 text-black',
   ]);
 
@@ -218,6 +218,7 @@ function CartLines({
             line={line as CartLine}
             additionalClasses={styles}
             staticPrice={line.cost.amountPerQuantity}
+            layout={layout}
           />
         ))}
       </ul>
@@ -348,7 +349,7 @@ function CartSummary({
           {layout === 'drawer' && (
             <>
               <div className="flex items-center justify-between font-semibold ">
-                <span className="uppercase text-[black] ">Subtotal</span>
+                <span className="uppercase text-[black] pb-2">Subtotal</span>
                 <span className="text-[red]" data-test="subtotal">
                   {cost?.subtotalAmount?.amount ? (
                     <Money data={cost?.subtotalAmount} />
@@ -392,7 +393,7 @@ function CartLineItem({
       key={id}
       className={` flex gap-4 pb-8 border-solid border-b-[1px] border-[#E0E0E0] last:border-none`}
     >
-      <div className="flex-shrink">
+      <div className="flex-shrink w-max">
         {merchandise.image && (
           <Image
             width={110}
@@ -404,9 +405,9 @@ function CartLineItem({
         )}
       </div>
 
-      <div className="flex items-center justify-between flex-grow gap-8 ">
+      <div className="flex items-center justify-between flex-grow gap-6">
         <div className={additionalClasses.cartItem}>
-          <div>
+          <div className="max-w-[200px] pr-8">
             <Heading as="h3" size="copy">
               {merchandise?.product?.handle ? (
                 <Link to={`/products/${merchandise.product.handle}`}>
@@ -417,25 +418,26 @@ function CartLineItem({
               )}
             </Heading>
 
-            <span>
-              {staticPrice.currencyCode} {staticPrice.amount}
-            </span>
+            {layout === 'page' && (
+              <span>
+                {staticPrice.currencyCode} {staticPrice.amount}
+              </span>
+            )}
           </div>
 
-          <div className="grid pb-2">
+          {/* <div className="grid pb-2">
             {(merchandise?.selectedOptions || []).map((option) => (
               <Text color="subtle" key={option.name}>
                 {option.name}: {option.value}
               </Text>
             ))}
-          </div>
+          </div> */}
 
-          <div className="">
-            <div className="flex justify-start text-copy">
-              <CartLineQuantityAdjust line={line} />
-            </div>
+          <div className="flex justify-start text-copy">
+            <CartLineQuantityAdjust line={line} />
           </div>
         </div>
+
         <Text>
           <div className={additionalClasses.price}>
             <div>
