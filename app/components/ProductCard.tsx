@@ -63,7 +63,7 @@ export function ProductCard({
           <div className="card-image aspect-[4/5] bg-primary/5">
             {image && (
               <Image
-                className="object-cover w-full fadeIn"
+                className="object-cover w-full fadeIn rounded-[2px]"
                 sizes="(min-width: 64em) 25vw, (min-width: 48em) 30vw, 45vw"
                 aspectRatio="4/5"
                 data={image}
@@ -81,13 +81,13 @@ export function ProductCard({
           </div>
           <div className="grid gap-1">
             <Text
-              className="w-full overflow-hidden whitespace-nowrap text-ellipsis "
+              className="w-full overflow-hidden whitespace-nowrap text-[20px] leading-[110%]"
               as="h3"
             >
               {product.title}
             </Text>
             <div className="flex gap-4">
-              <Text className="flex gap-4">
+              <Text className="flex gap-4 text-[20px] leading-[130%]">
                 <Money withoutTrailingZeros data={price!} />
                 {isDiscounted(price as MoneyV2, compareAtPrice as MoneyV2) && (
                   <CompareAtPrice
