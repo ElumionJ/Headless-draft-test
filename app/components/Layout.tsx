@@ -1,4 +1,4 @@
-import {useParams, Form, Await, useMatches} from '@remix-run/react';
+import {useParams, Form, Await, useMatches, Links} from '@remix-run/react';
 import {useWindowScroll} from 'react-use';
 import {Disclosure} from '@headlessui/react';
 import {Suspense, useEffect, useMemo} from 'react';
@@ -17,7 +17,6 @@ import {
   IconCaret,
   Section,
   CountrySelector,
-  Cart,
   CartLoading,
   Link,
 } from '~/components';
@@ -108,15 +107,16 @@ function CartDrawer({isOpen, onClose}: {isOpen: boolean; onClose: () => void}) {
   const [root] = useMatches();
 
   return (
-    <Drawer open={isOpen} onClose={onClose} heading="Cart" openFrom="right">
-      <div className="grid">
-        <Suspense fallback={<CartLoading />}>
-          <Await resolve={root.data?.cart}>
-            {(cart) => <Cart layout="drawer" onClose={onClose} cart={cart} />}
-          </Await>
-        </Suspense>
-      </div>
-    </Drawer>
+    <Suspense fallback={<CartLoading />}>
+      <Await resolve={root.data?.cart}>
+        <Drawer
+          open={isOpen}
+          onClose={onClose}
+          heading="Cart"
+          openFrom="right"
+        />
+      </Await>
+    </Suspense>
   );
 }
 
@@ -229,7 +229,7 @@ function MobileHeader({
         to="/"
       >
         <Heading
-          className="font-bold text-center leading-none"
+          className="font-bold leading-none text-center"
           as={isHome ? 'h1' : 'h2'}
         >
           {title}
@@ -373,6 +373,7 @@ function Badge({
     () => (
       <>
         <IconBag />
+
         <div
           className={`${
             dark
@@ -387,9 +388,10 @@ function Badge({
     [count, dark],
   );
 
+  //Kate
   return isHydrated ? (
     <button
-      onClick={openCart}
+      // onClick={openCart}
       className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
     >
       {BadgeCounter}
