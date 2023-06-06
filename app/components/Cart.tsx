@@ -42,8 +42,13 @@ export function Cart({
 
   return (
     <>
-      <CartEmpty hidden={linesCount} onClose={onClose} layout={layout} />
-      <CartDetails cart={cart} layout={layout} />
+      {!cart || cart.totalQuantity === 0 ? (
+        <CartEmpty hidden={linesCount} onClose={onClose} layout={layout} />
+      ) : (
+        <CartDetails cart={cart} layout={layout} />
+      )}
+      {/* <CartEmpty hidden={linesCount} onClose={onClose} layout={layout} /> */}
+      {/* <CartDetails cart={cart} layout={layout} /> */}
     </>
   );
 }
@@ -89,6 +94,7 @@ export function CartDetails({
         )}
       </div>
     </div>
+
     // <div className={container[layout]}>
     //   <CartLines lines={cart?.lines} layout={layout} />
 
@@ -575,12 +581,12 @@ export function CartEmpty({
 
   const container = {
     drawer: clsx([
-      'content-start gap-4 px-6 pb-8 transition overflow-y-scroll md:gap-12 md:px-12 h-screen-no-nav md:pb-12',
+      'content-start gap-4 px-6 pb-8 transition overflow-y-scroll md:gap-12 md:px-12 h-screen-no-nav md:pb-12 ',
       y > 0 ? 'border-t' : '',
     ]),
     page: clsx([
       hidden ? '' : 'grid',
-      `pb-12 w-full md:items-start gap-4 md:gap-8 lg:gap-12`,
+      `pb-12 w-full md:items-start gap-4 md:gap-8 lg:gap-12 `,
     ]),
   };
 
