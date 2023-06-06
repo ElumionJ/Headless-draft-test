@@ -57,11 +57,11 @@ export default function Journals() {
 
   return (
     <>
-      <PageHeader heading={BLOG_HANDLE} />
+      <PageHeader heading={BLOG_HANDLE} variant="blog"/>
       <Section>
         <Grid as="ol" layout="blog">
           {/* Kate */}
-          <div className="grid grid-cols-3 gap-9">
+          <div className="grid lg:grid-cols-3 gap-9">
             {articles.map((article, i) => (
               <ArticleCard
                 blogHandle={BLOG_HANDLE.toLowerCase()}
@@ -102,8 +102,7 @@ function ArticleCard({
           </div>
         )}
         <h2 className="mt-4 font-medium text-center">{article.title}</h2>
-        <span className="block mt-1 text-center">{article.publishedAt}</span>
-        {/* <span className="block mt-1 text-center">{article.content}</span> */}
+        {/* <span className="block mt-1 text-center">{article.publishedAt}</span> */}
       </Link>
     </li>
   );
