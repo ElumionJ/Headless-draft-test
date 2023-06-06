@@ -1,6 +1,7 @@
 import {json, redirect, type LoaderArgs} from '@shopify/remix-oxygen';
 import {LuArrowDownUp} from 'react-icons/lu';
 import {
+  Link,
   useLoaderData,
   useNavigate,
   useParams,
@@ -9,6 +10,7 @@ import {
 import type {
   ProductConnection,
   Collection,
+  PageInfo,
 } from '@shopify/hydrogen/storefront-api-types';
 import invariant from 'tiny-invariant';
 import {
@@ -25,22 +27,45 @@ import {getImageLoadingPriority} from '~/lib/const';
 import {seoPayload} from '~/lib/seo.server';
 import {routeHeaders, CACHE_SHORT} from '~/data/cache';
 
-const PAGE_BY = 249;
+const PAGE_BY = 8;
 
 export const headers = routeHeaders;
 
 export async function loader({request, context: {storefront}}: LoaderArgs) {
   const url = new URL(request.url);
+  const paramsObj = Object.fromEntries(url.searchParams.entries());
+  const variablesFromParams = {
+    sortKey: paramsObj.sortKey || 'TITLE',
+    reverse: paramsObj.reverse === 'true',
+    // endCursor: paramsObj.cursor || null,
+    // startCursor: paramsObj.direction === 'prev' ? paramsObj.cursor : null,
+    direction: paramsObj.direction || null,
+  };
+  console.log(paramsObj);
   const variables = getPaginationVariables(request, {pageBy: PAGE_BY});
+  const action: any = {};
+  if (paramsObj.direction === 'next') {
+    action.first = PAGE_BY;
+    action.endCursor = paramsObj.cursor;
+  } else if (paramsObj.direction === 'prev') {
+    action.last = PAGE_BY;
+    action.startCursor = paramsObj.cursor;
+  } else {
+    action.first = PAGE_BY;
+  }
   const data = await storefront.query<{
     products: ProductConnection;
   }>(ALL_PRODUCTS_QUERY, {
     variables: {
-      ...variables,
+      // ...variables,
+      // first: PAGE_BY,
       country: storefront.i18n.country,
       language: storefront.i18n.language,
+      ...variablesFromParams,
+      ...action,
     },
   });
+  console.log();
 
   invariant(data, 'No data returned from Shopify API');
 
@@ -66,7 +91,8 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
 
   return json(
     {
-      valuesParams: Object.fromEntries(url.searchParams.entries()),
+      varParams: variablesFromParams,
+      pageInfo: data.products.pageInfo,
       products: data.products,
       seo,
     },
@@ -79,78 +105,52 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
 }
 
 export default function AllProducts() {
-  const {products, valuesParams} = useLoaderData<typeof loader>();
+  const {products, varParams, pageInfo} = useLoaderData<typeof loader>();
   const [productsFiltered, setProductsFiltered] = useState(products);
-  let firstRender = false;
-  const [params, setParams] = useState({
-    filter: valuesParams.filter || 'name',
-    order: valuesParams.order || 'asc',
-  });
+  const [brands, setBrands] = useState<string[]>([]);
+  const [params, setParams] = useState(varParams);
   const navigate = useNavigate();
-  console.log(valuesParams)
 
   useEffect(() => {
-    // const url = getClientBrowserParameters();
-    if (valuesParams.filter) {
-      setParams({...params, order: valuesParams.filter});
-    }
-    if (valuesParams.order) {
-      setParams({...params, order: valuesParams.order});
-    }
-    console.log(valuesParams);
-    firstRender = true;
-  }, []);
-
+    const brandsArr = [...new Set(products.nodes.map((el) => el.vendor))];
+    setBrands(brandsArr);
+  }, [products]);
   useEffect(() => {
-    productsFiltered.nodes.sort((currentProduct, nextProduct) => {
-      const currentVariant = flattenConnection(currentProduct.variants)[0];
-      const nextVariant = flattenConnection(nextProduct.variants)[0];
-      const orderArr =
-        params.order === 'asc'
-          ? [currentVariant, nextVariant]
-          : [nextVariant, currentVariant];
-      let result;
-      if (params.filter === 'price') {
-        result = +orderArr[0].price.amount - +orderArr[1].price.amount;
-      } else {
-        result = orderArr[0].product.title.localeCompare(
-          orderArr[1].product.title,
-        );
-      }
-      return result;
-    });
-  }, [params.order, params.filter]);
-
-  useEffect(() => {
-    navigate(`/products?filter=${params.filter}&order=${params.order}`);
-  }, [params.filter, params.order, firstRender]);
+    console.log(brands);
+  }, [brands]);
 
   return (
     <>
       <PageHeader heading="All Products" variant="allCollections" />
       <Section>
         <div>
-          <button
-            onClick={() => {
-              setParams({
-                ...params,
-                order: params.order === 'asc' ? 'desc' : 'asc',
-              });
-            }}
+          <Link
+            to={`/products?sortKey=${
+              params.sortKey
+            }&reverse=${!params.reverse}`}
+            reloadDocument
+            preventScrollReset
           >
             <LuArrowDownUp />
-          </button>
-          <select
-            name="sort"
-            id="sort"
-            defaultValue={valuesParams.filter}
-            onChange={(e) => {
-              setParams({...params, filter: e.target.value});
-            }}
-          >
+          </Link>
+          <select name="sort" id="sort" onChange={(e) => {}}>
             <option value={'price'}>Price</option>
             <option value={'name'}>Name</option>
           </select>
+          <div data-filter>
+            {[
+              {value: 'TITLE', name: 'Name'},
+              {value: 'PRICE', name: 'price'},
+            ].map((el, i) => (
+              <Link
+                key={i}
+                reloadDocument
+                to={`/products?sortKey=${el.value}&reverse=${params.reverse}`}
+              >
+                {el.name}
+              </Link>
+            ))}
+          </div>
         </div>
         <Pagination connection={productsFiltered}>
           {({nodes, isLoading, NextLink, PreviousLink}) => {
@@ -164,16 +164,27 @@ export default function AllProducts() {
 
             return (
               <>
-                <div className="flex items-center justify-center mt-6">
-                  <PreviousLink className="inline-block rounded font-medium text-center py-3 px-6 border border-primary/10 bg-contrast text-primary w-full">
-                    {isLoading ? 'Loading...' : 'Previous'}
-                  </PreviousLink>
-                </div>
+                <div className="flex items-center justify-center mt-6"></div>
                 <Grid data-test="product-grid">{itemsMarkup}</Grid>
                 <div className="flex items-center justify-center mt-6">
-                  <NextLink className="inline-block rounded font-medium text-center py-3 px-6 border border-primary/10 bg-contrast text-primary w-full">
-                    {isLoading ? 'Loading...' : 'Next'}
-                  </NextLink>
+                  <div className="flex justify-center gap-2">
+                    <Link
+                      to={`/products?sortKey=${params.sortKey}&reverse=${
+                        params.reverse
+                      }&cursor=${pageInfo.startCursor || null}&direction=prev`}
+                      reloadDocument
+                    >
+                      PREVIOUS
+                    </Link>
+                    <Link
+                      to={`/products?sortKey=${params.sortKey}&reverse=${
+                        params.reverse
+                      }&cursor=${pageInfo.endCursor || null}&direction=next`}
+                      reloadDocument
+                    >
+                      NEXT
+                    </Link>
+                  </div>
                 </div>
               </>
             );
@@ -184,7 +195,8 @@ export default function AllProducts() {
   );
 }
 
-const ALL_PRODUCTS_QUERY = `#graphql
+const ALL_PRODUCTS_QUERY = `
+  #graphql
   query AllProducts(
     $country: CountryCode
     $language: LanguageCode
@@ -192,10 +204,22 @@ const ALL_PRODUCTS_QUERY = `#graphql
     $last: Int
     $startCursor: String
     $endCursor: String
+    $sortKey: ProductSortKeys
+    $reverse: Boolean
+    $query: String
   ) @inContext(country: $country, language: $language) {
-    products(first: $first, last: $last, before: $startCursor, after: $endCursor) {
+    products(
+      first: $first
+      last: $last
+      before: $startCursor
+      after: $endCursor
+      sortKey: $sortKey
+      query: $query
+      reverse: $reverse
+    ) {
       nodes {
         ...ProductCard
+        vendor
       }
       pageInfo {
         hasPreviousPage
