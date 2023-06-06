@@ -19,9 +19,16 @@ import {
   getClientBrowserParameters,
   getPaginationVariables__unstable as getPaginationVariables,
 } from '@shopify/hydrogen';
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 
-import {PageHeader, Section, ProductCard, Grid, Button} from '~/components';
+import {
+  PageHeader,
+  Section,
+  ProductCard,
+  Grid,
+  Button,
+  SortBy,
+} from '~/components';
 import {PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
 import {getImageLoadingPriority} from '~/lib/const';
 import {seoPayload} from '~/lib/seo.server';
@@ -41,8 +48,8 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
     // startCursor: paramsObj.direction === 'prev' ? paramsObj.cursor : null,
     direction: paramsObj.direction || null,
   };
-  console.log(paramsObj);
-  const variables = getPaginationVariables(request, {pageBy: PAGE_BY});
+  // console.log(paramsObj);
+  // const variables = getPaginationVariables(request, {pageBy: PAGE_BY});
   const action: any = {};
   if (paramsObj.direction === 'next') {
     action.first = PAGE_BY;
@@ -65,7 +72,6 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
       ...action,
     },
   });
-  console.log();
 
   invariant(data, 'No data returned from Shopify API');
 
@@ -91,6 +97,7 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
 
   return json(
     {
+      rawParams: paramsObj,
       varParams: variablesFromParams,
       pageInfo: data.products.pageInfo,
       products: data.products,
@@ -105,16 +112,28 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
 }
 
 export default function AllProducts() {
-  const {products, varParams, pageInfo} = useLoaderData<typeof loader>();
+  const {products, varParams, pageInfo, rawParams} =
+    useLoaderData<typeof loader>();
   const [productsFiltered, setProductsFiltered] = useState(products);
-  const [brands, setBrands] = useState<string[]>([]);
-  const [params, setParams] = useState(varParams);
+  const [brands, setBrands] = useState({});
+  // const [params, setParams] = useState(varParams);
+  const vendorsFilterRef = useRef(null);
   const navigate = useNavigate();
-
+  console.log(rawParams);
   useEffect(() => {
-    const brandsArr = [...new Set(products.nodes.map((el) => el.vendor))];
+    const brandsArr = products.nodes.reduce((acc, el) => {
+      if (acc[el.vendor]) {
+        acc[el.vendor].quantity += 1;
+      } else {
+        acc[el.vendor] = {};
+        acc[el.vendor].title = el.vendor;
+        acc[el.vendor].quantity = 1;
+      }
+      return acc;
+    }, {});
     setBrands(brandsArr);
   }, [products]);
+
   useEffect(() => {
     console.log(brands);
   }, [brands]);
@@ -126,30 +145,25 @@ export default function AllProducts() {
         <div>
           <Link
             to={`/products?sortKey=${
-              params.sortKey
-            }&reverse=${!params.reverse}`}
+              varParams.sortKey
+            }&reverse=${!varParams.reverse}`}
             reloadDocument
             preventScrollReset
           >
             <LuArrowDownUp />
           </Link>
-          <select name="sort" id="sort" onChange={(e) => {}}>
-            <option value={'price'}>Price</option>
-            <option value={'name'}>Name</option>
-          </select>
+
           <div data-filter>
-            {[
-              {value: 'TITLE', name: 'Name'},
-              {value: 'PRICE', name: 'price'},
-            ].map((el, i) => (
-              <Link
-                key={i}
-                reloadDocument
-                to={`/products?sortKey=${el.value}&reverse=${params.reverse}`}
-              >
-                {el.name}
-              </Link>
-            ))}
+            <SortBy
+              dataLinks={[
+                {value: 'TITLE', name: 'Name'},
+                {value: 'PRICE', name: 'price'},
+              ]}
+              linkStr={`/products?reverse=${varParams.reverse}`}
+              activeSort={rawParams.sortKey}
+            />
+
+            {}
           </div>
         </div>
         <Pagination connection={productsFiltered}>
@@ -169,16 +183,16 @@ export default function AllProducts() {
                 <div className="flex items-center justify-center mt-6">
                   <div className="flex justify-center gap-2">
                     <Link
-                      to={`/products?sortKey=${params.sortKey}&reverse=${
-                        params.reverse
+                      to={`/products?sortKey=${varParams.sortKey}&reverse=${
+                        varParams.reverse
                       }&cursor=${pageInfo.startCursor || null}&direction=prev`}
                       reloadDocument
                     >
                       PREVIOUS
                     </Link>
                     <Link
-                      to={`/products?sortKey=${params.sortKey}&reverse=${
-                        params.reverse
+                      to={`/products?sortKey=${varParams.sortKey}&reverse=${
+                        varParams.reverse
                       }&cursor=${pageInfo.endCursor || null}&direction=next`}
                       reloadDocument
                     >
