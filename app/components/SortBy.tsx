@@ -2,6 +2,8 @@ import {Link} from '@remix-run/react';
 import {HiArrowSmDown} from 'react-icons/hi';
 import React, {useEffect, useRef, useState} from 'react';
 
+import useOutsideClick from '~/hooks/useOutsideClick';
+
 interface Props {
   dataLinks: {value: string; name: string}[];
   linkStr: string;
@@ -11,15 +13,15 @@ interface Props {
 export const SortBy = ({dataLinks, linkStr, activeSort}: Props) => {
   const [open, setOpen] = useState(false);
   const filterRef = useRef(null);
-  useOutsideAlerter(filterRef, setOpen);
+  useOutsideClick(filterRef, setOpen);
   return (
-    <div ref={filterRef} className="relative  z-20">
+    <div ref={filterRef} className="relative  z-20 font-bebas tracking-wider">
       <button
         className="bg-c-gray py-[13px] px-[24px] rounded-[100px] flex justify-between items-center gap-1 w-[180px] uppercase"
-        onClick={() => setOpen(true)}
+        onClick={() => setOpen((prevState) => !prevState)}
       >
         {activeSort || 'SORT BY'}
-        <HiArrowSmDown />
+        <HiArrowSmDown className={`${open && 'rotate-180'} `} />
       </button>
       <ul
         className={`${
@@ -41,23 +43,3 @@ export const SortBy = ({dataLinks, linkStr, activeSort}: Props) => {
     </div>
   );
 };
-
-function useOutsideAlerter(
-  ref: React.MutableRefObject<HTMLElement | null>,
-  setState: (bool: boolean) => void,
-) {
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      const target = event.target as HTMLButtonElement;
-      if (ref.current && !ref.current.contains(target)) {
-        setState(false);
-      }
-    }
-    // Bind the event listener
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      // Unbind the event listener on clean up
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [ref]);
-}
