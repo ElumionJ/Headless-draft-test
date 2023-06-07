@@ -45,7 +45,7 @@ export default {
       fontFamily: {
         sans: ['Helvetica Neue', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         // serif: ['"IBMPlexSerif"', 'Palatino', 'ui-serif'],
-        bebas:['Bebas Neue','sans-serif'],
+        bebas: ['Bebas Neue', 'sans-serif'],
         noto: ['Noto Sans', 'sans-serif'],
       },
       fontSize: {
@@ -57,6 +57,7 @@ export default {
       },
       backgroundColor: {
         'c-gray': '#F2F2F2',
+        'c-red': '#D80F16',
       },
       maxWidth: {
         'prose-narrow': '45ch',
