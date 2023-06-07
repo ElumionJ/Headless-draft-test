@@ -42,13 +42,13 @@ export function Cart({
 
   return (
     <>
-      {!cart || cart.totalQuantity === 0 ? (
+      {/* {!cart || cart.totalQuantity === 0 ? (
         <CartEmpty hidden={linesCount} onClose={onClose} layout={layout} />
       ) : (
         <CartDetails cart={cart} layout={layout} />
-      )}
-      {/* <CartEmpty hidden={linesCount} onClose={onClose} layout={layout} /> */}
-      {/* <CartDetails cart={cart} layout={layout} /> */}
+      )} */}
+      <CartEmpty hidden={linesCount} onClose={onClose} layout={layout} /> 
+      <CartDetails cart={cart} layout={layout} />
     </>
   );
 }
@@ -69,7 +69,12 @@ export function CartDetails({
     page: 'w-full pt-4 pb-12 grid  md:pt-8 md:items-start gap-8 md:gap-8 lg:grid-cols-2 lg:gap-x-[155px] lg:px-[27px] xl:px-[155px] lg:pt-0 min-h-screen ',
   };
 
+  if (layout === 'page' && !cartHasItems) {
+    return <></>
+  }
+
   return (
+    // When its empty - work not correct
     <div className="flex flex-col w-full bg-[#FFFEFA] text-black ">
       {layout === 'page' && (
         <span className="pl-6 pt-3 lg:pt-8 lg:pb-6 lg:pl-[32px] xl:pl-[159px] font-semibold uppercase">
@@ -676,15 +681,9 @@ export function CartEmpty({
           </Link>
         </div>
       </section>
-      {/* <section className="grid gap-8 pt-16">
-        <FeaturedProducts
-          count={4}
-          heading="Shop Best Sellers"
-          layout={layout}
-          onClose={onClose}
-          sortKey="BEST_SELLING"
-        />
-      </section> */}
+     
     </div>
+
+   
   );
 }

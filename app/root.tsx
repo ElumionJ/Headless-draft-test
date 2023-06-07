@@ -92,6 +92,13 @@ export default function App() {
           href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
         />
 
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin='use-credentials' />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+          rel="stylesheet"
+        />
+
         <script
           src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"
           defer
