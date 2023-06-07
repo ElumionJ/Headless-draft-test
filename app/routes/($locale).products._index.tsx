@@ -142,28 +142,31 @@ export default function AllProducts() {
     <>
       <PageHeader heading="All Products" variant="allCollections" />
       <Section>
-        <div>
-          <Link
-            to={`/products?sortKey=${
-              varParams.sortKey
-            }&reverse=${!varParams.reverse}`}
-            reloadDocument
-            preventScrollReset
-          >
-            <LuArrowDownUp />
-          </Link>
+        <div className="w-full flex justify-between items-center  border-b-[1px] border-b-[#E0E0E0] pb-[32px]">
+          <div>Vendors</div>
+          <div className="flex gap-[16px] items-center ">
+            <Link
+              to={`/products?sortKey=${
+                varParams.sortKey
+              }&reverse=${!varParams.reverse}`}
+              reloadDocument
+              preventScrollReset
+            >
+              <LuArrowDownUp />
+            </Link>
 
-          <div data-filter>
-            <SortBy
-              dataLinks={[
-                {value: 'TITLE', name: 'Name'},
-                {value: 'PRICE', name: 'price'},
-              ]}
-              linkStr={`/products?reverse=${varParams.reverse}`}
-              activeSort={rawParams.sortKey}
-            />
+            <div data-filter className="">
+              <SortBy
+                dataLinks={[
+                  {value: 'TITLE', name: 'Name'},
+                  {value: 'PRICE', name: 'Price'},
+                ]}
+                linkStr={`/products?reverse=${varParams.reverse}`}
+                activeSort={rawParams.sortKey}
+              />
 
-            {}
+              {}
+            </div>
           </div>
         </div>
         <Pagination connection={productsFiltered}>
@@ -181,23 +184,31 @@ export default function AllProducts() {
                 <div className="flex items-center justify-center mt-6"></div>
                 <Grid data-test="product-grid">{itemsMarkup}</Grid>
                 <div className="flex items-center justify-center mt-6">
-                  <div className="flex justify-center gap-2">
-                    <Link
-                      to={`/products?sortKey=${varParams.sortKey}&reverse=${
-                        varParams.reverse
-                      }&cursor=${pageInfo.startCursor || null}&direction=prev`}
-                      reloadDocument
-                    >
-                      PREVIOUS
-                    </Link>
-                    <Link
-                      to={`/products?sortKey=${varParams.sortKey}&reverse=${
-                        varParams.reverse
-                      }&cursor=${pageInfo.endCursor || null}&direction=next`}
-                      reloadDocument
-                    >
-                      NEXT
-                    </Link>
+                  <div className="flex justify-center gap-2 ">
+                    {pageInfo.hasPreviousPage && (
+                      <Link
+                        className="text-[12px] font-bold leading-[150%] hover:text-[#D80F16] block w-[100px] px-3 py-1"
+                        to={`/products?sortKey=${varParams.sortKey}&reverse=${
+                          varParams.reverse
+                        }&cursor=${
+                          pageInfo.startCursor || null
+                        }&direction=prev`}
+                        reloadDocument
+                      >
+                        PREVIOUS
+                      </Link>
+                    )}
+                    {pageInfo.hasNextPage && (
+                      <Link
+                        className="text-[12px] font-bold leading-[150%] hover:text-[#D80F16] block w-[100px] px-3 py-1"
+                        to={`/products?sortKey=${varParams.sortKey}&reverse=${
+                          varParams.reverse
+                        }&cursor=${pageInfo.endCursor || null}&direction=next`}
+                        reloadDocument
+                      >
+                        NEXT
+                      </Link>
+                    )}
                   </div>
                 </div>
               </>
