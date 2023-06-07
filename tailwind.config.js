@@ -53,6 +53,9 @@ export default {
         copy: ['var(--font-size-copy)', '1.5'],
         fine: ['var(--font-size-fine)', '1.333'],
       },
+      backgroundColor: {
+        'c-gray': '#F2F2F2',
+      },
       maxWidth: {
         'prose-narrow': '45ch',
         'prose-wide': '80ch',
