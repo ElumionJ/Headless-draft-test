@@ -28,11 +28,13 @@ import {
   Grid,
   Button,
   SortBy,
+  VendorsFilter,
 } from '~/components';
 import {PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
 import {getImageLoadingPriority} from '~/lib/const';
 import {seoPayload} from '~/lib/seo.server';
 import {routeHeaders, CACHE_SHORT} from '~/data/cache';
+import {Storefront} from '~/lib/type';
 
 const PAGE_BY = 8;
 
@@ -73,6 +75,8 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
     },
   });
 
+  const allProducts = await getAllProducts(storefront);
+
   invariant(data, 'No data returned from Shopify API');
 
   const seoCollection = {
@@ -97,6 +101,7 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
 
   return json(
     {
+      allProducts,
       rawParams: paramsObj,
       varParams: variablesFromParams,
       pageInfo: data.products.pageInfo,
@@ -112,16 +117,15 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
 }
 
 export default function AllProducts() {
-  const {products, varParams, pageInfo, rawParams} =
+  const {products, varParams, pageInfo, rawParams, allProducts} =
     useLoaderData<typeof loader>();
   const [productsFiltered, setProductsFiltered] = useState(products);
   const [brands, setBrands] = useState({});
   // const [params, setParams] = useState(varParams);
   const vendorsFilterRef = useRef(null);
   const navigate = useNavigate();
-  console.log(rawParams);
   useEffect(() => {
-    const brandsArr = products.nodes.reduce((acc, el) => {
+    const brandsArr = allProducts.reduce((acc, el) => {
       if (acc[el.vendor]) {
         acc[el.vendor].quantity += 1;
       } else {
@@ -142,8 +146,10 @@ export default function AllProducts() {
     <>
       <PageHeader heading="All Products" variant="allCollections" />
       <Section>
-        <div className="w-full flex justify-between items-center  border-b-[1px] border-b-[#E0E0E0] pb-[32px]">
-          <div>Vendors</div>
+        <div className="w-full flex justify-between items-center  border-b-[1px] border-b-[#E0E0E0] pb-[32px] text-black">
+          <div>
+            <VendorsFilter />
+          </div>
           <div className="flex gap-[16px] items-center ">
             <Link
               to={`/products?sortKey=${
@@ -184,10 +190,10 @@ export default function AllProducts() {
                 <div className="flex items-center justify-center mt-6"></div>
                 <Grid data-test="product-grid">{itemsMarkup}</Grid>
                 <div className="flex items-center justify-center mt-6">
-                  <div className="flex justify-center gap-2 ">
+                  <div className="flex justify-center gap-2 font-noto">
                     {pageInfo.hasPreviousPage && (
                       <Link
-                        className="text-[12px] font-bold leading-[150%] hover:text-[#D80F16] block w-[100px] px-3 py-1"
+                        className="text-[12px] font-bold leading-[150%] hover:text-[#D80F16] block w-[100px] px-3 py-1 text-right"
                         to={`/products?sortKey=${varParams.sortKey}&reverse=${
                           varParams.reverse
                         }&cursor=${
@@ -200,7 +206,7 @@ export default function AllProducts() {
                     )}
                     {pageInfo.hasNextPage && (
                       <Link
-                        className="text-[12px] font-bold leading-[150%] hover:text-[#D80F16] block w-[100px] px-3 py-1"
+                        className="text-[12px] font-bold leading-[150%] hover:text-[#D80F16] block w-[100px] px-3 py-1 text-left"
                         to={`/products?sortKey=${varParams.sortKey}&reverse=${
                           varParams.reverse
                         }&cursor=${pageInfo.endCursor || null}&direction=next`}
@@ -256,3 +262,36 @@ const ALL_PRODUCTS_QUERY = `
   }
   ${PRODUCT_CARD_FRAGMENT}
 `;
+
+const LOOP_PRODUCTS_VENDOR_QUERY = `
+#graphql
+query FetchAllProducts($cursor:String){
+  products(first:250, after:$cursor){
+    nodes{
+      vendor
+    }
+    pageInfo{
+      endCursor
+      hasNextPage
+    }
+  }
+}`;
+
+const getAllProducts = async (storefront: Storefront) => {
+  const resultArr = [];
+  let hasMore = true;
+  let localCursor = null;
+  while (hasMore) {
+    const returnObj = await storefront.query<{
+      products: ProductConnection;
+    }>(LOOP_PRODUCTS_VENDOR_QUERY, {
+      variables: {
+        cursor: localCursor,
+      },
+    });
+    resultArr.push(...returnObj.products.nodes);
+    hasMore = returnObj.products.pageInfo.hasNextPage;
+    localCursor = returnObj.products.pageInfo.endCursor;
+  }
+  return resultArr;
+};
