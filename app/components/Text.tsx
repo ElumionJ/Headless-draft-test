@@ -166,13 +166,14 @@ export function PageHeader({
   children?: React.ReactNode;
   className?: string;
   heading?: string;
-  variant?: 'default' | 'blogPost' | 'allCollections';
+  variant?: 'default' | 'blog'  | 'blogPost' | 'allCollections';
   [key: string]: any;
 }) {
   const variants: Record<string, string> = {
     default: 'grid w-full gap-8 p-6 py-8 md:p-8 lg:p-12 justify-items-start',
+    blog: 'grid md:text-center w-full gap-4 p-6 py-8 md:p-8 lg:p-12 md:justify-items-center  uppercase', // - title article list page
     blogPost:
-      'grid md:text-center w-full gap-4 p-6 py-8 md:p-8 lg:p-12 md:justify-items-center',
+      'grid md:text-center w-full gap-4 p-6 py-8 md:p-8 lg:p-12 md:justify-items-center font-normal', // - title article page
     allCollections:
       'flex justify-between items-baseline gap-8 p-6 md:p-8 lg:p-12',
   };

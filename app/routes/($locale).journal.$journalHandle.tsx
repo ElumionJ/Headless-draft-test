@@ -8,7 +8,7 @@ import {PageHeader, Section} from '~/components';
 import {seoPayload} from '~/lib/seo.server';
 import {routeHeaders, CACHE_LONG} from '~/data/cache';
 
-import styles from '../styles/custom-font.css';
+// import styles from '../styles/custom-font.css';
 
 const BLOG_HANDLE = 'journal';
 

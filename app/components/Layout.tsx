@@ -128,7 +128,9 @@ export function MenuDrawer({
   isOpen: boolean;
   onClose: () => void;
   menu: EnhancedMenu;
-}) {
+}) 
+
+{
   return (
     <Drawer open={isOpen} onClose={onClose} openFrom="left" heading="Menu">
       <div className="grid">
@@ -269,10 +271,11 @@ function DesktopHeader({
       } hidden h-nav lg:flex items-center sticky transition duration-300 backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-8 px-12 py-8`}
     >
       <div className="flex gap-12">
-        <Link className="font-bold" to="/" prefetch="intent">
+        <Link className="font-bold font-bebas" to="/" prefetch="intent">
+          {/* here we need to add logo */}
           {title}
         </Link>
-        <nav className="flex gap-8">
+        <nav className="flex gap-8 font-bebas">
           {/* Top level menu items */}
           {(menu?.items || []).map((item) => (
             <Link
@@ -389,14 +392,33 @@ function Badge({
   );
 
   //Kate
-  return isHydrated ? (
-    <Link
-      to="/cart"
-      className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
-    >
-      {BadgeCounter}
-    </Link>
-  ) : null;
+//   return isHydrated ? (
+//     <Link
+//       to="/cart"
+//       onClick={openCart}
+//       className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
+//     >
+//       {BadgeCounter}
+//     </Link>
+//   ) : null;
+// }
+
+
+return isHydrated ? (
+  <button
+    onClick={openCart}
+    className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
+  >
+    {BadgeCounter}
+  </button>
+) : (
+  <Link
+    to="/cart"
+    className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
+  >
+    {BadgeCounter}
+  </Link>
+);
 }
 
 function Footer({menu}: {menu?: EnhancedMenu}) {

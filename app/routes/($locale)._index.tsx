@@ -169,7 +169,6 @@ export async function loader({params, context}: LoaderArgs) {
     }),
   );
 
-
   console.log(heroBannerMetaDataAll);
 
   //Kate
@@ -304,13 +303,14 @@ export default function Homepage() {
     <>
       <HeroBannerFirst data={metaObjectsArrFirst[0]} />
 
-      <ul>
+      {/* Kate */}
+      {/* <ul>
         {metaObjectsArr.map((el: any) => (
           <li className="w-[100%]" key={el.value}>
             <HeroBanner data={el} />
           </li>
         ))}
-      </ul>
+      </ul> */}
 
       <CustomData data={metaObjectsKate[0]} />
 
