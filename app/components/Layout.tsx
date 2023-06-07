@@ -275,7 +275,7 @@ function DesktopHeader({
           {/* here we need to add logo */}
           {title}
         </Link>
-        <nav className="flex gap-8">
+        <nav className="flex gap-8 font-bebas">
           {/* Top level menu items */}
           {(menu?.items || []).map((item) => (
             <Link
