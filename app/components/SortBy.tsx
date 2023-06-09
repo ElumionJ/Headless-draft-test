@@ -15,9 +15,12 @@ export const SortBy = ({dataLinks, linkStr, activeSort}: Props) => {
   const filterRef = useRef(null);
   useOutsideClick(filterRef, setOpen);
   return (
-    <div ref={filterRef} className="relative  z-20 font-bebas tracking-wider">
+    <div
+      ref={filterRef}
+      className="relative  z-20 font-bebas tracking-wider gt-sm:w-full"
+    >
       <button
-        className="bg-c-gray py-[13px] px-[24px] rounded-[100px] flex justify-between items-center gap-1 w-[180px] uppercase text-[20px]"
+        className="bg-c-gray py-[13px] px-[24px] rounded-[100px] flex justify-between items-center gap-1 w-[180px] gt-sm:w-full uppercase text-[20px]"
         onClick={() => setOpen((prevState) => !prevState)}
       >
         {activeSort || 'SORT BY'}
