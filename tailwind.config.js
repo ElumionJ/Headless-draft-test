@@ -27,6 +27,7 @@ export default {
         'gt-xl': {max: '80em'},
         'gt-l': {max: '58em'},
         'gt-m': {max: '37em'},
+        'gt-sm': {max: '32em'},
         'gt-ssm': {max: '30em'},
       },
       spacing: {
