@@ -1,4 +1,5 @@
 import {json, redirect, type LoaderArgs} from '@shopify/remix-oxygen';
+import {Image as ImageComponent} from '@shopify/hydrogen';
 import {LuArrowDownUp} from 'react-icons/lu';
 import {TfiClose} from 'react-icons/tfi';
 import {
@@ -12,6 +13,10 @@ import type {
   ProductConnection,
   Collection,
   PageInfo,
+  Metaobject,
+  Node,
+  Media,
+  Image,
 } from '@shopify/hydrogen/storefront-api-types';
 import invariant from 'tiny-invariant';
 import {
@@ -69,10 +74,9 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
     ? `vendor:${paramsObj.query.replaceAll(',', ' OR ')}`
     : null;
 
-  console.log(vendorsQuery);
-
   const data = await storefront.query<{
     products: ProductConnection;
+    metaobject: Metaobject;
   }>(ALL_PRODUCTS_QUERY, {
     variables: {
       // ...variables,
@@ -82,10 +86,48 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
       ...variablesFromParams,
       ...action,
       query: vendorsQuery,
+      metaobjectHandle: {
+        handle: 'all-products',
+        type: 'products_list_page_customize',
+      },
     },
   });
-
+  // const titleImg = await storefront.query<{
+  //   node: Node & {image: Image};
+  // }>(IMAGE_QUERY, {
+  //   variables: {
+  //     id: data.metaobject.field?.value,
+  //   },
+  // });
+  // console.log(titleImg.node.image.url);
   const allProducts = await getAllProducts(storefront);
+
+  console.log(data);
+
+  const func = async () => {
+    const parsedMetaobject = {};
+
+    await Promise.all(
+      data.metaobject.fields.map(async (el) => {
+        if (el.type === 'file_reference') {
+          const imgUrl = await storefront.query(IMAGE_QUERY, {
+            variables: {id: el.value},
+          });
+          parsedMetaobject[el.key] = {...el, value: imgUrl.node.image};
+          return;
+        } else if (el.type === 'number_integer') {
+          parsedMetaobject[el.key] = {
+            ...el,
+            value: isNaN(+el.value) ? 0 : +el.value,
+          };
+          return;
+        }
+        parsedMetaobject[el.key] = {...el};
+      }),
+    );
+    return parsedMetaobject;
+  };
+  const metaObject = await func();
 
   invariant(data, 'No data returned from Shopify API');
 
@@ -111,6 +153,7 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
 
   return json(
     {
+      customize: metaObject,
       rawUrl: request.url,
       allProducts,
       rawParams: paramsObj,
@@ -128,8 +171,15 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
 }
 
 export default function AllProducts() {
-  const {products, varParams, pageInfo, rawParams, allProducts, rawUrl} =
-    useLoaderData<typeof loader>();
+  const {
+    products,
+    varParams,
+    pageInfo,
+    rawParams,
+    allProducts,
+    rawUrl,
+    customize,
+  } = useLoaderData<typeof loader>();
 
   const [timer, setTimer] = useState<number | null>(null);
   const navigate = useNavigate();
@@ -166,7 +216,7 @@ export default function AllProducts() {
     } else if (!checked) {
       const splittedVendors = vendorsQuery.split(',');
       const removeIndex = splittedVendors.indexOf(`'${value}'`);
-      splittedVendors.splice(removeIndex, 1);
+      if (removeIndex > -1) splittedVendors.splice(removeIndex, 1);
       newVendors = splittedVendors.join(',');
     }
     setVendorsQuery(newVendors);
@@ -181,6 +231,9 @@ export default function AllProducts() {
     const newTimer = setTimeout(() => {
       navigate(
         `/products?sortKey=${varParams.sortKey}&reverse=${varParams.reverse}&query=${vendorsQuery}`,
+        {
+          preventScrollReset: true,
+        },
       );
       console.log(vendorsQuery);
     }, 2000);
@@ -197,10 +250,20 @@ export default function AllProducts() {
       }
     };
   }, [timer]);
-
   return (
     <>
-      <PageHeader heading="All Products" variant="allCollections" />
+      <header data-header className="relative w-full">
+        <ImageComponent
+          loading={'eager'}
+          data={customize.title_image.value}
+          className="object-cover h-full fadeIn relative title-bg-shadow "
+        />
+        <div className="absolute z-10 h-full w-full title-bg-shadow flex items-center pl-[40px] top-0 left-0">
+          <h1 className=" font-bebas text-[#fff] tracking-wider text-3xl leading-[120%] uppercase">
+            {customize.title.value}
+          </h1>
+        </div>
+      </header>
       <Section>
         <div className="w-full flex justify-between items-center  border-b-[1px] border-b-[#E0E0E0] pb-[32px] text-black">
           <div className="flex items-center gap-[40px]">
@@ -209,12 +272,12 @@ export default function AllProducts() {
               click={handleVendorClick}
               vendors={brands}
             />
-            <div className="flex gap-[16px] ">
+            <div className="flex gap-[16px] flex-wrap max-w-[70%]">
               {vendorsQuery &&
                 vendorsQuery.split(',').map((el) => (
                   <span
                     key={el}
-                    className="flex p-[8px] gap-[8px] items-center bg-black text-[#fff] rounded-[2px]"
+                    className="flex p-[8px] gap-[8px]  items-center bg-black text-[#fff] rounded-[2px]"
                   >
                     <span className="font-noto font-bold text-[12px] leading-[150%]">
                       {el.replaceAll("'", '')}
@@ -226,8 +289,14 @@ export default function AllProducts() {
                       onClick={(e) => {
                         // ==== Stoped here
                         const splittedVendors = vendorsQuery.split(',');
-                        const removeIndex = splittedVendors.indexOf(el);
-                        console.log(`${e.target.value}`);
+                        let value = '';
+                        if (e.target.value) {
+                          value = e.target.value;
+                        } else {
+                          value = e.target.parentElement.value;
+                        }
+                        const removeIndex = splittedVendors.indexOf(value);
+                        console.log(e.target.parentElement.value);
                         splittedVendors.splice(removeIndex, 1);
                         const newVendors = splittedVendors.join(',');
                         setVendorsQuery(newVendors);
@@ -326,6 +395,7 @@ const ALL_PRODUCTS_QUERY = `
     $sortKey: ProductSortKeys
     $reverse: Boolean
     $query: String
+    $metaobjectHandle: MetaobjectHandleInput
   ) @inContext(country: $country, language: $language) {
     products(
       first: $first
@@ -347,6 +417,13 @@ const ALL_PRODUCTS_QUERY = `
         endCursor
       }
     }
+    metaobject(handle: $metaobjectHandle) {
+      fields{
+        value
+        key
+        type
+      }
+    }
   }
   ${PRODUCT_CARD_FRAGMENT}
 `;
@@ -364,6 +441,23 @@ query FetchAllProducts($cursor:String){
     }
   }
 }`;
+
+const IMAGE_QUERY = `#graphql
+query GetImage($id:ID!){
+  node(id: $id) {
+    id
+    ... on MediaImage {
+      image {
+        url
+        altText
+        height
+        id
+        width
+      }
+    }
+  }
+}
+`;
 
 const getAllProducts = async (storefront: Storefront) => {
   const resultArr = [];
