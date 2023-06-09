@@ -222,6 +222,21 @@ export default function AllProducts() {
     setVendorsQuery(newVendors);
   };
 
+  const handleRemoveVendorOnChip = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const splittedVendors = vendorsQuery.split(',');
+    const target = e.target as HTMLButtonElement;
+    let value = '';
+    if (target.value) {
+      value = target.value;
+    } else {
+      value = (target.parentElement as HTMLButtonElement).value!;
+    }
+    const removeIndex = splittedVendors.indexOf(value);
+    splittedVendors.splice(removeIndex, 1);
+    const newVendors = splittedVendors.join(',');
+    setVendorsQuery(newVendors);
+  };
+
   useEffect(() => {
     if (timer) {
       clearTimeout(timer);
@@ -265,14 +280,14 @@ export default function AllProducts() {
         </div>
       </header>
       <Section>
-        <div className="w-full flex justify-between items-center  border-b-[1px] border-b-[#E0E0E0] pb-[32px] text-black">
-          <div className="flex items-center gap-[40px]">
+        <div className="gt-sm:grid gt-sm:grid-cols-2 w-full flex justify-between items-center border-b-[1px] border-b-[#E0E0E0] pb-[32px] text-black">
+          <div className="flex items-center sm:gap-[40px] ">
             <VendorsFilter
               url={vendorsQuery || ''}
               click={handleVendorClick}
               vendors={brands}
             />
-            <div className="flex gap-[16px] flex-wrap max-w-[70%]">
+            <div className="gt-l:hidden flex gap-[16px] flex-wrap max-w-[70%]">
               {vendorsQuery &&
                 vendorsQuery.split(',').map((el) => (
                   <span
@@ -286,21 +301,7 @@ export default function AllProducts() {
                       data-value={el}
                       value={el}
                       className="text-[11px]"
-                      onClick={(e) => {
-                        // ==== Stoped here
-                        const splittedVendors = vendorsQuery.split(',');
-                        let value = '';
-                        if (e.target.value) {
-                          value = e.target.value;
-                        } else {
-                          value = e.target.parentElement.value;
-                        }
-                        const removeIndex = splittedVendors.indexOf(value);
-                        console.log(e.target.parentElement.value);
-                        splittedVendors.splice(removeIndex, 1);
-                        const newVendors = splittedVendors.join(',');
-                        setVendorsQuery(newVendors);
-                      }}
+                      onClick={handleRemoveVendorOnChip}
                     >
                       <TfiClose />
                     </button>
@@ -308,17 +309,18 @@ export default function AllProducts() {
                 ))}
             </div>
           </div>
-          <div className="flex gap-[16px] items-center ">
+          <div className="flex gap-[16px] items-center gt-sm:w-full">
             <Link
               to={`/products?sortKey=${
                 varParams.sortKey
               }&reverse=${!varParams.reverse}&query=${vendorsQuery}`}
               preventScrollReset
+              className="gt-sm:hidden"
             >
               <LuArrowDownUp />
             </Link>
 
-            <div data-filter className="">
+            <div data-filter className="gt-sm:w-full">
               <SortBy
                 dataLinks={[
                   {value: 'TITLE', name: 'Name'},
@@ -331,6 +333,27 @@ export default function AllProducts() {
               {}
             </div>
           </div>
+        </div>
+        <div className="hidden gt-l:flex gap-[16px] flex-wrap">
+          {vendorsQuery &&
+            vendorsQuery.split(',').map((el) => (
+              <span
+                key={el}
+                className="flex p-[8px] gap-[8px]  items-center bg-black text-[#fff] rounded-[2px]"
+              >
+                <span className="font-noto font-bold text-[12px] leading-[150%]">
+                  {el.replaceAll("'", '')}
+                </span>
+                <button
+                  data-value={el}
+                  value={el}
+                  className="text-[11px]"
+                  onClick={handleRemoveVendorOnChip}
+                >
+                  <TfiClose />
+                </button>
+              </span>
+            ))}
         </div>
         <Pagination connection={products}>
           {({nodes, isLoading, NextLink, PreviousLink}) => {
