@@ -234,11 +234,14 @@ shop-pay-button {
   bottom: 0;
   left: 0;
   z-index: 11;
-  transition: opacity .2S ease-in;
+  transition: opacity 0.2s ease-in;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%);
 }
 
-.product-card:hover .card-image::after{
+.product-card:hover .card-image::after {
   opacity: 0.2;
 }
 
+.title-bg-shadow {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%);
+}
