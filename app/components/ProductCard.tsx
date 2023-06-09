@@ -124,7 +124,7 @@ export function ProductCard({
           },
         ]}
         variant="secondary"
-        className="mt-2 opacity-0 flex justify-between items-center bg-c-red w-fit gap-[12px] py-4 px-[16px] rounded-[100px] text-[#fff]"
+        className="mt-2 opacity-0 gt-l:opacity-100  flex justify-between items-center bg-c-red w-fit gap-[12px] py-4 px-[16px] rounded-[100px] text-[#fff]"
         analytics={{
           products: [productAnalytics],
           totalValue: parseFloat(productAnalytics.price),
