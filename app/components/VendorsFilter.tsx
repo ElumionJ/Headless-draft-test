@@ -53,7 +53,7 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
                   onChange={(e) => {
                     click(e.target.value, e.target.checked);
                   }}
-                  defaultChecked={url.includes(el[0])}
+                  checked={url.includes(el[0])}
                   className="text-[#D80F16]"
                   type="checkbox"
                   value={el[0]}
