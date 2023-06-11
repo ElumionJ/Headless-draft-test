@@ -7,7 +7,14 @@ import type {
 } from '@shopify/hydrogen/storefront-api-types';
 import {AnalyticsPageType} from '@shopify/hydrogen';
 
-import {ProductSwimlane, FeaturedCollections, Hero} from '~/components';
+import {
+  ProductSwimlane,
+  FeaturedCollections,
+  Hero,
+  HeroBanner,
+  HeroBannerFirst,
+  CustomData,
+} from '~/components';
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
 import {getHeroPlaceholder} from '~/lib/placeholders';
 import {seoPayload} from '~/lib/seo.server';
@@ -42,10 +49,183 @@ export async function loader({params, context}: LoaderArgs) {
     variables: {handle: 'freestyle'},
   });
 
+  const IMAGE_QUERY = `
+  query ImageUrl($id: ID!) {
+    node(id: $id) {
+      id
+      ... on MediaImage {
+        image {
+          url
+        }
+      }
+    }
+  }
+`;
+
+  const heroBannerMetaData = await context.storefront.query(`
+  #graphql
+  query {
+    metaobjects(type: "hero_baner", first: 15) {
+      nodes {
+        fields {
+          type
+          key
+          value
+        }
+      }
+    }
+
+  }`);
+
+  const heroBannerMetaDataFirst = await context.storefront.query(`
+  #graphql
+  query {
+    metaobjects(type: "hero_banner_first", first: 15) {
+      nodes {
+        fields {
+          type
+          key
+          value
+        }
+      }
+    }
+
+  }`);
+
+  const heroBannerMetaDataAll = await context.storefront.query(`
+  #graphql
+  query {
+  bannerMetaobjects: metaobjects(type: "hero_banner_first", first: 15) {
+    nodes {
+      fields {
+        value
+        key
+      }
+    }
+  }
+  designerMetaobjects: metaobjects(type: "hero_baner", first: 15) {
+    nodes {
+      fields {
+        value
+        key
+      }
+    }
+  }
+}`);
+
+  // const metaObjectsArrAll = await Promise.all(
+  //   for (const key in heroBannerMetaDataAll) {
+  //     console.log(`Key: ${key}`);
+  //   }
+  // );
+
+  const metaObjectsArrFirst = await Promise.all(
+    heroBannerMetaDataFirst.metaobjects.nodes.map(async (element: any) => {
+      const parsedMetaobject = {};
+      await Promise.all(
+        element.fields.map(async (el: any) => {
+          if (el.type === 'file_reference') {
+            const imgUrl = await context.storefront.query(IMAGE_QUERY, {
+              variables: {id: el.value},
+            });
+            parsedMetaobject[el.key] = {...el, value: imgUrl.node.image.url};
+            return;
+          } else if (el.type === 'number_integer') {
+            parsedMetaobject[el.key] = {
+              ...el,
+              value: isNaN(+el.value) ? 0 : +el.value,
+            };
+            return;
+          }
+          parsedMetaobject[el.key] = {...el};
+        }),
+      );
+      return parsedMetaobject;
+    }),
+  );
+
+  const metaObjectsArr = await Promise.all(
+    heroBannerMetaData.metaobjects.nodes.map(async (element: any) => {
+      const parsedMetaobject = {};
+      await Promise.all(
+        element.fields.map(async (el: any) => {
+          if (el.type === 'file_reference') {
+            const imgUrl = await context.storefront.query(IMAGE_QUERY, {
+              variables: {id: el.value},
+            });
+            parsedMetaobject[el.key] = {...el, value: imgUrl.node.image.url};
+            return;
+          } else if (el.type === 'number_integer') {
+            parsedMetaobject[el.key] = {
+              ...el,
+              value: isNaN(+el.value) ? 0 : +el.value,
+            };
+            return;
+          }
+          parsedMetaobject[el.key] = {...el};
+        }),
+      );
+      return parsedMetaobject;
+    }),
+  );
+
+  // console.log(heroBannerMetaData[0]);
+  // console.log(heroBannerMetaDataFirst);
+
+  //Kate
+
+  const customData = await context.storefront.query(`
+  #graphql
+
+    query {
+      shop {
+        name
+      }
+      metaobjects(type: "developers", first: 5) {
+        nodes {
+          handle
+          id
+          fields {
+            key
+            value
+            type
+          }
+        }
+      }
+    }`);
+
+  const metaObjectsKate = await Promise.all(
+    customData.metaobjects.nodes.map(async (element: any) => {
+      const parsedMetaobject = {};
+      await Promise.all(
+        element.fields.map(async (el: any) => {
+          if (el.type === 'file_reference') {
+            const imgUrl = await context.storefront.query(IMAGE_QUERY, {
+              variables: {id: el.value},
+            });
+            parsedMetaobject[el.key] = {...el, value: imgUrl.node.image.url};
+            return;
+          } else if (el.type === 'number_integer') {
+            parsedMetaobject[el.key] = {
+              ...el,
+              value: isNaN(+el.value) ? 0 : +el.value,
+            };
+            return;
+          }
+          parsedMetaobject[el.key] = {...el};
+        }),
+      );
+      return parsedMetaobject;
+    }),
+  );
+
   const seo = seoPayload.home();
 
   return defer(
     {
+      metaObjectsKate,
+      metaObjectsArr,
+      metaObjectsArrFirst,
       shop,
       primaryHero: hero,
       // These different queries are separated to illustrate how 3rd party content
@@ -111,6 +291,10 @@ export default function Homepage() {
     tertiaryHero,
     featuredCollections,
     featuredProducts,
+    metaObjectsArr,
+    metaObjectsArrFirst,
+
+    metaObjectsKate,
   } = useLoaderData<typeof loader>();
 
   // TODO: skeletons vs placeholders
@@ -118,9 +302,23 @@ export default function Homepage() {
 
   return (
     <>
-      {primaryHero && (
+      {/* {primaryHero && (
         <Hero {...primaryHero} height="full" top loading="eager" />
-      )}
+      )} */}
+
+      <HeroBannerFirst data={metaObjectsArrFirst[0]} />
+
+      {/* Vlad ul */}
+      <ul className="flex flex-row gap-x-2">
+        {metaObjectsArr.map((el: any) => (
+          <li className="w-[100%]" key={el.value}>
+            <HeroBanner data={el} />
+          </li>
+        ))}
+      </ul>
+
+      <CustomData data={metaObjectsKate[0]} />
+      <CustomData data={metaObjectsKate[1]} />
 
       {featuredProducts && (
         <Suspense>

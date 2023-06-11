@@ -1,4 +1,12 @@
-import {type ReactNode, useRef, Suspense, useMemo} from 'react';
+import {
+  type ReactNode,
+  useRef,
+  Suspense,
+  useMemo,
+  useState,
+  useEffect,
+} from 'react';
+import DOMPurify from 'dompurify';
 import {Disclosure, Listbox} from '@headlessui/react';
 import {defer, type LoaderArgs} from '@shopify/remix-oxygen';
 import {
@@ -18,6 +26,9 @@ import type {
   Product as ProductType,
   Shop,
   ProductConnection,
+  Metafield,
+  Metaobject,
+  MetaobjectField,
 } from '@shopify/hydrogen/storefront-api-types';
 
 import {
@@ -33,12 +44,31 @@ import {
   Link,
   AddToCartButton,
   Button,
+  ProductQuantity,
+  ProductTabs,
+  SwiperImages,
+  IconAddToCartBag,
 } from '~/components';
 import {getExcerpt} from '~/lib/utils';
 import {seoPayload} from '~/lib/seo.server';
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
 import type {Storefront} from '~/lib/type';
 import {routeHeaders, CACHE_SHORT} from '~/data/cache';
+
+const DESCRIPTION_METAFIELD_VARIABLE = [
+  {
+    key: 'attributes',
+    namespace: 'custom',
+  },
+  {
+    namespace: 'custom',
+    key: 'attributes_title',
+  },
+];
+const SHIPPING_INFO_METAOBJECT_VARIABLE = {
+  handle: 'shipping-information-wndmvoiu',
+  type: 'shipping_information',
+};
 
 export const headers = routeHeaders;
 
@@ -62,12 +92,60 @@ export async function loader({params, request, context}: LoaderArgs) {
       selectedOptions,
       country: context.storefront.i18n.country,
       language: context.storefront.i18n.language,
+      identifiers: DESCRIPTION_METAFIELD_VARIABLE,
+      handleShippingInfo: SHIPPING_INFO_METAOBJECT_VARIABLE,
     },
   });
 
   if (!product?.id) {
     throw new Response('product', {status: 404});
   }
+
+  const shippingInfo = await context.storefront.query(SHIPPING_INFO_QUERY, {
+    variables: {
+      handleShippingInfo: SHIPPING_INFO_METAOBJECT_VARIABLE,
+    },
+  });
+  const shippingInfoText = shippingInfo.metaobject.fields.find(
+    (el: MetaobjectField) => el.key === 'text',
+  ).value;
+
+  const attributesMetaobjectsString = product.metafields.find(
+    (el) => el?.key === 'attributes',
+  )?.value;
+
+  const attributesTitleString = product.metafields.find(
+    (el) => el?.key === 'attributes_title',
+  )?.value;
+
+  const attributesMetaobjectsArr: string[] | [] = JSON.parse(
+    attributesMetaobjectsString || '[]',
+  );
+  const metaobjectsPromises = attributesMetaobjectsArr.map(async (el) => {
+    return context.storefront.query(
+      `query($id:ID!){
+      metaobject(id:$id){
+        fields{
+          value
+          key
+        }
+      }
+    }`,
+      {
+        variables: {
+          id: el,
+        },
+      },
+    );
+  });
+  const metaobjectsArr = await Promise.all(metaobjectsPromises);
+  const attributesArr = metaobjectsArr.map((meta) => {
+    const obj = {};
+    (meta.metaobject as unknown as Metaobject).fields.forEach((field) => {
+      obj[field.key] = {...field};
+    });
+    return obj;
+  });
 
   const recommended = getRecommendedProducts(context.storefront, product.id);
   const firstVariant = product.variants.nodes[0];
@@ -90,6 +168,9 @@ export async function loader({params, request, context}: LoaderArgs) {
 
   return defer(
     {
+      shippingInfoText,
+      attributesTitleString,
+      attributesArr,
       product,
       shop,
       storeDomain: shop.primaryDomain.url,
@@ -111,36 +192,56 @@ export async function loader({params, request, context}: LoaderArgs) {
 }
 
 export default function Product() {
-  const {product, shop, recommended} = useLoaderData<typeof loader>();
+  const {
+    product,
+    shop,
+    recommended,
+    attributesArr,
+    attributesTitleString,
+    shippingInfoText,
+  } = useLoaderData<typeof loader>();
   const {media, title, vendor, descriptionHtml} = product;
   const {shippingPolicy, refundPolicy} = shop;
+  const descriptionRef = useRef(null);
 
+  useEffect(() => {
+    const sanitizedHtml = DOMPurify.sanitize(descriptionHtml);
+    (descriptionRef.current as unknown as HTMLParagraphElement).innerHTML =
+      sanitizedHtml;
+  }, []);
   return (
     <>
-      <Section className="px-0 md:px-8 lg:px-12">
-        <div className="grid items-start md:gap-6 lg:gap-20 md:grid-cols-2 lg:grid-cols-3">
-          <ProductGallery
-            media={media.nodes}
-            className="w-full lg:col-span-2"
-          />
-          <div className="sticky md:-mb-nav md:top-nav md:-translate-y-nav md:h-screen md:pt-nav hiddenScroll md:overflow-y-scroll">
-            <section className="flex flex-col w-full max-w-xl gap-8 p-6 md:mx-auto md:max-w-sm md:px-0">
-              <div className="grid gap-2">
-                <Heading as="h1" className="whitespace-normal">
-                  {title}
-                </Heading>
-                {vendor && (
-                  <Text className={'opacity-50 font-medium'}>{vendor}</Text>
-                )}
-              </div>
+      <Section className="!px-0 !py-0">
+        <div className=" justify-center !gap-[63px] !flex px-0 md:px-8 lg:px-12 gt-l:flex-col  gt-l:items-center bg-c-gray pt-[60px]">
+          <div className=" px-[4px] max-w-[325px]">
+            <Heading as="h1" className="text-5xl  mb-8">
+              {title}
+            </Heading>
+            {descriptionHtml && (
+              <p
+                ref={descriptionRef}
+                className="text-[16px] text-[#333333]"
+              ></p>
+            )}
+          </div>
+          <div className="max-h-[468px] max-w-[368px] gt-ssm:w-[280px]">
+            {/* <ProductGallery
+              media={media.nodes}
+              className="w-full lg:col-span-2"
+            /> */}
+            <SwiperImages media={media.nodes} />
+          </div>
+
+          <div className="sticky md:-mb-nav md:top-nav md:-translate-y-nav md:pt-nav hiddenScroll md:overflow-y-scroll ">
+            <section className="flex flex-col w-full max-w-xl gap-8 p-6 md:mx-auto md:max-w-sm md:px-0 gt-ssm:p-1">
+              {vendor && (
+                <div className="flex gap-[8px] items-end">
+                  <span className="text-xl text-[#000] uppercase">Brand:</span>
+                  <span className="text-[#333]">{vendor}</span>
+                </div>
+              )}
               <ProductForm />
               <div className="grid gap-4 py-4">
-                {descriptionHtml && (
-                  <ProductDetail
-                    title="Product Details"
-                    content={descriptionHtml}
-                  />
-                )}
                 {shippingPolicy?.body && (
                   <ProductDetail
                     title="Shipping"
@@ -158,6 +259,15 @@ export default function Product() {
               </div>
             </section>
           </div>
+        </div>
+        <div className="mt-24 px-[60px] gt-l:px-[10px]">
+          <ProductTabs
+            shippingInfoText={shippingInfoText}
+            attributesTitle={attributesTitleString}
+            attributes={attributesArr}
+            description={product.description}
+            title={product.title}
+          />
         </div>
       </Section>
       <Suspense fallback={<Skeleton className="h-32" />}>
@@ -179,6 +289,25 @@ export function ProductForm() {
 
   const [currentSearchParams] = useSearchParams();
   const {location} = useNavigation();
+
+  const [quantity, setQuantity] = useState<number>(1); //---------
+
+  const changeQuantity = (action: 'plus' | 'minus') => {
+    if (action === 'plus') {
+      setQuantity((prev) => Math.max(1, prev + 1));
+    } else if (action === 'minus') {
+      setQuantity((prev) => Math.max(1, prev - 1));
+    }
+  };
+
+  useEffect(() => {
+    if (!product.totalInventory) return;
+    if (product.totalInventory >= quantity) {
+      console.log('AVAILABLE');
+    } else {
+      console.log('Not AVAILABLE');
+    }
+  }, [quantity]);
 
   /**
    * We update `searchParams` with in-flight request data from `location` (if available)
@@ -216,6 +345,7 @@ export function ProductForm() {
    * of add to cart if there is none returned from the loader.
    * A developer can opt out of this, too.
    */
+  // product.selectedVariant?.quantityAvailable;
   const selectedVariant = product.selectedVariant ?? firstVariant;
   const isOutOfStock = !selectedVariant?.availableForSale;
 
@@ -226,7 +356,7 @@ export function ProductForm() {
 
   const productAnalytics: ShopifyAnalyticsProduct = {
     ...analytics.products[0],
-    quantity: 1,
+    quantity,
   };
 
   return (
@@ -243,40 +373,38 @@ export function ProductForm() {
                 <Text>Sold out</Text>
               </Button>
             ) : (
-              <AddToCartButton
-                lines={[
-                  {
-                    merchandiseId: selectedVariant.id,
-                    quantity: 1,
-                  },
-                ]}
-                variant="primary"
-                data-test="add-to-cart"
-                analytics={{
-                  products: [productAnalytics],
-                  totalValue: parseFloat(productAnalytics.price),
-                }}
-              >
-                <Text
-                  as="span"
-                  className="flex items-center justify-center gap-2"
-                >
-                  <span>Add to Cart</span> <span>·</span>{' '}
-                  <Money
-                    withoutTrailingZeros
-                    data={selectedVariant?.price!}
-                    as="span"
-                  />
-                  {isOnSale && (
-                    <Money
-                      withoutTrailingZeros
-                      data={selectedVariant?.compareAtPrice!}
+              <div className="flex gap-[16px] items-center gt-xl:flex-col">
+                <ProductQuantity
+                  quantity={quantity}
+                  changeQuantity={changeQuantity}
+                />
+                <div className="w-full ">
+                  <AddToCartButton
+                    lines={[
+                      {
+                        merchandiseId: selectedVariant.id,
+                        quantity,
+                      },
+                    ]}
+                    className="mt-2 flex justify-between items-center bg-c-red w-fit gap-[12px] py-4 px-[16px] rounded-[100px] text-[#fff]"
+                    variant="primary"
+                    data-test="add-to-cart"
+                    analytics={{
+                      products: [productAnalytics],
+                      totalValue: parseFloat(productAnalytics.price),
+                    }}
+                  >
+                    <Text
                       as="span"
-                      className="opacity-50 strike"
-                    />
-                  )}
-                </Text>
-              </AddToCartButton>
+                      className="flex items-center justify-center gap-2 uppercase text-[12px] leading-4 font-noto tracking-widest font-bold"
+                    >
+                      <span>Add to Cart</span>
+
+                      <IconAddToCartBag />
+                    </Text>
+                  </AddToCartButton>
+                </div>
+              </div>
             )}
             {!isOutOfStock && (
               <ShopPayButton
@@ -532,14 +660,30 @@ const PRODUCT_VARIANT_FRAGMENT = `#graphql
   }
 `;
 
+const SHIPPING_INFO_QUERY = `
+  #graphql
+  query ShippingInfo($handleShippingInfo: MetaobjectHandleInput) {
+    metaobject(handle: $handleShippingInfo) {
+      fields {
+        key
+        type
+        value
+      }
+    }
+  }
+`;
+
 const PRODUCT_QUERY = `#graphql
   query Product(
     $country: CountryCode
     $language: LanguageCode
     $handle: String!
     $selectedOptions: [SelectedOptionInput!]!
+    $identifiers: [HasMetafieldsIdentifier!]!
+    
   ) @inContext(country: $country, language: $language) {
     product(handle: $handle) {
+      totalInventory
       id
       title
       vendor
@@ -549,6 +693,12 @@ const PRODUCT_QUERY = `#graphql
       options {
         name
         values
+      }
+
+      metafields(identifiers: $identifiers) {
+        id
+        value
+        key
       }
       selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
         ...ProductVariantFragment
@@ -585,6 +735,8 @@ const PRODUCT_QUERY = `#graphql
   }
   ${MEDIA_FRAGMENT}
   ${PRODUCT_VARIANT_FRAGMENT}
+
+
 `;
 
 const RECOMMENDED_PRODUCTS_QUERY = `#graphql

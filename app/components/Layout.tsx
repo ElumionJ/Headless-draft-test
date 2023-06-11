@@ -1,4 +1,4 @@
-import {useParams, Form, Await, useMatches} from '@remix-run/react';
+import {useParams, Form, Await, useMatches, Links} from '@remix-run/react';
 import {useWindowScroll} from 'react-use';
 import {Disclosure} from '@headlessui/react';
 import {Suspense, useEffect, useMemo} from 'react';
@@ -17,9 +17,9 @@ import {
   IconCaret,
   Section,
   CountrySelector,
-  Cart,
   CartLoading,
   Link,
+  Button,
 } from '~/components';
 import {
   type EnhancedMenu,
@@ -30,6 +30,8 @@ import {useIsHydrated} from '~/hooks/useIsHydrated';
 import {useCartFetchers} from '~/hooks/useCartFetchers';
 
 import type {LayoutData} from '../root';
+
+import logo from '~/../public/logo.svg';
 
 export function Layout({
   children,
@@ -108,15 +110,16 @@ function CartDrawer({isOpen, onClose}: {isOpen: boolean; onClose: () => void}) {
   const [root] = useMatches();
 
   return (
-    <Drawer open={isOpen} onClose={onClose} heading="Cart" openFrom="right">
-      <div className="grid">
-        <Suspense fallback={<CartLoading />}>
-          <Await resolve={root.data?.cart}>
-            {(cart) => <Cart layout="drawer" onClose={onClose} cart={cart} />}
-          </Await>
-        </Suspense>
-      </div>
-    </Drawer>
+    <Suspense fallback={<CartLoading />}>
+      <Await resolve={root.data?.cart}>
+        <Drawer
+          open={isOpen}
+          onClose={onClose}
+          heading="Cart"
+          openFrom="right"
+        />
+      </Await>
+    </Suspense>
   );
 }
 
@@ -131,7 +134,7 @@ export function MenuDrawer({
 }) {
   return (
     <Drawer open={isOpen} onClose={onClose} openFrom="left" heading="Menu">
-      <div className="grid">
+      <div className="grid ">
         <MenuMobileNav menu={menu} onClose={onClose} />
       </div>
     </Drawer>
@@ -141,30 +144,69 @@ export function MenuDrawer({
 function MenuMobileNav({
   menu,
   onClose,
+  isHome,
 }: {
   menu: EnhancedMenu;
   onClose: () => void;
+  isHome: boolean;
 }) {
+  const params = useParams();
+
   return (
-    <nav className="grid gap-4 p-6 sm:gap-6 sm:px-12 sm:py-8">
-      {/* Top level menu items */}
-      {(menu?.items || []).map((item) => (
-        <span key={item.id} className="block">
-          <Link
-            to={item.to}
-            target={item.target}
-            onClick={onClose}
-            className={({isActive}) =>
-              isActive ? 'pb-1 border-b -mb-px' : 'pb-1'
-            }
+    <>
+      <nav className="font-bebas grid gap-4 p-6 sm:gap-6 sm:px-12 sm:py-8 text-white">
+        <Form
+          method="get"
+          action={params.locale ? `/${params.locale}/search` : '/search'}
+          className="font-noto items-center gap-2 sm:flex bg-white rounded-[100px] mb-8"
+        >
+          <button
+            type="submit"
+            className="relative flex items-center justify-center w-8 h-8"
           >
-            <Text as="span" size="copy">
-              {item.title}
-            </Text>
-          </Link>
-        </span>
-      ))}
-    </nav>
+            <IconSearch />
+          </button>
+          <Input
+            className={
+              isHome
+                ? 'focus:border-contrast/20 dark:focus:border-primary/20 text-black'
+                : 'focus:border-primary/20 text-black'
+            }
+            type="search"
+            variant="minisearch"
+            placeholder="Tabasco, Cholula, Very Hot"
+            name="q"
+          />
+        </Form>
+        {/* Top level menu items */}
+        {(menu?.items || []).map((item) => (
+          <span key={item.id} className="block">
+            <Link
+              to={item.to}
+              target={item.target}
+              onClick={onClose}
+              className={({isActive}) =>
+                isActive ? 'pb-1 border-b -mb-px' : 'pb-1'
+              }
+            >
+              <Text as="span" size="copy">
+                {item.title}
+              </Text>
+            </Link>
+          </span>
+        ))}
+      </nav>
+
+      <a href="/account/login" className="mt-[80px] mx-3">
+        <Button
+          as="span"
+          width="full"
+          className=" border-white border-2 text-white mb-4  flex items-center justify-center  px-3 py-4  bg-[#D80F16] rounded-[100px] w-full hover:opacity-80"
+        >
+          Login
+        </Button>
+      </a>
+    </>
   );
 }
 
@@ -192,14 +234,14 @@ function MobileHeader({
           : 'bg-contrast/80 text-primary'
       } flex lg:hidden items-center h-nav sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 px-4 md:px-8`}
     >
-      <div className="flex items-center justify-start w-full gap-4">
+      <div className="flex items-center justify-start w-full gap-4 ">
         <button
           onClick={openMenu}
           className="relative flex items-center justify-center w-8 h-8"
         >
           <IconMenu />
         </button>
-        <Form
+        {/* <Form
           method="get"
           action={params.locale ? `/${params.locale}/search` : '/search'}
           className="items-center gap-2 sm:flex"
@@ -221,7 +263,7 @@ function MobileHeader({
             placeholder="Search"
             name="q"
           />
-        </Form>
+        </Form> */}
       </div>
 
       <Link
@@ -229,15 +271,19 @@ function MobileHeader({
         to="/"
       >
         <Heading
-          className="font-bold text-center leading-none"
+          className="font-bold leading-none text-center"
           as={isHome ? 'h1' : 'h2'}
         >
-          {title}
+          {/* {title} */}
+          <div className="p-2 ">
+            <img src={logo} alt="" className="w-[50px] h-[50px]" />
+          </div>
         </Heading>
+        {/* {logo} */}
       </Link>
 
       <div className="flex items-center justify-end w-full gap-4">
-        <AccountLink className="relative flex items-center justify-center w-8 h-8" />
+        {/* <AccountLink className="relative flex items-center justify-center w-8 h-8" />s */}
         <CartCount isHome={isHome} openCart={openCart} />
       </div>
     </header>
@@ -257,6 +303,7 @@ function DesktopHeader({
 }) {
   const params = useParams();
   const {y} = useWindowScroll();
+
   return (
     <header
       role="banner"
@@ -266,31 +313,66 @@ function DesktopHeader({
           : 'bg-contrast/80 text-primary'
       } ${
         !isHome && y > 50 && ' shadow-lightHeader'
-      } hidden h-nav lg:flex items-center sticky transition duration-300 backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-8 px-12 py-8`}
+      } hidden h-nav lg:flex items-center justify-center sticky transition duration-300 backdrop-blur-lg z-40 top-0  w-full leading-none gap-10 px-12 py-8`}
     >
-      <div className="flex gap-12">
-        <Link className="font-bold" to="/" prefetch="intent">
-          {title}
-        </Link>
-        <nav className="flex gap-8">
-          {/* Top level menu items */}
-          {(menu?.items || []).map((item) => (
-            <Link
-              key={item.id}
-              to={item.to}
-              target={item.target}
-              prefetch="intent"
-              className={({isActive}) =>
-                isActive ? 'pb-1 border-b -mb-px' : 'pb-1'
-              }
-            >
-              {item.title}
-            </Link>
-          ))}
-        </nav>
-      </div>
-      <div className="flex items-center gap-1">
+      <div className="flex justify-between items-center gap-x-96">
         <Form
+          method="get"
+          action={params.locale ? `/${params.locale}/search` : '/search'}
+          className="flex items-center gap-2"
+        >
+          {/* <Input
+            className={
+              isHome
+                ? 'focus:border-contrast/20 dark:focus:border-primary/20'
+                : 'focus:border-primary/20'
+            }
+            type="search"
+            variant="minisearch"
+            placeholder="Search"
+            name="q"
+          /> */}
+          <button
+            type="submit"
+            className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
+          >
+            <IconSearch />
+          </button>
+        </Form>
+        <div className="flex gap-12">
+          {/* here we need to add logo */}
+          {/* <Link className="font-bold font-bebas" to="/" prefetch="intent">
+            {title}
+          </Link> */}
+          <nav className="flex gap-8 font-bebas items-center justify-center">
+            {/* Top level menu items */}
+            {(menu?.items || []).map((item) => {
+              if (item.to === '/') {
+                return (
+                  <Link to="/" className="">
+                    <img src={logo} alt="" className="w-[70px] h-[70px]" />
+                  </Link>
+                );
+              }
+
+              return (
+                <Link
+                  key={item.id}
+                  to={item.to}
+                  target={item.target}
+                  prefetch="intent"
+                  className={({isActive}) =>
+                    isActive ? 'pb-1 border-b -mb-px' : 'pb-1'
+                  }
+                >
+                  {item.title}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+        <div className="flex items-center gap-9">
+          {/* <Form
           method="get"
           action={params.locale ? `/${params.locale}/search` : '/search'}
           className="flex items-center gap-2"
@@ -312,9 +394,10 @@ function DesktopHeader({
           >
             <IconSearch />
           </button>
-        </Form>
-        <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5" />
-        <CartCount isHome={isHome} openCart={openCart} />
+        </Form> */}
+          <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5" />
+          <CartCount isHome={isHome} openCart={openCart} />
+        </div>
       </div>
     </header>
   );
@@ -326,10 +409,62 @@ function AccountLink({className}: {className?: string}) {
   return isLoggedIn ? (
     <Link to="/account" className={className}>
       <IconAccount />
+      <div className="flex items-center justify-center text-black uppercase border-b-2 border-black w-fit gap-x-2 hover:opacity-80">
+        login
+        {/* <svg
+          width="10"
+          height="10"
+          viewBox="0 0 10 10"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M7.07025 2.25054L2.12057 7.20022"
+            stroke="black"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M2.95279 2.12583L7.19526 2.12565L7.19543 6.36847"
+            stroke="black"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg> */}
+      </div>
     </Link>
   ) : (
     <Link to="/account/login" className={className}>
-      <IconLogin />
+      {/* <IconLogin /> */}
+      <div className="tracking-widest font-bebas flex items-center justify-center   uppercase border-b-2  border-black dark:border-white w-fit gap-x-2 hover:opacity-80">
+        Login
+        <span className="">
+          <svg
+            width="10"
+            height="10"
+            viewBox="0 0 10 10"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7.07025 2.25054L2.12057 7.20022"
+              stroke="black"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M2.95279 2.12583L7.19526 2.12565L7.19543 6.36847"
+              stroke="black"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </span>
+      </div>
     </Link>
   );
 }
@@ -373,7 +508,8 @@ function Badge({
     () => (
       <>
         <IconBag />
-        <div
+
+        <span
           className={`${
             dark
               ? 'text-primary bg-contrast dark:text-contrast dark:bg-primary'
@@ -381,11 +517,23 @@ function Badge({
           } absolute bottom-1 right-1 text-[0.625rem] font-medium subpixel-antialiased h-3 min-w-[0.75rem] flex items-center justify-center leading-none text-center rounded-full w-auto px-[0.125rem] pb-px`}
         >
           <span>{count || 0}</span>
-        </div>
+        </span>
       </>
     ),
     [count, dark],
   );
+
+  //Kate
+  //   return isHydrated ? (
+  //     <Link
+  //       to="/cart"
+  //       onClick={openCart}
+  //       className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
+  //     >
+  //       {BadgeCounter}
+  //     </Link>
+  //   ) : null;
+  // }
 
   return isHydrated ? (
     <button
