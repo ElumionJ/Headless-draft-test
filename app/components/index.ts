@@ -28,5 +28,7 @@ export {CustomData} from './CustomData';
 export {ProductQuantity} from './ProductQuantity';
 export {ProductTabs} from './ProductTabs';
 export {SwiperImages} from './SwiperImages';
+export {SortBy} from './SortBy';
+export {VendorsFilter} from './VendorsFilter';
 // Sue me
 export * from './Icon';

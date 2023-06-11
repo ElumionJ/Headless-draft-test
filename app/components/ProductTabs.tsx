@@ -42,7 +42,7 @@ export const ProductTabs = ({
           onClick={handleClick}
           className={`${
             activeTab === 'description'
-              ? 'block bg-[#4d4d4d] text-[#f2f2f2]'
+              ? 'block bg-c-red text-[#f2f2f2]'
               : 'none'
           } w-[280px] text-center py-3 inline-block text-[20px] uppercase gt-l:w-full gt-l:text-center gt-l:border-y-[1px] gt-l:border-y-[#00000063]`}
         >
@@ -52,9 +52,7 @@ export const ProductTabs = ({
           data-name="shipping"
           onClick={handleClick}
           className={`${
-            activeTab === 'shipping'
-              ? 'block bg-[#4d4d4d] text-[#f2f2f2]'
-              : 'none'
+            activeTab === 'shipping' ? 'block bg-c-red text-[#f2f2f2]' : 'none'
           } w-[280px] text-center py-3 inline-block text-[20px] uppercase gt-l:w-full gt-l:text-center gt-l:border-y-[1px] gt-l:border-y-[#00000063]`}
         >
           SHIPPING INFORMATION
@@ -63,9 +61,7 @@ export const ProductTabs = ({
           data-name="payments"
           onClick={handleClick}
           className={`${
-            activeTab === 'payments'
-              ? 'block bg-[#4d4d4d] text-[#f2f2f2]'
-              : 'none'
+            activeTab === 'payments' ? 'block bg-c-red text-[#f2f2f2]' : 'none'
           } w-[280px] text-center py-3 inline-block text-[20px] uppercase gt-l:w-full gt-l:text-center gt-l:border-y-[1px] gt-l:border-y-[#00000063]`}
         >
           Payments

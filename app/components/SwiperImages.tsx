@@ -12,10 +12,11 @@ export const SwiperImages = ({media}: Props) => {
       slidesPerView: 1, // Number of slides per view
       loop: true,
       autoHeight: true,
-      
+
       pagination: {
         el: '.swiper-pagination', // Pagination dots selector
         clickable: true, // Enable navigation through pagination dots
+        enabled: true,
       },
     });
     // swiper.destroy(true);
@@ -33,6 +34,7 @@ export const SwiperImages = ({media}: Props) => {
               <div key={el.id} className="swiper-slide">
                 {/* <img src={el.image.url} alt="" /> */}
                 <Image
+                  aspectRatio="3/4"
                   loading={'eager'}
                   data={el.image!}
                   className="object-cover h-full fadeIn"
