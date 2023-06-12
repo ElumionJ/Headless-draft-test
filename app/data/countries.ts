@@ -232,7 +232,7 @@ export const countries: Localizations = {
   '/ar-ar': {
     label: 'Arabian (SAR ر.س)',
     language: 'AR',
-    country: 'AR',
+    country: 'SA',
     currency: 'SAR',
   },
 };
