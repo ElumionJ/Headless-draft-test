@@ -169,7 +169,8 @@ export async function loader({params, context}: LoaderArgs) {
     }),
   );
 
-  console.log(heroBannerMetaDataAll);
+  // console.log(heroBannerMetaData[0]);
+  // console.log(heroBannerMetaDataFirst);
 
   //Kate
 
@@ -301,10 +302,14 @@ export default function Homepage() {
 
   return (
     <>
+      {/* {primaryHero && (
+        <Hero {...primaryHero} height="full" top loading="eager" />
+      )} */}
+
       <HeroBannerFirst data={metaObjectsArrFirst[0]} />
 
-      {/* Kate */}
-      {/* <ul>
+      {/* Vlad ul */}
+      {/* <ul className="flex flex-row gap-x-2">
         {metaObjectsArr.map((el: any) => (
           <li className="w-[100%]" key={el.value}>
             <HeroBanner data={el} />
@@ -313,10 +318,7 @@ export default function Homepage() {
       </ul> */}
 
       <CustomData data={metaObjectsKate[0]} />
-
-      {primaryHero && (
-        <Hero {...primaryHero} height="full" top loading="eager" />
-      )}
+      <CustomData data={metaObjectsKate[1]} />
 
       {featuredProducts && (
         <Suspense>
