@@ -184,7 +184,6 @@ export default function AllProducts() {
   const mainPath = `${origin}${selectedLocale.pathPrefix}`;
   console.log(mainPath);
   console.log(selectedLocale);
-  
 
   const [brands, setBrands] = useState({});
   const vendorsFilterRef = useRef(null);
@@ -247,7 +246,7 @@ export default function AllProducts() {
     // Set a new timer to redirect after 2 seconds
     const newTimer = setTimeout(() => {
       navigate(
-        `/products?sortKey=${varParams.sortKey}&reverse=${varParams.reverse}&query=${vendorsQuery}`,
+        `${selectedLocale.pathPrefix}/products?sortKey=${varParams.sortKey}&reverse=${varParams.reverse}&query=${vendorsQuery}`,
         {
           preventScrollReset: true,
         },
@@ -313,7 +312,7 @@ export default function AllProducts() {
           </div>
           <div className="flex gap-[16px] items-center gt-sm:w-full">
             <Link
-              to={`/products?sortKey=${
+              to={`${selectedLocale.pathPrefix}/products?sortKey=${
                 varParams.sortKey
               }&reverse=${!varParams.reverse}&query=${vendorsQuery}`}
               preventScrollReset
@@ -328,7 +327,7 @@ export default function AllProducts() {
                   {value: 'TITLE', name: 'Name'},
                   {value: 'PRICE', name: 'Price'},
                 ]}
-                linkStr={`/products?reverse=${varParams.reverse}&query=${vendorsQuery}`}
+                linkStr={`${selectedLocale.pathPrefix}/products?reverse=${varParams.reverse}&query=${vendorsQuery}`}
                 activeSort={rawParams.sortKey}
               />
 
@@ -376,9 +375,9 @@ export default function AllProducts() {
                     {pageInfo.hasPreviousPage && (
                       <Link
                         className="text-[12px] font-bold leading-[150%] hover:text-[#D80F16] block w-[100px] px-3 py-1 text-right"
-                        to={`/products?sortKey=${varParams.sortKey}&reverse=${
-                          varParams.reverse
-                        }&cursor=${
+                        to={`${selectedLocale.pathPrefix}/products?sortKey=${
+                          varParams.sortKey
+                        }&reverse=${varParams.reverse}&cursor=${
                           pageInfo.startCursor || null
                         }&query=${vendorsQuery}&direction=prev`}
                       >
@@ -388,9 +387,9 @@ export default function AllProducts() {
                     {pageInfo.hasNextPage && (
                       <Link
                         className="text-[12px] font-bold leading-[150%] hover:text-[#D80F16] block w-[100px] px-3 py-1 text-left"
-                        to={`/products?sortKey=${varParams.sortKey}&reverse=${
-                          varParams.reverse
-                        }&cursor=${
+                        to={`${selectedLocale.pathPrefix}/products?sortKey=${
+                          varParams.sortKey
+                        }&reverse=${varParams.reverse}&cursor=${
                           pageInfo.endCursor || null
                         }&query=${vendorsQuery}&direction=next`}
                       >
