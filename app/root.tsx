@@ -76,11 +76,16 @@ export default function App() {
   const data = useLoaderData<typeof loader>();
   const locale = data.selectedLocale ?? DEFAULT_LOCALE;
   const hasUserConsent = true;
+  const [root] = useMatches();
+  console.log('ROOT', data.selectedLocale);
 
   useAnalytics(hasUserConsent, locale);
 
   return (
-    <html lang={locale.language}>
+    <html
+      lang={locale.language}
+      dir={root.params.locale === 'ar-ar' ? 'rtl' : 'ltr'}
+    >
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -92,9 +97,16 @@ export default function App() {
           href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
         />
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin='use-credentials' />
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="use-credentials"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans:ital,wght@0,400;0,700;1,400&display=swap"
+          rel="stylesheet"
+        />
 
         <script
           src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"
