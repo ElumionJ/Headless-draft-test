@@ -32,6 +32,9 @@ import {useCartFetchers} from '~/hooks/useCartFetchers';
 import type {LayoutData} from '../root';
 
 import logo from '~/../public/logo.svg';
+import banner1 from '~/../public/banner1.png';
+import banner2 from '~/../public/banner2.png';
+import banner3 from '~/../public/banner3.png';
 
 export function Layout({
   children,
@@ -154,7 +157,7 @@ function MenuMobileNav({
 
   return (
     <>
-      <nav className="font-bebas grid gap-4 p-6 sm:gap-6 sm:px-12 sm:py-8 text-white">
+      <nav className="font-bebas grid gap-4 p-[17px] pt-6 sm:gap-6   sm:py-8 text-white">
         <Form
           method="get"
           action={params.locale ? `/${params.locale}/search` : '/search'}
@@ -162,15 +165,41 @@ function MenuMobileNav({
         >
           <button
             type="submit"
-            className="relative flex items-center justify-center w-8 h-8"
+            className="relative flex items-center justify-center w-8 h-8 text-[#A0A0A0] pl-[10px]"
           >
-            <IconSearch />
+            <div>
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 18 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="6.74142"
+                  cy="6.74142"
+                  r="6.74142"
+                  transform="matrix(-1 0 0 1 15.918 2.08398)"
+                  stroke="#A0A0A0"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M4.48828 13.8652L1.84526 16.5014"
+                  stroke="#A0A0A0"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
           </button>
           <Input
             className={
               isHome
-                ? 'focus:border-contrast/20 dark:focus:border-primary/20 text-black'
-                : 'focus:border-primary/20 text-black'
+                ? 'focus:border-contrast/20 dark:focus:border-primary/20 text-black w-full'
+                : 'focus:border-primary/20 text-black w-full'
             }
             type="search"
             variant="minisearch"
@@ -179,22 +208,54 @@ function MenuMobileNav({
           />
         </Form>
         {/* Top level menu items */}
-        {(menu?.items || []).map((item) => (
-          <span key={item.id} className="block">
-            <Link
-              to={item.to}
-              target={item.target}
-              onClick={onClose}
-              className={({isActive}) =>
-                isActive ? 'pb-1 border-b -mb-px' : 'pb-1'
-              }
-            >
-              <Text as="span" size="copy">
-                {item.title}
-              </Text>
-            </Link>
-          </span>
-        ))}
+        {(menu?.items || []).map((item) => {
+          if (item.to === '/products') {
+            return (
+              <Link to="/products" className="inline-block">
+                <div className="flex justify-center items-center bg-[url('/banner1.png')] bg-no-repeat	 w-[345px] h-[120px]">
+                  <span className="uppercase  text-3xl">All products</span>
+                </div>
+              </Link>
+            );
+          }
+
+          if (item.to === '/collections/freestyle') {
+            return (
+              <Link to="/collections">
+                <div className="flex justify-center items-center bg-[url('/banner2.png')] bg-no-repeat	 w-[345px] h-[120px]">
+                  <span className="uppercase text-3xl">Shop bundles</span>
+                </div>
+              </Link>
+            );
+          }
+
+          if (item.to === '/journal') {
+            return (
+              <Link to="/journal">
+                <div className="flex justify-center items-center bg-[url('/banner3.png')] bg-no-repeat	 w-[345px] h-[120px]">
+                  <span className="uppercase  text-3xl">Journal</span>
+                </div>
+              </Link>
+            );
+          }
+
+          return (
+            <span key={item.id} className="block">
+              <Link
+                to={item.to}
+                target={item.target}
+                onClick={onClose}
+                className={({isActive}) =>
+                  isActive ? 'pb-1 border-b -mb-px' : 'pb-1'
+                }
+              >
+                <Text as="span" size="copy">
+                  {item.title}
+                </Text>
+              </Link>
+            </span>
+          );
+        })}
       </nav>
 
       <a href="/account/login" className="mt-[80px] mx-3">
@@ -230,40 +291,17 @@ function MobileHeader({
       role="banner"
       className={`${
         isHome
-          ? 'bg-primary/80 dark:bg-contrast/60 text-contrast dark:text-primary shadow-darkHeader'
+          ? 'bg-white dark:bg-contrast/60 text-contrast dark:text-primary shadow-darkHeader'
           : 'bg-contrast/80 text-primary'
-      } flex lg:hidden items-center h-nav sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 px-4 md:px-8`}
+      } flex lg:hidden items-center h-nav sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 px-4 py-8 md:px-8`}
     >
       <div className="flex items-center justify-start w-full gap-4 ">
         <button
           onClick={openMenu}
-          className="relative flex items-center justify-center w-8 h-8"
+          className="relative flex items-center justify-center w-8 h-8 text-black"
         >
           <IconMenu />
         </button>
-        {/* <Form
-          method="get"
-          action={params.locale ? `/${params.locale}/search` : '/search'}
-          className="items-center gap-2 sm:flex"
-        >
-          <button
-            type="submit"
-            className="relative flex items-center justify-center w-8 h-8"
-          >
-            <IconSearch />
-          </button>
-          <Input
-            className={
-              isHome
-                ? 'focus:border-contrast/20 dark:focus:border-primary/20'
-                : 'focus:border-primary/20'
-            }
-            type="search"
-            variant="minisearch"
-            placeholder="Search"
-            name="q"
-          />
-        </Form> */}
       </div>
 
       <Link
@@ -309,29 +347,18 @@ function DesktopHeader({
       role="banner"
       className={`${
         isHome
-          ? 'bg-primary/80 dark:bg-contrast/60 text-contrast dark:text-primary shadow-darkHeader'
+          ? 'bg-white dark:bg-contrast/60 text-contrast dark:text-primary shadow-darkHeader'
           : 'bg-contrast/80 text-primary'
       } ${
         !isHome && y > 50 && ' shadow-lightHeader'
       } hidden h-nav lg:flex items-center justify-center sticky transition duration-300 backdrop-blur-lg z-40 top-0  w-full leading-none gap-10 px-12 py-8`}
     >
-      <div className="flex justify-between items-center gap-x-96">
+      <div className="flex justify-between items-center lg:gap-x-28 xl:gap-x-60 text-black ">
         <Form
           method="get"
           action={params.locale ? `/${params.locale}/search` : '/search'}
           className="flex items-center gap-2"
         >
-          {/* <Input
-            className={
-              isHome
-                ? 'focus:border-contrast/20 dark:focus:border-primary/20'
-                : 'focus:border-primary/20'
-            }
-            type="search"
-            variant="minisearch"
-            placeholder="Search"
-            name="q"
-          /> */}
           <button
             type="submit"
             className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
@@ -340,17 +367,13 @@ function DesktopHeader({
           </button>
         </Form>
         <div className="flex gap-12">
-          {/* here we need to add logo */}
-          {/* <Link className="font-bold font-bebas" to="/" prefetch="intent">
-            {title}
-          </Link> */}
-          <nav className="flex gap-8 font-bebas items-center justify-center">
+          <nav className="flex gap-10 font-bebas items-center justify-center">
             {/* Top level menu items */}
             {(menu?.items || []).map((item) => {
               if (item.to === '/') {
                 return (
-                  <Link to="/" className="">
-                    <img src={logo} alt="" className="w-[70px] h-[70px]" />
+                  <Link to="/" className="w-[70px] h-[70px]">
+                    <img src={logo} alt="" className="" />
                   </Link>
                 );
               }
@@ -372,29 +395,6 @@ function DesktopHeader({
           </nav>
         </div>
         <div className="flex items-center gap-9">
-          {/* <Form
-          method="get"
-          action={params.locale ? `/${params.locale}/search` : '/search'}
-          className="flex items-center gap-2"
-        >
-          <Input
-            className={
-              isHome
-                ? 'focus:border-contrast/20 dark:focus:border-primary/20'
-                : 'focus:border-primary/20'
-            }
-            type="search"
-            variant="minisearch"
-            placeholder="Search"
-            name="q"
-          />
-          <button
-            type="submit"
-            className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
-          >
-            <IconSearch />
-          </button>
-        </Form> */}
           <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5" />
           <CartCount isHome={isHome} openCart={openCart} />
         </div>
@@ -410,29 +410,7 @@ function AccountLink({className}: {className?: string}) {
     <Link to="/account" className={className}>
       <IconAccount />
       <div className="flex items-center justify-center text-black uppercase border-b-2 border-black w-fit gap-x-2 hover:opacity-80">
-        login
-        {/* <svg
-          width="10"
-          height="10"
-          viewBox="0 0 10 10"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M7.07025 2.25054L2.12057 7.20022"
-            stroke="black"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M2.95279 2.12583L7.19526 2.12565L7.19543 6.36847"
-            stroke="black"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg> */}
+        Login
       </div>
     </Link>
   ) : (
@@ -469,7 +447,7 @@ function AccountLink({className}: {className?: string}) {
   );
 }
 
-function CartCount({
+export default function CartCount({
   isHome,
   openCart,
 }: {
@@ -522,18 +500,6 @@ function Badge({
     ),
     [count, dark],
   );
-
-  //Kate
-  //   return isHydrated ? (
-  //     <Link
-  //       to="/cart"
-  //       onClick={openCart}
-  //       className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
-  //     >
-  //       {BadgeCounter}
-  //     </Link>
-  //   ) : null;
-  // }
 
   return isHydrated ? (
     <button
