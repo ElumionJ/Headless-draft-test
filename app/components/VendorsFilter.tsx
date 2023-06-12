@@ -1,4 +1,4 @@
-import {useNavigate, useNavigation} from '@remix-run/react';
+import {useMatches, useNavigate, useNavigation} from '@remix-run/react';
 import React, {useEffect, useRef, useState} from 'react';
 import {HiArrowSmDown} from 'react-icons/hi';
 import {TfiClose} from 'react-icons/tfi';
@@ -18,6 +18,8 @@ interface Props {
 }
 
 export const VendorsFilter = ({vendors, click, url}: Props) => {
+  const [root] = useMatches();
+  const isArabic = root.data.selectedLocale.pathPrefix === '/ar-ar';
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -42,9 +44,9 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
           <HiArrowSmDown className={`${open && 'rotate-180'} `} />
         </button>
         <ul
-          className={`${
-            open ? 'block' : 'hidden'
-          } absolute top-full left-0 bg-[#fff] w-fit p-[24px] font-noto shadow-darkPopUp mt-[13px] gt-l:hidden`}
+          className={`${open ? 'block' : 'hidden'} absolute top-full ${
+            isArabic ? 'right-0' : 'left-0'
+          }  bg-[#fff] w-fit p-[24px] font-noto shadow-darkPopUp mt-[13px] gt-l:hidden`}
         >
           {vendors &&
             Object.entries(vendors).map((el) => (
