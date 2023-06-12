@@ -26,7 +26,7 @@ export async function loader({request, params, context}: LoaderArgs) {
   const seo = seoPayload.page({page, url: request.url});
 
   return json(
-    {page, seo},
+    {page, seo, lang: context.storefront.i18n},
     {
       headers: {
         'Cache-Control': CACHE_LONG,
@@ -36,8 +36,8 @@ export async function loader({request, params, context}: LoaderArgs) {
 }
 
 export default function Page() {
-  const {page} = useLoaderData<typeof loader>();
-
+  const {page, lang} = useLoaderData<typeof loader>();
+  console.log(lang);
   return (
     <>
       <PageHeader heading={page.title}>

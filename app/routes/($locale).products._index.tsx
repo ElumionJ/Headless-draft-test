@@ -25,7 +25,7 @@ import {
   getClientBrowserParameters,
   getPaginationVariables__unstable as getPaginationVariables,
 } from '@shopify/hydrogen';
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import {useLocation} from 'react-use';
 
 import {
@@ -92,17 +92,9 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
       },
     },
   });
-  // const titleImg = await storefront.query<{
-  //   node: Node & {image: Image};
-  // }>(IMAGE_QUERY, {
-  //   variables: {
-  //     id: data.metaobject.field?.value,
-  //   },
-  // });
-  // console.log(titleImg.node.image.url);
   const allProducts = await getAllProducts(storefront);
 
-  console.log(data);
+  // console.log(data);
 
   const func = async () => {
     const parsedMetaobject = {};
@@ -156,6 +148,8 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
       customize: metaObject,
       rawUrl: request.url,
       allProducts,
+      selectedLocale: storefront.i18n,
+      origin: url.origin,
       rawParams: paramsObj,
       varParams: variablesFromParams,
       pageInfo: data.products.pageInfo,
@@ -178,11 +172,18 @@ export default function AllProducts() {
     rawParams,
     allProducts,
     rawUrl,
+    origin,
     customize,
+    selectedLocale,
   } = useLoaderData<typeof loader>();
+
+  // console.log(selectedLocale);
 
   const [timer, setTimer] = useState<number | null>(null);
   const navigate = useNavigate();
+  const mainPath = `${origin}${selectedLocale.pathPrefix}`;
+  console.log(mainPath);
+  console.log(selectedLocale);
 
   const [brands, setBrands] = useState({});
   const vendorsFilterRef = useRef(null);
@@ -245,7 +246,7 @@ export default function AllProducts() {
     // Set a new timer to redirect after 2 seconds
     const newTimer = setTimeout(() => {
       navigate(
-        `/products?sortKey=${varParams.sortKey}&reverse=${varParams.reverse}&query=${vendorsQuery}`,
+        `${selectedLocale.pathPrefix}/products?sortKey=${varParams.sortKey}&reverse=${varParams.reverse}&query=${vendorsQuery}`,
         {
           preventScrollReset: true,
         },
@@ -311,7 +312,7 @@ export default function AllProducts() {
           </div>
           <div className="flex gap-[16px] items-center gt-sm:w-full">
             <Link
-              to={`/products?sortKey=${
+              to={`${selectedLocale.pathPrefix}/products?sortKey=${
                 varParams.sortKey
               }&reverse=${!varParams.reverse}&query=${vendorsQuery}`}
               preventScrollReset
@@ -326,7 +327,7 @@ export default function AllProducts() {
                   {value: 'TITLE', name: 'Name'},
                   {value: 'PRICE', name: 'Price'},
                 ]}
-                linkStr={`/products?reverse=${varParams.reverse}&query=${vendorsQuery}`}
+                linkStr={`${selectedLocale.pathPrefix}/products?reverse=${varParams.reverse}&query=${vendorsQuery}`}
                 activeSort={rawParams.sortKey}
               />
 
@@ -374,9 +375,9 @@ export default function AllProducts() {
                     {pageInfo.hasPreviousPage && (
                       <Link
                         className="text-[12px] font-bold leading-[150%] hover:text-[#D80F16] block w-[100px] px-3 py-1 text-right"
-                        to={`/products?sortKey=${varParams.sortKey}&reverse=${
-                          varParams.reverse
-                        }&cursor=${
+                        to={`${selectedLocale.pathPrefix}/products?sortKey=${
+                          varParams.sortKey
+                        }&reverse=${varParams.reverse}&cursor=${
                           pageInfo.startCursor || null
                         }&query=${vendorsQuery}&direction=prev`}
                       >
@@ -386,9 +387,9 @@ export default function AllProducts() {
                     {pageInfo.hasNextPage && (
                       <Link
                         className="text-[12px] font-bold leading-[150%] hover:text-[#D80F16] block w-[100px] px-3 py-1 text-left"
-                        to={`/products?sortKey=${varParams.sortKey}&reverse=${
-                          varParams.reverse
-                        }&cursor=${
+                        to={`${selectedLocale.pathPrefix}/products?sortKey=${
+                          varParams.sortKey
+                        }&reverse=${varParams.reverse}&cursor=${
                           pageInfo.endCursor || null
                         }&query=${vendorsQuery}&direction=next`}
                       >

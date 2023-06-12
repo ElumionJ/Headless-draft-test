@@ -229,4 +229,10 @@ export const countries: Localizations = {
     country: 'XK',
     currency: 'EUR',
   },
+  '/ar-ar': {
+    label: 'Arabian (SAR ر.س)',
+    language: 'AR',
+    country: 'SA',
+    currency: 'SAR',
+  },
 };
