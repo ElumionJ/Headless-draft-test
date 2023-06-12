@@ -309,13 +309,13 @@ export default function Homepage() {
       <HeroBannerFirst data={metaObjectsArrFirst[0]} />
 
       {/* Vlad ul */}
-      <ul className="flex flex-row gap-x-2">
+      {/* <ul className="flex flex-row gap-x-2">
         {metaObjectsArr.map((el: any) => (
           <li className="w-[100%]" key={el.value}>
             <HeroBanner data={el} />
           </li>
         ))}
-      </ul>
+      </ul> */}
 
       <CustomData data={metaObjectsKate[0]} />
       <CustomData data={metaObjectsKate[1]} />
