@@ -25,7 +25,7 @@ import {
   getClientBrowserParameters,
   getPaginationVariables__unstable as getPaginationVariables,
 } from '@shopify/hydrogen';
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import {useLocation} from 'react-use';
 
 import {
@@ -92,17 +92,9 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
       },
     },
   });
-  // const titleImg = await storefront.query<{
-  //   node: Node & {image: Image};
-  // }>(IMAGE_QUERY, {
-  //   variables: {
-  //     id: data.metaobject.field?.value,
-  //   },
-  // });
-  // console.log(titleImg.node.image.url);
   const allProducts = await getAllProducts(storefront);
 
-  console.log(data);
+  // console.log(data);
 
   const func = async () => {
     const parsedMetaobject = {};
@@ -156,6 +148,8 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
       customize: metaObject,
       rawUrl: request.url,
       allProducts,
+      selectedLocale: storefront.i18n,
+      origin: url.origin,
       rawParams: paramsObj,
       varParams: variablesFromParams,
       pageInfo: data.products.pageInfo,
@@ -178,11 +172,19 @@ export default function AllProducts() {
     rawParams,
     allProducts,
     rawUrl,
+    origin,
     customize,
+    selectedLocale,
   } = useLoaderData<typeof loader>();
+
+  // console.log(selectedLocale);
 
   const [timer, setTimer] = useState<number | null>(null);
   const navigate = useNavigate();
+  const mainPath = `${origin}${selectedLocale.pathPrefix}`;
+  console.log(mainPath);
+  console.log(selectedLocale);
+  
 
   const [brands, setBrands] = useState({});
   const vendorsFilterRef = useRef(null);
