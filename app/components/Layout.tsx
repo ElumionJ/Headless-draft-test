@@ -211,8 +211,11 @@ function MenuMobileNav({
         {(menu?.items || []).map((item) => {
           if (item.to === '/products') {
             return (
-              <Link to="/products" className="inline-block">
-                <div className="flex justify-center items-center bg-[url('/banner1.png')] bg-no-repeat	 w-[345px] h-[120px]">
+              <Link to="/products" key={item.id}>
+                <div
+                  className="flex justify-center items-center bg-no-repeat w-[345px] h-[120px]"
+                  style={{backgroundImage: `url(${banner1})`}}
+                >
                   <span className="uppercase  text-3xl">All products</span>
                 </div>
               </Link>
@@ -221,8 +224,11 @@ function MenuMobileNav({
 
           if (item.to === '/collections/freestyle') {
             return (
-              <Link to="/collections">
-                <div className="flex justify-center items-center bg-[url('/banner2.png')] bg-no-repeat	 w-[345px] h-[120px]">
+              <Link to="/collections" key={item.id}>
+                <div
+                  className="flex justify-center items-center  bg-no-repeat	 w-[345px] h-[120px]"
+                  style={{backgroundImage: `url(${banner2})`}}
+                >
                   <span className="uppercase text-3xl">Shop bundles</span>
                 </div>
               </Link>
@@ -231,8 +237,11 @@ function MenuMobileNav({
 
           if (item.to === '/journal') {
             return (
-              <Link to="/journal">
-                <div className="flex justify-center items-center bg-[url('/banner3.png')] bg-no-repeat	 w-[345px] h-[120px]">
+              <Link to="/journal" key={item.id}>
+                <div
+                  className="flex justify-center items-center  bg-no-repeat w-[345px] h-[120px]"
+                  style={{backgroundImage: `url(${banner3})`}}
+                >
                   <span className="uppercase  text-3xl">Journal</span>
                 </div>
               </Link>
@@ -372,7 +381,7 @@ function DesktopHeader({
             {(menu?.items || []).map((item) => {
               if (item.to === '/') {
                 return (
-                  <Link to="/" className="w-[70px] h-[70px]">
+                  <Link to="/" key={item.id} className="w-[70px] h-[70px]">
                     <img src={logo} alt="" className="" />
                   </Link>
                 );
