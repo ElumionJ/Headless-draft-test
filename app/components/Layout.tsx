@@ -408,7 +408,6 @@ function DesktopHeader({
           </nav>
         </div>
 
-        <div>{/* <CountrySelector /> */}</div>
         <div className="flex items-center gap-9">
           <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5" />
           <CartCount isHome={isHome} openCart={openCart} />
