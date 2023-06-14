@@ -30,5 +30,7 @@ export {ProductTabs} from './ProductTabs';
 export {SwiperImages} from './SwiperImages';
 export {BlogBanner} from './BlogBanner';
 export {ComponentOne} from './ComponentOne';
+export {SortBy} from './SortBy';
+export {VendorsFilter} from './VendorsFilter';
 // Sue me
 export * from './Icon';

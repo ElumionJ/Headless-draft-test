@@ -49,46 +49,50 @@ export function CountrySelector() {
   return (
     <section
       ref={observerRef}
-      className="grid w-full gap-4"
+      // className="grid w-full gap-4"
+      className=" w-full "
       onMouseLeave={closeDropdown}
     >
-      <Heading size="lead" className="cursor-default" as="h3">
-        Country
-      </Heading>
-      <div className="relative">
-        <details
-          className="absolute w-full border rounded border-contrast/30 dark:border-white open:round-b-none overflow-clip"
-          ref={closeRef}
-        >
-          <summary className="flex items-center justify-between w-full px-4 py-3 cursor-pointer">
-            {selectedLocale.label}
-          </summary>
-          <div className="w-full overflow-auto border-t border-contrast/30 dark:border-white bg-contrast/30 max-h-36">
-            {countries &&
-              Object.keys(countries).map((countryPath) => {
-                const countryLocale = countries[countryPath];
-                const isSelected =
-                  countryLocale.language === selectedLocale.language &&
-                  countryLocale.country === selectedLocale.country;
+      <div className="flex items-center sm-max:justify-start justify-center ">
+        <Heading size="lead" className="cursor-default font-bebas " as="h3">
+          Choose country:
+        </Heading>
+        <div className="relative">
+          <details
+            // className="absolute w-max border rounded border-contrast/30 dark:border-white open:round-b-none overflow-clip"
+            className="  w-max border rounded border-contrast/30 dark:border-white open:round-b-none overflow-clip"
+            ref={closeRef}
+          >
+            <summary className="flex items-center justify-between w-full px-4  cursor-pointer">
+              {selectedLocale.label}
+            </summary>
+            <div className="absolute left-[100%] bottom-[0] w-max overflow-auto border-t border-contrast/30 dark:border-white bg-contrast/30 max-h-36">
+              {countries &&
+                Object.keys(countries).map((countryPath) => {
+                  const countryLocale = countries[countryPath];
+                  const isSelected =
+                    countryLocale.language === selectedLocale.language &&
+                    countryLocale.country === selectedLocale.country;
 
-                const countryUrlPath = getCountryUrlPath({
-                  countryLocale,
-                  defaultLocalePrefix,
-                  pathWithoutLocale,
-                });
+                  const countryUrlPath = getCountryUrlPath({
+                    countryLocale,
+                    defaultLocalePrefix,
+                    pathWithoutLocale,
+                  });
 
-                return (
-                  <Country
-                    key={countryPath}
-                    closeDropdown={closeDropdown}
-                    countryUrlPath={countryUrlPath}
-                    isSelected={isSelected}
-                    countryLocale={countryLocale}
-                  />
-                );
-              })}
-          </div>
-        </details>
+                  return (
+                    <Country
+                      key={countryPath}
+                      closeDropdown={closeDropdown}
+                      countryUrlPath={countryUrlPath}
+                      isSelected={isSelected}
+                      countryLocale={countryLocale}
+                    />
+                  );
+                })}
+            </div>
+          </details>
+        </div>
       </div>
     </section>
   );

@@ -76,11 +76,16 @@ export default function App() {
   const data = useLoaderData<typeof loader>();
   const locale = data.selectedLocale ?? DEFAULT_LOCALE;
   const hasUserConsent = true;
+  const [root] = useMatches();
+  console.log('ROOT', data.selectedLocale);
 
   useAnalytics(hasUserConsent, locale);
 
   return (
-    <html lang={locale.language}>
+    <html
+      lang={locale.language}
+      dir={root.params.locale === 'ar-ar' ? 'rtl' : 'ltr'}
+    >
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />

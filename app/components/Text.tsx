@@ -68,7 +68,7 @@ export function Heading({
   as?: React.ElementType;
   children: React.ReactNode;
   format?: boolean;
-  size?: 'display' | 'heading' | 'lead' | 'copy';
+  size?: 'display' | 'heading' | 'lead' | 'copy' | 'footer';
   width?: 'default' | 'narrow' | 'wide';
 } & React.HTMLAttributes<HTMLHeadingElement>) {
   const sizes = {
@@ -76,6 +76,7 @@ export function Heading({
     heading: 'font-bold text-heading',
     lead: 'font-bold text-lead',
     copy: 'font-medium text-copy',
+    footer: 'font-medium text-[20px]',
   };
 
   const widths = {
@@ -166,7 +167,7 @@ export function PageHeader({
   children?: React.ReactNode;
   className?: string;
   heading?: string;
-  variant?: 'default' | 'blog'  | 'blogPost' | 'allCollections';
+  variant?: 'default' | 'blog' | 'blogPost' | 'allCollections';
   [key: string]: any;
 }) {
   const variants: Record<string, string> = {

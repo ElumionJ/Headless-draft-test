@@ -3,7 +3,7 @@ import type {ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 import {flattenConnection, Image, Money, useMoney} from '@shopify/hydrogen';
 import type {MoneyV2, Product} from '@shopify/hydrogen/storefront-api-types';
 
-import {Text, Link, AddToCartButton} from '~/components';
+import {Text, Link, AddToCartButton, IconAddToCartBag} from '~/components';
 import {isDiscounted, isNewArrival} from '~/lib/utils';
 import {getProductPlaceholder} from '~/lib/placeholders';
 
@@ -32,7 +32,8 @@ export function ProductCard({
   const firstVariant = flattenConnection(cardProduct.variants)[0];
 
   if (!firstVariant) return null;
-  const {image, price, compareAtPrice} = firstVariant;
+  const {image, price, compareAtPrice, availableForSale} = firstVariant;
+  // console.log(firstVariant);
 
   if (label) {
     cardLabel = label;
@@ -53,7 +54,7 @@ export function ProductCard({
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="product-card flex flex-col gap-2 ">
       <Link
         onClick={onClick}
         to={`/products/${product.handle}`}
@@ -61,14 +62,24 @@ export function ProductCard({
       >
         <div className={clsx('grid gap-4', className)}>
           <div className="card-image aspect-[4/5] bg-primary/5">
+            {!availableForSale && (
+              <div
+                data-outofstock-overlay
+                className="absolute w-full h-full top-0 left-0 z-20 backdrop-grayscale "
+              >
+                <span className="absolute top-[16px] left-[16px] rounded-[2px] w-fit uppercase p-2 bg-black text-[#fff] text-[12px] font-bold leading-[150%] font-noto">
+                  OUT OF SToCK
+                </span>
+              </div>
+            )}
             {image && (
               <Image
-                className="object-cover w-full fadeIn"
+                className={`object-cover w-full fadeIn rounded-[2px] `}
                 sizes="(min-width: 64em) 25vw, (min-width: 48em) 30vw, 45vw"
                 aspectRatio="4/5"
                 data={image}
                 alt={image.altText || `Picture of ${product.title}`}
-                loading={loading}
+                loading={'lazy'}
               />
             )}
             <Text
@@ -81,45 +92,52 @@ export function ProductCard({
           </div>
           <div className="grid gap-1">
             <Text
-              className="w-full overflow-hidden whitespace-nowrap text-ellipsis "
+              className="w-full overflow-hidden whitespace-nowrap text-[20px] leading-[110%] font-bebas tracking-wider"
               as="h3"
             >
               {product.title}
             </Text>
             <div className="flex gap-4">
-              <Text className="flex gap-4">
-                <Money withoutTrailingZeros data={price!} />
-                {isDiscounted(price as MoneyV2, compareAtPrice as MoneyV2) && (
+              <Text className="flex gap-4 text-[20px] leading-[130%]">
+                <Money
+                  className="font-bebas tracking-wider leading-[130%]"
+                  withoutTrailingZeros
+                  data={price!}
+                />
+                {/* {isDiscounted(price as MoneyV2, compareAtPrice as MoneyV2) && (
                   <CompareAtPrice
                     className={'opacity-50'}
                     data={compareAtPrice as MoneyV2}
                   />
-                )}
+                )} */}
               </Text>
             </div>
           </div>
         </div>
       </Link>
-      {quickAdd && (
-        <AddToCartButton
-          lines={[
-            {
-              quantity: 1,
-              merchandiseId: firstVariant.id,
-            },
-          ]}
-          variant="secondary"
-          className="mt-2"
-          analytics={{
-            products: [productAnalytics],
-            totalValue: parseFloat(productAnalytics.price),
-          }}
+
+      <AddToCartButton
+        lines={[
+          {
+            quantity: 1,
+            merchandiseId: firstVariant.id,
+          },
+        ]}
+        variant="secondary"
+        className="mt-2 opacity-0 gt-l:opacity-100  flex justify-between items-center bg-c-red w-fit gap-[12px] py-4 px-[16px] rounded-[100px] text-[#fff]"
+        analytics={{
+          products: [productAnalytics],
+          totalValue: parseFloat(productAnalytics.price),
+        }}
+      >
+        <Text
+          as="span"
+          className="flex items-center justify-center gap-2 uppercase text-[12px] leading-4 font-noto tracking-widest font-bold"
         >
-          <Text as="span" className="flex items-center justify-center gap-2">
-            Add to Cart
-          </Text>
-        </AddToCartButton>
-      )}
+          Add to Bag
+        </Text>
+        <IconAddToCartBag />
+      </AddToCartButton>
     </div>
   );
 }

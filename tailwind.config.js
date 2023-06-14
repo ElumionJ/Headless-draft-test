@@ -24,9 +24,13 @@ export default {
         'lg-only': {min: '64em', max: '80em'},
         'xl-only': {min: '80em', max: '96em'},
         '2xl-only': {min: '96em'},
+        'fr-md': {min: '47em', max: '49em'},
         'gt-xl': {max: '80em'},
         'gt-l': {max: '58em'},
+        'gt-md': {max: '48em'},
+        'gt-lg': {max: '64em'},
         'gt-m': {max: '37em'},
+        'gt-sm': {max: '32em'},
         'gt-ssm': {max: '30em'},
       },
       spacing: {
@@ -45,7 +49,7 @@ export default {
       fontFamily: {
         sans: ['Helvetica Neue', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         // serif: ['"IBMPlexSerif"', 'Palatino', 'ui-serif'],
-        bebas:['Bebas Neue','sans-serif'],
+        bebas: ['Bebas Neue', 'sans-serif'],
         noto: ['Noto Sans', 'sans-serif'],
       },
       fontSize: {
@@ -55,6 +59,10 @@ export default {
         copy: ['var(--font-size-copy)', '1.5'],
         fine: ['var(--font-size-fine)', '1.333'],
       },
+      backgroundColor: {
+        'c-gray': '#F2F2F2',
+        'c-red': '#D80F16',
+      },
       maxWidth: {
         'prose-narrow': '45ch',
         'prose-wide': '80ch',
@@ -63,6 +71,7 @@ export default {
         border: 'inset 0px 0px 0px 1px rgb(var(--color-primary) / 0.08)',
         darkHeader: 'inset 0px -1px 0px 0px rgba(21, 21, 21, 0.4)',
         lightHeader: 'inset 0px -1px 0px 0px rgba(21, 21, 21, 0.05)',
+        darkPopUp: '0px 0px 30px rgba(0, 0, 0, 0.1)',
       },
     },
   },

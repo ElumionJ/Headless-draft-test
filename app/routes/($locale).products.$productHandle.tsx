@@ -47,6 +47,7 @@ import {
   ProductQuantity,
   ProductTabs,
   SwiperImages,
+  IconAddToCartBag,
 } from '~/components';
 import {getExcerpt} from '~/lib/utils';
 import {seoPayload} from '~/lib/seo.server';
@@ -210,8 +211,8 @@ export default function Product() {
   }, []);
   return (
     <>
-      <Section>
-        <div className=" justify-center !gap-[63px] !flex px-0 md:px-8 lg:px-12 gt-l:flex-col  gt-l:items-center">
+      <Section className="!px-0 !py-0">
+        <div className=" justify-center !gap-[63px] !flex px-0 md:px-8 lg:px-12 gt-l:flex-col  gt-l:items-center bg-c-gray pt-[60px]">
           <div className=" px-[4px] max-w-[325px]">
             <Heading as="h1" className="text-5xl  mb-8">
               {title}
@@ -223,7 +224,7 @@ export default function Product() {
               ></p>
             )}
           </div>
-          <div className="w-[320px] gt-ssm:w-[280px]">
+          <div className="max-h-[468px] max-w-[368px] gt-ssm:w-[280px]">
             {/* <ProductGallery
               media={media.nodes}
               className="w-full lg:col-span-2"
@@ -231,7 +232,7 @@ export default function Product() {
             <SwiperImages media={media.nodes} />
           </div>
 
-          <div className="sticky md:-mb-nav md:top-nav md:-translate-y-nav md:pt-nav hiddenScroll md:overflow-y-scroll">
+          <div className="sticky md:-mb-nav md:top-nav md:-translate-y-nav md:pt-nav hiddenScroll md:overflow-y-scroll ">
             <section className="flex flex-col w-full max-w-xl gap-8 p-6 md:mx-auto md:max-w-sm md:px-0 gt-ssm:p-1">
               {vendor && (
                 <div className="flex gap-[8px] items-end">
@@ -259,7 +260,7 @@ export default function Product() {
             </section>
           </div>
         </div>
-        <div className="mt-24">
+        <div className="mt-24 px-[60px] gt-l:px-[10px]">
           <ProductTabs
             shippingInfoText={shippingInfoText}
             attributesTitle={attributesTitleString}
@@ -372,12 +373,12 @@ export function ProductForm() {
                 <Text>Sold out</Text>
               </Button>
             ) : (
-              <div className="flex gap-[16px] gt-xl:flex-col">
+              <div className="flex gap-[16px] items-center gt-xl:flex-col">
                 <ProductQuantity
                   quantity={quantity}
                   changeQuantity={changeQuantity}
                 />
-                <div className="w-[100%]">
+                <div className="w-full ">
                   <AddToCartButton
                     lines={[
                       {
@@ -385,6 +386,7 @@ export function ProductForm() {
                         quantity,
                       },
                     ]}
+                    className="mt-2 flex justify-between items-center bg-c-red w-fit gap-[12px] py-4 px-[16px] rounded-[100px] text-[#fff]"
                     variant="primary"
                     data-test="add-to-cart"
                     analytics={{
@@ -394,22 +396,11 @@ export function ProductForm() {
                   >
                     <Text
                       as="span"
-                      className="flex items-center justify-center gap-2"
+                      className="flex items-center justify-center gap-2 uppercase text-[12px] leading-4 font-noto tracking-widest font-bold"
                     >
-                      <span>Add to Cart</span> <span>·</span>{' '}
-                      <Money
-                        withoutTrailingZeros
-                        data={selectedVariant?.price!}
-                        as="span"
-                      />
-                      {isOnSale && (
-                        <Money
-                          withoutTrailingZeros
-                          data={selectedVariant?.compareAtPrice!}
-                          as="span"
-                          className="opacity-50 strike"
-                        />
-                      )}
+                      <span>Add to Cart</span>
+
+                      <IconAddToCartBag />
                     </Text>
                   </AddToCartButton>
                 </div>
