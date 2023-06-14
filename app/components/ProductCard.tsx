@@ -57,7 +57,11 @@ export function ProductCard({
     <div className="product-card flex flex-col gap-2 ">
       <Link
         onClick={onClick}
-        to={`/products/${product.handle}`}
+        to={
+          product.collections.nodes[0].handle
+            ? `/categories/${product.collections.nodes[0].handle}/${product.handle}`
+            : `/products/${product.handle}`
+        }
         prefetch="intent"
       >
         <div className={clsx('grid gap-4', className)}>
