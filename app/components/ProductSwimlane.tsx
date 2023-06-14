@@ -5,7 +5,7 @@ import {ProductCard, Section} from '~/components';
 const mockProducts = new Array(12).fill('');
 
 export function ProductSwimlane({
-  title = 'Featured Products',
+  title = 'TRY something NEW',
   products = mockProducts,
   count = 12,
   ...props
@@ -15,8 +15,56 @@ export function ProductSwimlane({
   count?: number;
 }) {
   return (
-    <Section heading={title} padding="y" {...props}>
-      <div className="swimlane hiddenScroll md:pb-8 md:scroll-px-8 lg:scroll-px-12 md:px-8 lg:px-12">
+    <div
+      heading={title}
+      padding="y"
+      {...props}
+      className=" gt-m:flex-col flex justify-between"
+    >
+      <div className="ml-[40px]">
+        <h2 className="font-bebas leading-[72px] text-[72px] tracking-widest mb-[64px] mt-[64px] gt-m:mb-[20px]">
+          TRY
+          <br />
+          SOMETHING
+          <br />
+          NEW
+        </h2>
+        <div className="relative w-[fit-content] gt-m:mb-[20px]">
+          <a
+            className="font-noto font-bold text-[12px] flex items-center tracking-widest "
+            href="/products"
+          >
+            SEE ALL PRODUCTS
+            <span className="ml-[8px]">
+              <svg
+                width="10"
+                height="10"
+                viewBox="0 0 10 10"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M7.07025 2.25054L2.12057 7.20022"
+                  stroke="black"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M2.95279 2.12583L7.19526 2.12565L7.19543 6.36847"
+                  stroke="black"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+          </a>
+          <div className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-black"></div>
+        </div>
+      </div>
+
+      <div className="swimlane hiddenScroll md:pb-8 md:scroll-px-8 lg:scroll-px-12 md:px-8 lg:px-12 w-[70%] gt-m:w-[100%] gt-m:mb-[60px]">
         {products.map((product) => (
           <ProductCard
             product={product}
@@ -25,6 +73,6 @@ export function ProductSwimlane({
           />
         ))}
       </div>
-    </Section>
+    </div>
   );
 }
