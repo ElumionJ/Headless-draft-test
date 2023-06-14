@@ -42,7 +42,8 @@ export async function loader({params, context}: LoaderArgs) {
 
   const allMetaobjects = await context.storefront.query(`
     #graphql
-      query GetMetaobjects
+      query GetMetaobjects($country: CountryCode, $language: LanguageCode)
+      @inContext(country: $country, language: $language)
         {
           HomePageBanner: metaobjects(type: "home_page_banner", first: 15) {
             nodes {
