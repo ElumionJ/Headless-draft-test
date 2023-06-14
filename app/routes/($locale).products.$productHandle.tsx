@@ -225,10 +225,6 @@ export default function Product() {
             )}
           </div>
           <div className="max-h-[468px] max-w-[368px] gt-ssm:w-[280px]">
-            {/* <ProductGallery
-              media={media.nodes}
-              className="w-full lg:col-span-2"
-            /> */}
             <SwiperImages media={media.nodes} />
           </div>
 
