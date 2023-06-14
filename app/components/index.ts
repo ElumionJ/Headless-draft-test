@@ -22,11 +22,13 @@ export {SortFilter} from './SortFilter';
 export {Grid} from './Grid';
 export {FeaturedProducts} from './FeaturedProducts';
 export {AddToCartButton} from './AddToCartButton';
-export {HeroBanner} from './HeroBaner';
-export {HeroBannerFirst} from './HeroBannerFirst';
-export {CustomData} from './CustomData';
+export {BrandsBanner} from './BrandsBanner';
+export {HomePageBanner} from './HomePageBanner';
+export {PersonalizeBanner} from './PersonalizeBanner';
 export {ProductQuantity} from './ProductQuantity';
 export {ProductTabs} from './ProductTabs';
 export {SwiperImages} from './SwiperImages';
+export {BlogBanner} from './BlogBanner';
+export {ComponentOne} from './ComponentOne';
 // Sue me
 export * from './Icon';

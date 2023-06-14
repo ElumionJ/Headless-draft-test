@@ -181,7 +181,7 @@ shop-pay-button {
   }
 }
 
-.bannerFirst {
+/* .bannerFirst {
   display: flex;
   justify-content: center;
   background-size: cover;
@@ -210,4 +210,4 @@ shop-pay-button {
 .swiper-pagination-bullet-active {
   opacity: 1;
   background-color: #f00;
-}
+} */
