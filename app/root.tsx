@@ -77,7 +77,6 @@ export default function App() {
   const locale = data.selectedLocale ?? DEFAULT_LOCALE;
   const hasUserConsent = true;
   const [root] = useMatches();
-  console.log('ROOT', data.selectedLocale);
 
   useAnalytics(hasUserConsent, locale);
 
