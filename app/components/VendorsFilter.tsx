@@ -1,5 +1,5 @@
-import {useMatches, useNavigate, useNavigation} from '@remix-run/react';
-import React, {useEffect, useRef, useState} from 'react';
+import {useMatches, useNavigate} from '@remix-run/react';
+import {useRef, useState} from 'react';
 import {HiArrowSmDown} from 'react-icons/hi';
 import {TfiClose} from 'react-icons/tfi';
 import {ImArrowUpRight2} from 'react-icons/im';

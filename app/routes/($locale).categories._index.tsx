@@ -10,7 +10,7 @@ import {
   getPaginationVariables__unstable as getPaginationVariables,
 } from '@shopify/hydrogen';
 
-import {Grid, Heading, PageHeader, Section, Link, Button} from '~/components';
+import {Grid, Heading, PageHeader, Section, Link} from '~/components';
 import {getImageLoadingPriority} from '~/lib/const';
 import {seoPayload} from '~/lib/seo.server';
 import {CACHE_SHORT, routeHeaders} from '~/data/cache';

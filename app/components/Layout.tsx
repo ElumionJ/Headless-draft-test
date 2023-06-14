@@ -1,4 +1,4 @@
-import {useParams, Form, Await, useMatches, Links} from '@remix-run/react';
+import { useParams, Form, Await, useMatches } from '@remix-run/react';
 import {useWindowScroll} from 'react-use';
 import {Disclosure} from '@headlessui/react';
 import {Suspense, useEffect, useMemo} from 'react';
@@ -8,7 +8,6 @@ import {
   useDrawer,
   Text,
   Input,
-  IconLogin,
   IconAccount,
   IconBag,
   IconSearch,

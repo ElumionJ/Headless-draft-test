@@ -17,7 +17,7 @@ import {
   useNavigation,
 } from '@remix-run/react';
 import type {ShopifyAnalyticsProduct} from '@shopify/hydrogen';
-import {AnalyticsPageType, Money, ShopPayButton} from '@shopify/hydrogen';
+import {AnalyticsPageType, ShopPayButton} from '@shopify/hydrogen';
 import invariant from 'tiny-invariant';
 import clsx from 'clsx';
 import type {
@@ -26,7 +26,6 @@ import type {
   Product as ProductType,
   Shop,
   ProductConnection,
-  Metafield,
   Metaobject,
   MetaobjectField,
 } from '@shopify/hydrogen/storefront-api-types';
@@ -36,7 +35,6 @@ import {
   IconCaret,
   IconCheck,
   IconClose,
-  ProductGallery,
   ProductSwimlane,
   Section,
   Skeleton,
