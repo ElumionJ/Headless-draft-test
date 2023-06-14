@@ -175,6 +175,7 @@ export function ErrorBoundary({error}: {error: Error}) {
   );
 }
 
+//Header query Kate
 const LAYOUT_QUERY = `#graphql
   query layoutMenus(
     $language: LanguageCode
@@ -202,6 +203,9 @@ const LAYOUT_QUERY = `#graphql
         ...MenuItem
         items {
           ...MenuItem
+          items {
+            ...MenuItem
+          }
         }
       }
     }

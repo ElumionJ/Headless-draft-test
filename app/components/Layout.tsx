@@ -21,6 +21,7 @@ import {
   Link,
   Button,
 } from '~/components';
+import {ChildHeaderLink} from './ChildHeaderLink';
 import {
   type EnhancedMenu,
   type EnhancedMenuItem,
@@ -355,6 +356,23 @@ function DesktopHeader({
   const params = useParams();
   const {y} = useWindowScroll();
 
+  //Mega menu with 1 children
+  const menuOpen = (event) => {
+    let otherMenuOpen = document.querySelectorAll('header nav > .top-menu ');
+    otherMenuOpen.forEach((e) => {
+      e.classList.remove('active');
+    });
+
+    event.target.closest('.top-menu').classList.add('active');
+  };
+
+  const dropDownMenuClose = (event) => {
+    event.target.closest('.top-menu').classList.remove('active');
+  };
+  // const nestedMenuClose = (event) => {
+  //   event.target.closest('.drop-down').classList.remove('active');
+  // };
+
   return (
     <header
       role="banner"
@@ -379,9 +397,13 @@ function DesktopHeader({
             <IconSearch />
           </button>
         </Form>
-        <div className="flex gap-12">
+
+        {/* className="flex gap-12 justify-center h-full items-center " */}
+        <div className=" flex gap-12">
+          {/*  flex gap-8 h-full items-center */}
           <nav className="flex gap-10 font-bebas items-center justify-center">
             {/* Top level menu items */}
+
             {(menu?.items || []).map((item) => {
               if (item.to === '/') {
                 return (
@@ -391,18 +413,83 @@ function DesktopHeader({
                 );
               }
 
+              // Alex variant
+              // return (
+              //   <Link
+              //     key={item.id}
+              //     to={item.to}
+              //     target={item.target}
+              //     prefetch="intent"
+              //     // className={({isActive}) =>
+              //     //   isActive ? 'pb-1 border-b -mb-px' : 'pb-1'
+              //     // }
+              //     // className="group/nav-link-item inline-block py-[25px] leading-[1.5] flex items-center"
+              //   >
+              //     {item.title}
+
+              //     {/* {console.log('item.items ', item?.items)} */}
+              //     {item?.items.length > 0 && (
+              //       <ChildHeaderLink data={item.items} />
+              //     )}
+              //   </Link>
+              // );
+
+              // Work with nested menu - 2 level
               return (
-                <Link
-                  key={item.id}
-                  to={item.to}
-                  target={item.target}
-                  prefetch="intent"
-                  className={({isActive}) =>
-                    isActive ? 'pb-1 border-b -mb-px' : 'pb-1'
-                  }
-                >
-                  {item.title}
-                </Link>
+                <div>
+                  <ul
+                    className="top-menu relative"
+                    // key={'top-menu--' + item.id}
+                  >
+                    <Link
+                      onMouseEnter={menuOpen}
+                      key={item.id}
+                      to={item.to}
+                      target={item.target}
+                      prefetch="intent"
+                      className={({isActive}) =>
+                        isActive ? 'pb-1 border-b -mb-px' : 'pb-1'
+                      }
+                    >
+                      {item.title}
+                    </Link>
+
+                    {/* nested menu - 2 level*/}
+
+                    {item?.items.length > 0 && (
+                      <ul
+                        className="drop-down absolute pt-10 bg-slate-500"
+                        onMouseLeave={dropDownMenuClose}
+                        // key={'drop-down--' + item.id}
+                      >
+                        {(item?.items || []).map((submenu) => (
+                          <div className="">
+                            <Link
+                              key={submenu.id}
+                              to={submenu.to}
+                              target={submenu.target}
+                            >
+                              {submenu.title}
+                            </Link>
+
+                            {/*  nested menu - 3 level */}
+                            {submenu.items.length > 0 &&
+                              submenu?.items.map((el) => (
+                                <Link
+                                  className="bg-[yellow] p-3 inline-block"
+                                  key={el.id}
+                                  to={el.to}
+                                  target={el.target}
+                                >
+                                  {el.title}
+                                </Link>
+                              ))}
+                          </div>
+                        ))}
+                      </ul>
+                    )}
+                  </ul>
+                </div>
               );
             })}
           </nav>
@@ -532,6 +619,7 @@ function Badge({
   );
 }
 
+//FOOTER
 //Desktop
 export function Footer({menu}: {menu?: EnhancedMenu}) {
   const isHome = useIsHomePath();
