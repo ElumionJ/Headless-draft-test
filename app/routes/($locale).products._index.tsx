@@ -1,42 +1,18 @@
-import {json, redirect, type LoaderArgs} from '@shopify/remix-oxygen';
+import {json, type LoaderArgs} from '@shopify/remix-oxygen';
 import {Image as ImageComponent} from '@shopify/hydrogen';
 import {LuArrowDownUp} from 'react-icons/lu';
 import {TfiClose} from 'react-icons/tfi';
-import {
-  Link,
-  useLoaderData,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from '@remix-run/react';
+import {Link, useLoaderData, useNavigate} from '@remix-run/react';
 import type {
   ProductConnection,
   Collection,
-  PageInfo,
   Metaobject,
-  Node,
-  Media,
-  Image,
 } from '@shopify/hydrogen/storefront-api-types';
 import invariant from 'tiny-invariant';
-import {
-  Pagination__unstable as Pagination,
-  flattenConnection,
-  getClientBrowserParameters,
-  getPaginationVariables__unstable as getPaginationVariables,
-} from '@shopify/hydrogen';
-import {useEffect, useMemo, useRef, useState} from 'react';
-import {useLocation} from 'react-use';
+import {Pagination__unstable as Pagination} from '@shopify/hydrogen';
+import {useEffect, useState} from 'react';
 
-import {
-  PageHeader,
-  Section,
-  ProductCard,
-  Grid,
-  Button,
-  SortBy,
-  VendorsFilter,
-} from '~/components';
+import {Section, ProductCard, Grid, SortBy, VendorsFilter} from '~/components';
 import {PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
 import {getImageLoadingPriority} from '~/lib/const';
 import {seoPayload} from '~/lib/seo.server';
@@ -172,7 +148,6 @@ export default function AllProducts() {
     rawParams,
     allProducts,
     rawUrl,
-    origin,
     customize,
     selectedLocale,
   } = useLoaderData<typeof loader>();
@@ -181,12 +156,8 @@ export default function AllProducts() {
 
   const [timer, setTimer] = useState<number | null>(null);
   const navigate = useNavigate();
-  const mainPath = `${origin}${selectedLocale.pathPrefix}`;
-  console.log(mainPath);
-  console.log(selectedLocale);
 
   const [brands, setBrands] = useState({});
-  const vendorsFilterRef = useRef(null);
   const [vendorsQuery, setVendorsQuery] = useState<string>(
     rawParams.query || '',
   );
@@ -245,13 +216,14 @@ export default function AllProducts() {
 
     // Set a new timer to redirect after 2 seconds
     const newTimer = setTimeout(() => {
-      navigate(
-        `${selectedLocale.pathPrefix}/products?sortKey=${varParams.sortKey}&reverse=${varParams.reverse}&query=${vendorsQuery}`,
-        {
-          preventScrollReset: true,
-        },
-      );
-      console.log(vendorsQuery);
+      if (rawParams.query !== undefined || vendorsQuery.length)
+        navigate(
+          `${selectedLocale.pathPrefix}/products?sortKey=${varParams.sortKey}&reverse=${varParams.reverse}&query=${vendorsQuery}`,
+          {
+            preventScrollReset: true,
+          },
+        );
+      // console.log(vendorsQuery);
     }, 2000);
 
     // Update the timer state
@@ -368,7 +340,6 @@ export default function AllProducts() {
 
             return (
               <>
-                <div className="flex items-center justify-center mt-6"></div>
                 <Grid data-test="product-grid">{itemsMarkup}</Grid>
                 <div className="flex items-center justify-center mt-6">
                   <div className="flex justify-center gap-2 font-noto">
