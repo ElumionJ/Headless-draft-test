@@ -303,8 +303,8 @@ header nav > .top-menu > .drop-down > a {
 }
 
 header nav > .top-menu.active > .drop-down {
-  opacity: 1;
-  visibility: visible;
+  /* opacity: 1;
+  visibility: visible; */
 }
 
 .visually-hidden {

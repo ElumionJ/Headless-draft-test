@@ -11,6 +11,7 @@ import {
   PersonalizeBanner,
   BlogBanner,
 } from '~/components';
+
 import {PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
 import {seoPayload} from '~/lib/seo.server';
 import {routeHeaders} from '~/data/cache';

@@ -3,6 +3,8 @@ import {useWindowScroll} from 'react-use';
 import {Disclosure} from '@headlessui/react';
 import {Suspense, useEffect, useMemo} from 'react';
 
+import {Image} from '@shopify/hydrogen';
+
 import {
   Drawer,
   useDrawer,
@@ -21,7 +23,7 @@ import {
   Link,
   Button,
 } from '~/components';
-import {ChildHeaderLink} from './ChildHeaderLink';
+
 import {
   type EnhancedMenu,
   type EnhancedMenuItem,
@@ -41,9 +43,13 @@ import footer from '~/../public/footer.png';
 export function Layout({
   children,
   layout,
+  menuLinks,
+  metaObject,
 }: {
   children: React.ReactNode;
   layout: LayoutData;
+  menuLinks: any;
+  metaObject: any;
 }) {
   return (
     <>
@@ -66,6 +72,10 @@ export function Layout({
       </div>
       <div className="md:hidden fr-md:!hidden">
         <FooterMob menu={layout?.footerMenu} />
+      </div>
+
+      <div>
+        <MenuLinks metaObject={metaObject} menuLinks={menuLinks} />
       </div>
     </>
   );
@@ -813,7 +823,6 @@ function FooterMenu({menu}: {menu?: EnhancedMenu}) {
 
 // MOBILE
 
-//KATE
 function FooterMob({menu}: {menu?: EnhancedMenu}) {
   const isHome = useIsHomePath();
   const itemsCount = menu
@@ -997,6 +1006,23 @@ function FooterMenuMob({menu}: {menu?: EnhancedMenu}) {
           </Disclosure>
         </section>
       ))}
+    </>
+  );
+}
+
+function MenuLinks({metaObject}: any) {
+  return (
+    <>
+      <h1>menu link</h1>
+
+      <div className="w-2/3 gt-m:w-full relative">
+        <Image data={metaObject.image.value} className="w-full h-full" />
+        {/* <MediaImage gid={imageValue} alt="test" className="w-full h-full" /> */}
+        {/* <Image src={`${banner1}`} alt="test" /> */}
+      </div>
+      {/* <span>{textValue}</span> */}
+
+      {/* <span>{menuLinks.nodes[1].fields[0].value}</span> */}
     </>
   );
 }
