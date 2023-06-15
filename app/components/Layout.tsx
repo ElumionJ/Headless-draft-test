@@ -1,7 +1,8 @@
-import { useParams, Form, Await, useMatches } from '@remix-run/react';
+import {useParams, Form, Await, useMatches} from '@remix-run/react';
 import {useWindowScroll} from 'react-use';
 import {Disclosure} from '@headlessui/react';
 import {Suspense, useEffect, useMemo} from 'react';
+import {Image as ImageComponent} from '@shopify/hydrogen';
 
 import {
   Drawer,
@@ -20,7 +21,6 @@ import {
   Link,
   Button,
 } from '~/components';
-import {ChildHeaderLink} from './ChildHeaderLink';
 import {
   type EnhancedMenu,
   type EnhancedMenuItem,
@@ -28,14 +28,15 @@ import {
 } from '~/lib/utils';
 import {useIsHydrated} from '~/hooks/useIsHydrated';
 import {useCartFetchers} from '~/hooks/useCartFetchers';
-
-import type {LayoutData} from '../root';
-
 import logo from '~/../public/logo.svg';
 import banner1 from '~/../public/banner1.png';
 import banner2 from '~/../public/banner2.png';
 import banner3 from '~/../public/banner3.png';
 import footer from '~/../public/footer.png';
+
+import type {LayoutData} from '../root';
+
+import {ChildHeaderLink} from './ChildHeaderLink';
 
 export function Layout({
   children,
@@ -308,7 +309,7 @@ function MobileHeader({
         isHome
           ? 'bg-white dark:bg-contrast/60 text-contrast dark:text-primary shadow-darkHeader'
           : 'bg-contrast/80 text-primary'
-      } flex lg:hidden items-center h-nav sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 px-4 py-8 md:px-8`}
+      } flex lg:hidden items-center  sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 px-4 py-8 md:px-8 h-fit`}
     >
       <div className="flex items-center justify-start w-full gap-4 ">
         <button
@@ -355,22 +356,7 @@ function DesktopHeader({
   const params = useParams();
   const {y} = useWindowScroll();
 
-  //Mega menu with 1 children
-  const menuOpen = (event) => {
-    let otherMenuOpen = document.querySelectorAll('header nav > .top-menu ');
-    otherMenuOpen.forEach((e) => {
-      e.classList.remove('active');
-    });
 
-    event.target.closest('.top-menu').classList.add('active');
-  };
-
-  const dropDownMenuClose = (event) => {
-    event.target.closest('.top-menu').classList.remove('active');
-  };
-  // const nestedMenuClose = (event) => {
-  //   event.target.closest('.drop-down').classList.remove('active');
-  // };
 
   return (
     <header
@@ -381,7 +367,7 @@ function DesktopHeader({
           : 'bg-contrast/80 text-primary'
       } ${
         !isHome && y > 50 && ' shadow-lightHeader'
-      } hidden h-nav lg:flex items-center justify-center sticky transition duration-300 backdrop-blur-lg z-40 top-0  w-full leading-none gap-10 px-12 py-8`}
+      } hidden h-fit lg:flex items-center justify-center sticky transition duration-300 backdrop-blur-lg z-40 top-0  w-full leading-none gap-10 px-12 `}
     >
       <div className="flex justify-between items-center lg:gap-x-28 xl:gap-x-60 text-black ">
         <Form
@@ -397,58 +383,34 @@ function DesktopHeader({
           </button>
         </Form>
 
-        {/* className="flex gap-12 justify-center h-full items-center " */}
         <div className=" flex gap-12">
-          {/*  flex gap-8 h-full items-center */}
           <nav className="flex gap-10 font-bebas items-center justify-center">
             {/* Top level menu items */}
 
             {(menu?.items || []).map((item) => {
               if (item.to === '/') {
                 return (
-                  <Link to="/" key={item.id} className="w-[70px] h-[70px]">
-                    <img src={logo} alt="" className="" />
-                  </Link>
+                  <div key={item.id} className="h-fit">
+                    <Link to="/" key={item.id} className="w-[70px] block">
+                      <img src={logo} alt="" className="" />
+                    </Link>
+                  </div>
                 );
               }
 
-              // Alex variant
-              // return (
-              //   <Link
-              //     key={item.id}
-              //     to={item.to}
-              //     target={item.target}
-              //     prefetch="intent"
-              //     // className={({isActive}) =>
-              //     //   isActive ? 'pb-1 border-b -mb-px' : 'pb-1'
-              //     // }
-              //     // className="group/nav-link-item inline-block py-[25px] leading-[1.5] flex items-center"
-              //   >
-              //     {item.title}
-
-              //     {/* {console.log('item.items ', item?.items)} */}
-              //     {item?.items.length > 0 && (
-              //       <ChildHeaderLink data={item.items} />
-              //     )}
-              //   </Link>
-              // );
-
-              // Work with nested menu - 2 level
               return (
-                <div>
-                  <ul
-                    className="top-menu relative"
-                    // key={'top-menu--' + item.id}
-                  >
+                <div key={`${item.id}`}>
+                  <div className="top-menu navigation-item">
                     <Link
-                      onMouseEnter={menuOpen}
+                      // onMouseEnter={menuOpen}
                       key={item.id}
                       to={item.to}
                       target={item.target}
                       prefetch="intent"
-                      className={({isActive}) =>
-                        isActive ? 'pb-1 border-b -mb-px' : 'pb-1'
-                      }
+                      className={({isActive}) => {
+                        const mainStyles = `  block py-8 `;
+                        return `${mainStyles} ${isActive ? ' ' : ' '} `;
+                      }}
                     >
                       {item.title}
                     </Link>
@@ -456,39 +418,47 @@ function DesktopHeader({
                     {/* nested menu - 2 level*/}
 
                     {item?.items.length > 0 && (
-                      <ul
-                        className="drop-down absolute pt-10 bg-slate-500 p-4"
-                        onMouseLeave={dropDownMenuClose}
-                        // key={'drop-down--' + item.id}
+                      <div
+                        className="drop-down hidden absolute pt-10 bg-[#FFF] pb-8 top-full left-0 w-full"
+                        // onMouseLeave={dropDownMenuClose}
                       >
-                        {(item?.items || []).map((submenu) => (
-                          <div className="">
-                            <Link
-                              key={submenu.id}
-                              to={submenu.to}
-                              target={submenu.target}
-                              className="p-2 inline-block"
+                        <ul className="max-w-5xl flex gap-[125px] mx-auto">
+                          {(item?.items || []).map((submenu) => (
+                            <li
+                              className=" max-w-[150px] "
+                              key={`${item.id}-${submenu.id}`}
                             >
-                              {submenu.title}
-                            </Link>
+                              <Link
+                                key={submenu.id}
+                                to={submenu.to}
+                                target={submenu.target}
+                                className="pb-[6px] inline-block uppercase font-bebas text-[20px] leading-[110%] tracking-wider text-[#1f1f1f]"
+                              >
+                                {submenu.title}
+                              </Link>
 
-                            {/*  nested menu - 3 level */}
-                            {submenu.items.length > 0 &&
-                              submenu?.items.map((el) => (
-                                <Link
-                                  className="bg-[yellow] p-3 inline-block"
-                                  key={el.id}
-                                  to={el.to}
-                                  target={el.target}
-                                >
-                                  {el.title}
-                                </Link>
-                              ))}
-                          </div>
-                        ))}
-                      </ul>
+                              {/*  nested menu - 3 level */}
+                              <ul>
+                                {submenu.items.length > 0 &&
+                                  submenu?.items.map((el) => (
+                                    <li key={el.id}>
+                                      <Link
+                                        className="text-[#333] font-noto leading-[150%] text-[16px]  py-3 inline-block"
+                                        key={`${item.id}-${submenu.id}-${el.id}`}
+                                        to={el.to}
+                                        target={el.target}
+                                      >
+                                        {el.title}
+                                      </Link>
+                                    </li>
+                                  ))}
+                              </ul>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     )}
-                  </ul>
+                  </div>
                 </div>
               );
             })}
