@@ -2,7 +2,7 @@ import {Fragment, useState} from 'react';
 import {Dialog, Transition} from '@headlessui/react';
 import {useAsyncValue} from '@remix-run/react';
 
-import {Heading, IconBag, IconClose} from '~/components';
+import {Heading, IconClose} from '~/components';
 import {Cart} from '~/components';
 
 import CartCount from './Layout';

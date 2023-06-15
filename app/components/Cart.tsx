@@ -9,18 +9,9 @@ import type {
   CartLineUpdateInput,
   Product,
 } from '@shopify/hydrogen/storefront-api-types';
-import {useFetcher, useLoaderData} from '@remix-run/react';
+import {useFetcher} from '@remix-run/react';
 
-import {
-  Button,
-  IconRemove,
-  IconClose,
-  Text,
-  Link,
-  Heading,
-  FeaturedProducts,
-} from '~/components';
-import {getInputStyleClasses} from '~/lib/utils';
+import {Button, IconRemove, IconClose, Text, Link, Heading} from '~/components';
 import {CartAction} from '~/lib/type';
 
 type Layouts = 'page' | 'drawer';
@@ -47,7 +38,7 @@ export function Cart({
       ) : (
         <CartDetails cart={cart} layout={layout} />
       )} */}
-      <CartEmpty hidden={linesCount} onClose={onClose} layout={layout} /> 
+      <CartEmpty hidden={linesCount} onClose={onClose} layout={layout} />
       <CartDetails cart={cart} layout={layout} />
     </>
   );
@@ -70,7 +61,7 @@ export function CartDetails({
   };
 
   if (layout === 'page' && !cartHasItems) {
-    return <></>
+    return <></>;
   }
 
   return (
@@ -681,9 +672,6 @@ export function CartEmpty({
           </Link>
         </div>
       </section>
-     
     </div>
-
-   
   );
 }

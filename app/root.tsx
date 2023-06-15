@@ -111,7 +111,7 @@ export default function App() {
   const [root] = useMatches();
   // console.log('ROOT', data.selectedLocale);
 
-  console.log(data.metaObject);
+  // console.log(data.metaObject);
 
   useAnalytics(hasUserConsent, locale);
 

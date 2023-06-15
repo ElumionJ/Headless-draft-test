@@ -1,6 +1,6 @@
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
-import {ProductCard, Section} from '~/components';
+import {ProductCard} from '~/components';
 
 const mockProducts = new Array(12).fill('');
 

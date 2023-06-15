@@ -204,9 +204,10 @@ export default function Product() {
 
   useEffect(() => {
     const sanitizedHtml = DOMPurify.sanitize(descriptionHtml);
+    if (!descriptionRef.current) return;
     (descriptionRef.current as unknown as HTMLParagraphElement).innerHTML =
       sanitizedHtml;
-  }, []);
+  }, [descriptionHtml]);
   return (
     <>
       <Section className="!px-0 !py-0">
