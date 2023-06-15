@@ -458,7 +458,7 @@ function DesktopHeader({
 
                     {item?.items.length > 0 && (
                       <ul
-                        className="drop-down absolute pt-10 bg-slate-500"
+                        className="drop-down absolute pt-10 bg-slate-500 p-4"
                         onMouseLeave={dropDownMenuClose}
                         // key={'drop-down--' + item.id}
                       >
@@ -468,6 +468,7 @@ function DesktopHeader({
                               key={submenu.id}
                               to={submenu.to}
                               target={submenu.target}
+                              className="p-2 inline-block"
                             >
                               {submenu.title}
                             </Link>

@@ -17,7 +17,6 @@ export interface EnhancedMenuItem extends MenuItem {
   target: string;
   isExternal?: boolean;
   items: EnhancedMenuItem[];
-  thirdNestedLink?: MenuItem;
 }
 
 export interface EnhancedMenu extends Menu {
