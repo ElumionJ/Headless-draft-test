@@ -403,7 +403,7 @@ function DesktopHeader({
         </Form>
 
         <div className=" flex gap-12">
-          <nav className="flex gap-10 font-bebas items-center justify-center">
+          <nav className="flex font-bebas items-center justify-center">
             {/* Top level menu items */}
 
             {(menu?.items || []).map((item) => {
@@ -427,7 +427,7 @@ function DesktopHeader({
                       target={item.target}
                       prefetch="intent"
                       className={({isActive}) => {
-                        const mainStyles = `  block py-8 `;
+                        const mainStyles = `  block p-8 `;
                         return `${mainStyles} ${isActive ? ' ' : ' '} `;
                       }}
                     >
