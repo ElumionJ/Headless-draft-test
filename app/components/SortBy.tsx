@@ -1,6 +1,6 @@
 import {Link} from '@remix-run/react';
 import {HiArrowSmDown} from 'react-icons/hi';
-import React, {useEffect, useRef, useState} from 'react';
+import {useRef, useState} from 'react';
 
 import useOutsideClick from '~/hooks/useOutsideClick';
 

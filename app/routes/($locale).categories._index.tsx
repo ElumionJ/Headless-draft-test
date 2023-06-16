@@ -10,7 +10,7 @@ import {
   getPaginationVariables__unstable as getPaginationVariables,
 } from '@shopify/hydrogen';
 
-import {Grid, Heading, PageHeader, Section, Link, Button} from '~/components';
+import {Grid, Heading, PageHeader, Section, Link} from '~/components';
 import {getImageLoadingPriority} from '~/lib/const';
 import {seoPayload} from '~/lib/seo.server';
 import {CACHE_SHORT, routeHeaders} from '~/data/cache';
@@ -94,7 +94,7 @@ function CollectionCard({
   loading?: HTMLImageElement['loading'];
 }) {
   return (
-    <Link to={`/collections/${collection.handle}`} className="grid gap-4">
+    <Link to={`/categories/${collection.handle}`} className="grid gap-4">
       <div className="card-image bg-primary/5 aspect-[3/2]">
         {collection?.image && (
           <Image

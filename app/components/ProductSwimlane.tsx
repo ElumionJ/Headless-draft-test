@@ -1,7 +1,6 @@
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
-import React from 'react';
 
-import {ProductCard, Section} from '~/components';
+import {ProductCard} from '~/components';
 import {Link} from './Link';
 
 interface Data {

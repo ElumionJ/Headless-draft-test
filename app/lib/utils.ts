@@ -88,8 +88,8 @@ function resolveToFromType(
   */
   const defaultPrefixes = {
     BLOG: 'blogs',
-    COLLECTION: 'collections',
-    COLLECTIONS: 'collections', // Collections All (not documented)
+    COLLECTION: 'categories',
+    COLLECTIONS: 'categories', // Collections All (not documented)
     FRONTPAGE: 'frontpage',
     HTTP: '',
     PAGE: 'pages',
@@ -126,6 +126,9 @@ function resolveToFromType(
 
     case type === 'CATALOG':
       return `/${routePrefix.CATALOG}`;
+
+    case type === 'PAGE':
+      return `/${handle}`;
 
     // common cases: BLOG, PAGE, COLLECTION, PRODUCT, SHOP_POLICY, HTTP
     default:

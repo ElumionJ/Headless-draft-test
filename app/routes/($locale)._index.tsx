@@ -2,7 +2,6 @@ import {defer, type LoaderArgs} from '@shopify/remix-oxygen';
 import {Suspense} from 'react';
 import {Await, useLoaderData} from '@remix-run/react';
 import type {ProductConnection} from '@shopify/hydrogen/storefront-api-types';
-import React from 'react';
 
 import {
   ProductSwimlane,
@@ -12,6 +11,7 @@ import {
   BlogBanner,
   BrandsLogos,
 } from '~/components';
+
 import {PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
 import {seoPayload} from '~/lib/seo.server';
 import {routeHeaders} from '~/data/cache';

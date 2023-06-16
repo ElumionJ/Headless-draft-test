@@ -57,7 +57,7 @@ export default function Journals() {
 
   return (
     <>
-      <PageHeader heading={BLOG_HANDLE} variant="blog"/>
+      <PageHeader heading={BLOG_HANDLE} variant="blog" />
       <Section>
         <Grid as="ol" layout="blog">
           {/* Kate */}
