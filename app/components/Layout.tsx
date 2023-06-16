@@ -377,7 +377,6 @@ function DesktopHeader({
 }) {
   const params = useParams();
   const {y} = useWindowScroll();
-
   return (
     <header
       role="banner"
@@ -473,7 +472,7 @@ function DesktopHeader({
                             </li>
                           ))}
 
-                          <div className="flex gap-x-10 pl-32">
+                          <li className="flex gap-x-10 pl-32">
                             {imagesLinks &&
                               typeof imagesLinks.navigation_relative.value ===
                                 'string' &&
@@ -487,12 +486,14 @@ function DesktopHeader({
                                     {imagesLinks.text.value}
                                   </Link>
 
-                                  <img
-                                    src={imagesLinks.image.value.url}
-                                    alt={imagesLinks.text.value}
-                                    width={200}
-                                    height={500}
-                                  />
+                                  {imagesLinks.image && (
+                                    <img
+                                      src={imagesLinks.image.value.url}
+                                      alt={imagesLinks.text.value}
+                                      width={200}
+                                      height={500}
+                                    />
+                                  )}
                                 </div>
                               )}
 
@@ -508,16 +509,17 @@ function DesktopHeader({
                                   >
                                     {imagesLinks.text_2.value}
                                   </Link>
-
-                                  <img
-                                    src={imagesLinks.image_2.value.url}
-                                    alt={imagesLinks.text_2.value}
-                                    width={200}
-                                    height={500}
-                                  />
+                                  {imagesLinks.image_2 && (
+                                    <img
+                                      src={imagesLinks.image_2.value.url}
+                                      alt={imagesLinks.text_2.value}
+                                      width={200}
+                                      height={500}
+                                    />
+                                  )}
                                 </div>
                               )}
-                          </div>
+                          </li>
                         </ul>
                       </div>
                     )}
