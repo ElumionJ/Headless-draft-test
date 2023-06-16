@@ -165,7 +165,7 @@ export function Drawer({
                       {heading !== null && (
                         <Dialog.Title>
                           <Heading as="span" size="lead" id="cart-contents">
-                            <span className="uppercase">
+                            <span className="uppercase font-bebas !font-normal !text-[32px]">
                               Your bag ({cart?.totalQuantity})
                             </span>
                             {/* {heading} */}
