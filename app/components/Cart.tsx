@@ -33,11 +33,6 @@ export function Cart({
 
   return (
     <>
-      {/* {!cart || cart.totalQuantity === 0 ? (
-        <CartEmpty hidden={linesCount} onClose={onClose} layout={layout} />
-      ) : (
-        <CartDetails cart={cart} layout={layout} />
-      )} */}
       <CartEmpty hidden={linesCount} onClose={onClose} layout={layout} />
       <CartDetails cart={cart} layout={layout} />
     </>
@@ -90,21 +85,6 @@ export function CartDetails({
         )}
       </div>
     </div>
-
-    // <div className={container[layout]}>
-    //   <CartLines lines={cart?.lines} layout={layout} />
-
-    //   {cartHasItems && (
-    //     <CartSummary
-    //       cartQuantity={cart.totalQuantity}
-    //       cost={cart.cost}
-    //       layout={layout}
-    //     >
-    //       <CartDiscounts discountCodes={cart.discountCodes} />
-    //       <CartCheckoutActions checkoutUrl={cart.checkoutUrl} />
-    //     </CartSummary>
-    //   )}
-    // </div>
   );
 }
 
@@ -139,26 +119,6 @@ function CartDiscounts({
           </div>
         </div>
       </dl>
-
-      {/* No discounts, show an input to apply a discount */}
-      {/* <UpdateDiscountForm>
-        <div
-          className={clsx(
-            codes ? 'hidden' : 'flex',
-            'items-center gap-4 justify-between text-copy',
-          )}
-        >
-          <input
-            className={getInputStyleClasses()}
-            type="text"
-            name="discountCode"
-            placeholder="Discount code"
-          />
-          <button className="flex justify-end font-medium whitespace-nowrap">
-            Apply Discount
-          </button>
-        </div>
-      </UpdateDiscountForm> */}
     </>
   );
 }
@@ -203,7 +163,7 @@ function CartLines({
     // y > 0 ? 'border-t' : '',
     y > 0 ? '' : '',
     layout === 'page'
-      ? 'flex-grow md:translate-y-4 pr-6 pl-6  lg:pl-0 lg:pr-[488px] xl:pl-0 border-y-[1px] border-black pt-[40px]  xl:pl-12'
+      ? 'flex-grow md:translate-y-4 pr-6 pl-6 h-fit lg:pl-0 lg:pr-[488px] xl:pl-0 border-y-[1px] border-black pt-[40px]  xl:pl-12'
       : 'px-6 pb-6 sm-max:pt-2 overflow-auto transition md:px-12 text-black',
   ]);
 
@@ -317,23 +277,24 @@ function CartSummary({
 }) {
   const summary = {
     drawer: 'grid gap-6 p-6 border-t md:px-12 border-[black] bg-[#F2F2F2] ',
-    page: 'sticky top-nav grid gap-6 md:translate-y-4 rounded w-full w-[325px] ',
+    page: 'sticky top-nav grid gap-6 px-[15px] md:translate-y-4 rounded w-full w-[325px] ',
   };
 
   return (
     <section aria-labelledby="summary-heading" className={summary[layout]}>
-      <div className="mb-5 p-4 md:px-6 bg-[#F2F2F2]">
+      <div className="mb-5 p-4 md:px-6 bg-[#F2F2F2] h-fit">
         <h2 id="summary-heading" className="sr-only">
           Order summary
         </h2>
+
         <dl className="grid">
           {layout === 'page' && (
-            <div className="w-full">
-              <div className="font-bebas text-2xl p-6 pb-2 font-normal  uppercase text-[black] border-b-[1px] border-[#E0E0E0]">
+            <>
+              <dt className="font-bebas text-2xl p-6 pb-6 font-normal uppercase text-[black] border-b-[1px] border-[#E0E0E0]">
                 Order summary
-              </div>
+              </dt>
 
-              <div className="flex items-center justify-between p-6">
+              <dd className="flex items-center justify-between p-6">
                 <span className="uppercase text-[black] font-bebas text-2xl">
                   Total
                 </span>
@@ -347,17 +308,18 @@ function CartSummary({
                     '-'
                   )}
                 </span>
-              </div>
-              <span className="p-6 font-noto text-base">
+              </dd>
+
+              <dd className="p-6 font-noto text-base">
                 Delivery calculated at checkout
-              </span>
-            </div>
+              </dd>
+            </>
           )}
 
           {/* drawer */}
           {layout === 'drawer' && (
             <>
-              <div className="flex items-center justify-between font-semibold ">
+              <dt className="flex items-center justify-between font-semibold">
                 <span className="uppercase text-[black] pb-2 font-bebas text-2xl font-normal">
                   Subtotal
                 </span>
@@ -371,8 +333,8 @@ function CartSummary({
                     '-'
                   )}
                 </span>
-              </div>
-              <div>{children}</div>
+              </dt>
+              <dd>{children}</dd>
             </>
           )}
         </dl>
@@ -415,6 +377,7 @@ function CartLineItem({
             data={merchandise.image}
             className="object-cover object-center w-24 h-24 border rounded md:w-28 md:h-28"
             alt={merchandise.title}
+            loading="lazy"
           />
         )}
       </div>
@@ -438,14 +401,6 @@ function CartLineItem({
               </span>
             )}
           </div>
-
-          {/* <div className="grid pb-2">
-            {(merchandise?.selectedOptions || []).map((option) => (
-              <Text color="subtle" key={option.name}>
-                {option.name}: {option.value}
-              </Text>
-            ))}
-          </div> */}
 
           <div className="flex justify-start text-copy">
             <CartLineQuantityAdjust line={line} />

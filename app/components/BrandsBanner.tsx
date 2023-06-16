@@ -1,3 +1,5 @@
+import {Image} from '@shopify/hydrogen';
+
 import {Link} from './Link';
 
 interface Props {
@@ -24,10 +26,12 @@ export function BrandsBanner({data}: Props) {
           borderRadius: `2px`,
         }}
       >
-        <img
-          className="w-[100%] h-[100%] object-cover"
-          src={data.image_1.value}
-          alt={data.image_1.value}
+        <Image
+          className={`w-[100%] h-[100%] object-cover`}
+          sizes="(min-width: 64em) 25vw, (min-width: 48em) 30vw, 45vw"
+          data={{url: data.image_1.value}}
+          alt={data.title_1.value}
+          loading={'lazy'}
         />
         <div
           className="bg-gradient-to-t from-transparent to-black w-full h-full absolute"
@@ -75,10 +79,12 @@ export function BrandsBanner({data}: Props) {
           borderRadius: `2px`,
         }}
       >
-        <img
-          className="w-[100%] h-[100%] object-cover"
-          src={data.image_2.value}
-          alt={data.image_2.value}
+        <Image
+          className={`w-[100%] h-[100%] object-cover`}
+          sizes="(min-width: 64em) 25vw, (min-width: 48em) 30vw, 45vw"
+          data={{url: data.image_2.value}}
+          alt={data.title_2.value}
+          loading={'lazy'}
         />
         <div
           className="bg-gradient-to-t from-transparent to-black w-full h-full absolute"

@@ -32,7 +32,6 @@ export const SwiperImages = ({media}: Props) => {
           <div className="swiper-wrapper">
             {media.map((el) => (
               <div key={el.id} className="swiper-slide">
-                {/* <img src={el.image.url} alt="" /> */}
                 <Image
                   aspectRatio="3/4"
                   loading={'eager'}

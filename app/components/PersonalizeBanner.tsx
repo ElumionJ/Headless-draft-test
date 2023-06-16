@@ -1,4 +1,5 @@
 import React from 'react';
+import {Image} from '@shopify/hydrogen';
 
 import {Link} from './Link';
 
@@ -23,10 +24,12 @@ export function PersonalizeBanner({data}: Props) {
       style={{marginBottom: `${data.margin.value}px`}}
     >
       <div className="w-2/3 gt-m:w-full relative">
-        <img
-          src={data.image.value}
+        <Image
+          className={`gt-m:aspect-[3/4] gt-m:object-cover w-full`}
+          sizes="(min-width: 64em) 25vw, (min-width: 48em) 30vw, 45vw"
+          data={{url: data.image.value}}
           alt={data.title.value}
-          className="gt-m:aspect-[3/4] gt-m:object-cover"
+          loading={'lazy'}
         />
         <Link
           to={'/products'}

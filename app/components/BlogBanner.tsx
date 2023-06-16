@@ -1,3 +1,5 @@
+import {Image} from '@shopify/hydrogen';
+
 import {Link} from './Link';
 
 interface Props {
@@ -16,21 +18,23 @@ export function BlogBanner({data}: Props) {
       <div
         className={`flex ${
           data.revert.value === 'true'
-            ? 'flex-row gt-m:flex-col'
-            : 'flex-row-reverse gt-m:flex-col-reverse'
+            ? 'flex-row gt-l:flex-col'
+            : 'flex-row-reverse gt-l:flex-col-reverse'
         } `}
         style={{marginBottom: `${data.margin.value}px`}}
       >
-        <div className="w-2/3 gt-m:w-full relative">
-          <img
-            src={data.image.value}
+        <div className="w-2/3 gt-l:w-full relative">
+          <Image
+            className={`object-cover w-full h-full gt-l:aspect-[3/4] gt-l:object-cover`}
+            sizes="(min-width: 64em) 25vw, (min-width: 48em) 30vw, 45vw"
+            data={{url: data.image.value}}
             alt={data.title.value}
-            className="object-cover w-full h-full gt-m:aspect-[3/4] gt-m:object-cover"
+            loading={'lazy'}
           />
         </div>
 
         <div
-          className={`flex flex-col gt-m:mt-0 w-1/3 gt-m:w-full bg-[#F3F3F3] p-[92px] gt-m:p-[15px] ${
+          className={`flex flex-col gt-l:mt-0 w-1/3 gt-l:w-full bg-[#F3F3F3] p-[92px] gt-l:p-[15px] ${
             data.revert.value === 'true' ? 'gt-m:mt-[24px]' : 'gt-m:mb-[24px]'
           }`}
         >
