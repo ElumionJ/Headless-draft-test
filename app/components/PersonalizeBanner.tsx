@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {Link} from './Link';
+
 interface Props {
   data: {
     [key: string]: {
@@ -11,13 +13,6 @@ interface Props {
 }
 
 export function PersonalizeBanner({data}: Props) {
-  // const desc = data.description.value;
-  // if (desc) {
-  //   return <span className="font-noto text-base text-[#333333]">{desc}</span>;
-  // } else {
-  //   null;
-  // }
-
   return (
     <div
       className={`flex mr-[40px] ml-[40px] gt-m:mr-[15px] gt-m:ml-[15px] ${
@@ -33,12 +28,12 @@ export function PersonalizeBanner({data}: Props) {
           alt={data.title.value}
           className="gt-m:aspect-[3/4] gt-m:object-cover"
         />
-        <a
-          href="/products"
-          className="absolute left-[32px] bottom-[32px] font-normal text-[#fff] text-[30px] flex justify-center font-bebas tracking-wider leading-[120%]"
+        <Link
+          to={'/products'}
+          className="absolute ltr:left-[32px] rtl:right-[32px] bottom-[32px] font-normal text-[#fff] text-[30px] flex justify-center font-bebas tracking-wider leading-[120%]"
         >
-          I WANT THIS
-          <span className="ml-[8px]">
+          {data.button.value}
+          <span className="ltr:ml-[8px] rtl:mr-[8px] rtl:scale-x-[-1]">
             <svg
               width="10"
               height="10"
@@ -62,7 +57,7 @@ export function PersonalizeBanner({data}: Props) {
               />
             </svg>
           </span>
-        </a>
+        </Link>
       </div>
 
       <div

@@ -1,4 +1,5 @@
 import {Button} from './Button';
+import {Link} from './Link';
 
 interface Props {
   data: {
@@ -32,12 +33,12 @@ export function HomePageBanner({data}: Props) {
             as="span"
             className="text-white w-[158px] h-[48px] mb-4 uppercase flex items-center justify-center gap-x-2 px-3 py-4  bg-[#D80F16] rounded-[100px] hover:opacity-80"
           >
-            <a
+            <Link
               className="font-noto tracking-widest font-bold flex items-center text-[12px]"
-              href="/products"
+              to={'/products'}
             >
-              Shop now
-              <span className="ml-[8px]">
+              {data.button.value}
+              <span className="ltr:ml-[8px] rtl:mr-[8px] rtl:scale-x-[-1]">
                 <svg
                   width="10"
                   height="10"
@@ -61,7 +62,7 @@ export function HomePageBanner({data}: Props) {
                   />
                 </svg>
               </span>
-            </a>
+            </Link>
           </Button>
         </div>
       </div>

@@ -1,6 +1,15 @@
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
 import {ProductCard} from '~/components';
+import {Link} from './Link';
+
+interface Data {
+  [key: string]: {
+    value: string;
+    key: string;
+    type: string;
+  };
+}
 
 const mockProducts = new Array(12).fill('');
 
@@ -8,11 +17,13 @@ export function ProductSwimlane({
   title = 'TRY something NEW',
   products = mockProducts,
   count = 12,
+  data,
   ...props
 }: {
   title?: string;
   products?: Product[];
   count?: number;
+  data?: Data;
 }) {
   return (
     <div
@@ -21,21 +32,17 @@ export function ProductSwimlane({
       {...props}
       className=" gt-m:flex-col flex justify-between"
     >
-      <div className="ml-[40px]">
+      <div className="ltr:ml-[40px] rtl:mr-[40px]">
         <h2 className="font-bebas leading-[72px] text-[72px] tracking-widest mb-[64px] mt-[64px] gt-m:mb-[20px]">
-          TRY
-          <br />
-          SOMETHING
-          <br />
-          NEW
+          {data?.title.value}
         </h2>
         <div className="relative w-[fit-content] gt-m:mb-[20px]">
-          <a
+          <Link
             className="font-noto font-bold text-[12px] flex items-center tracking-widest "
-            href="/products"
+            to={'/products'}
           >
-            SEE ALL PRODUCTS
-            <span className="ml-[8px]">
+            {data?.button.value}
+            <span className="ltr:ml-[8px] rtl:mr-[8px] rtl:scale-x-[-1]">
               <svg
                 width="10"
                 height="10"
@@ -59,7 +66,7 @@ export function ProductSwimlane({
                 />
               </svg>
             </span>
-          </a>
+          </Link>
           <div className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-black"></div>
         </div>
       </div>
