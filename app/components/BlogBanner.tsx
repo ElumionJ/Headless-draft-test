@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {Link} from './Link';
+
 interface Props {
   data: {
     [key: string]: {
@@ -11,13 +13,6 @@ interface Props {
 }
 
 export function BlogBanner({data}: Props) {
-  // const desc = data.description.value;
-  // if (desc) {
-  //   return <span className="font-noto text-base text-[#333333]">{desc}</span>;
-  // } else {
-  //   null;
-  // }
-
   return (
     <>
       <div
@@ -51,12 +46,12 @@ export function BlogBanner({data}: Props) {
           )}
 
           <div className="relative w-[fit-content] gt-m:mb-[20px]">
-            <a
+            <Link
               className="font-noto font-bold text-[12px] flex items-center tracking-widest text-[#D80F16]"
-              href="/products"
+              to={'/products'}
             >
-              SEE ALL PRODUCTS
-              <span className="ml-[8px]">
+              {data.button.value}
+              <span className="ltr:ml-[8px] rtl:mr-[8px] rtl:scale-x-[-1]">
                 <svg
                   width="10"
                   height="10"
@@ -80,7 +75,7 @@ export function BlogBanner({data}: Props) {
                   />
                 </svg>
               </span>
-            </a>
+            </Link>
             <div className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-[#D80F16]"></div>
           </div>
         </div>

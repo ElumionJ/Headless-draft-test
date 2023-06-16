@@ -10,6 +10,7 @@ import {
   HomePageBanner,
   PersonalizeBanner,
   BlogBanner,
+  BrandsLogos,
 } from '~/components';
 import {PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
 import {seoPayload} from '~/lib/seo.server';
@@ -81,8 +82,26 @@ export async function loader({params, context}: LoaderArgs) {
               }
             }
           }
+          ProductSwimlane: metaobjects(type: "product_swimlane", first: 15) {
+            nodes {
+              fields {
+                type
+                key
+                value
+              }
+            }
+          }
+          BrandsLogos: metaobjects(type: "brands_logos", first: 15) {
+            nodes {
+              fields {
+                type
+                key
+                value
+              }
+            }
+          }
         }
-      `);
+  `);
 
   const allMetaobjectsArray = [];
   for (const key in allMetaobjects) {
@@ -145,41 +164,45 @@ export default function Homepage() {
     BrandsBanner,
     BlogBanner,
     PersonalizeBanner,
+    BrandsLogos,
   };
 
   return (
     <>
       <div>
         {allMetaobjectsArray.map((component) => {
+          if (component[0].name === 'ProductSwimlane') {
+            return component[0].show.value === 'true'
+              ? featuredProducts && (
+                  <Suspense key={component[0].order.value}>
+                    <Await
+                      key={component[0].order.value}
+                      resolve={featuredProducts}
+                    >
+                      {({products}) => {
+                        if (!products?.nodes) return <></>;
+                        return (
+                          <ProductSwimlane
+                            key={component[0].order.value}
+                            products={products.nodes}
+                            data={component[0]}
+                            title="Featured Products"
+                            count={4}
+                          />
+                        );
+                      }}
+                    </Await>
+                  </Suspense>
+                )
+              : '';
+          }
           const Component = componentMap[component[0].name];
-          return (
+          return component[0].show.value === 'true' ? (
             <Component key={component[0].order.value} data={component[0]} />
+          ) : (
+            ''
           );
         })}
-      </div>
-
-      {featuredProducts && (
-        <Suspense>
-          <Await resolve={featuredProducts}>
-            {({products}) => {
-              if (!products?.nodes) return <></>;
-              return (
-                <ProductSwimlane
-                  products={products.nodes}
-                  title="Featured Products"
-                  count={4}
-                />
-              );
-            }}
-          </Await>
-        </Suspense>
-      )}
-
-      <div className="grid grid-cols-4 gap-5 m-[40px] mb-[80px] gt-m:grid-cols-2 gt-m:gap-2">
-        <div className="h-[120px] bg-[#F3F3F3]"></div>
-        <div className="h-[120px] bg-[#F3F3F3]"></div>
-        <div className="h-[120px] bg-[#F3F3F3] gt-m:hidden"></div>
-        <div className="h-[120px] bg-[#F3F3F3] gt-m:hidden"></div>
       </div>
     </>
   );

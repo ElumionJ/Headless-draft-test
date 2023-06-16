@@ -84,7 +84,7 @@ export default function App() {
   return (
     <html
       lang={locale.language}
-      dir={root.params.locale === 'ar-ar' ? 'rtl' : 'ltr'}
+      dir={root.params.locale === 'ar-sa' ? 'rtl' : 'ltr'}
     >
       <head>
         <meta charSet="utf-8" />
