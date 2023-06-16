@@ -214,7 +214,7 @@ export default function OrderRoute() {
                   <th
                     scope="row"
                     colSpan={3}
-                    className="hidden pt-6 pl-6 pr-3 font-normal text-right sm:table-cell md:pl-0"
+                    className="hidden pt-6 pl-6 pr-3 font-normal text-right sm:table-cell md:pl-0 "
                   >
                     <Text>Subtotal</Text>
                   </th>

@@ -68,7 +68,7 @@ export function CartDetails({
     // When its empty - work not correct
     <div className="flex flex-col w-full bg-[#FFFEFA] text-black ">
       {layout === 'page' && (
-        <span className="pl-6 pt-3 lg:pt-8 lg:pb-6 lg:pl-[32px] xl:pl-[159px] font-semibold uppercase">
+        <span className="pl-6 pt-3 lg:pt-8 lg:pb-6 lg:pl-[32px] xl:pl-[159px] font-normal uppercase font-bebas text-[32px]">
           My bag ({cart?.totalQuantity})
         </span>
       )}
@@ -195,8 +195,8 @@ function CartLines({
 
     price:
       layout === 'page'
-        ? 'item flex flex-row-reverse gap-x-10'
-        : 'item ajax-styles flex flex-col gap-y-16',
+        ? 'item flex flex-row-reverse gap-x-10 font-bebas text-[20px]'
+        : 'item ajax-styles flex flex-col gap-y-16 font-bebas text-[20px]',
   };
 
   const className = clsx([
@@ -243,7 +243,7 @@ function CartCheckoutActions({
         <Button
           as="span"
           width="full"
-          className="text-white mb-4 uppercase flex items-center justify-center gap-x-2 px-3 py-4  bg-[#D80F16] rounded-[100px] w-full hover:opacity-80"
+          className="font-bold text-white mb-4 uppercase text-xs font-noto flex items-center justify-center gap-x-2 px-3 py-4  bg-[#D80F16] rounded-[100px] w-full hover:opacity-80"
         >
           Secure Checkout
           <svg
@@ -273,7 +273,7 @@ function CartCheckoutActions({
 
       {layout === 'drawer' && (
         <a href="/cart">
-          <div className="flex items-center justify-center text-black uppercase border-b-2 border-black w-fit gap-x-2 hover:opacity-80">
+          <div className="font-bold font-noto text-xs flex items-center justify-center text-black uppercase border-b-2 border-black w-fit gap-x-2 hover:opacity-80">
             View bag
             <svg
               width="10"
@@ -329,13 +329,18 @@ function CartSummary({
         <dl className="grid">
           {layout === 'page' && (
             <div className="w-full">
-              <div className=" p-6 pb-2 font-semibold  uppercase text-[black] border-b-[1px] border-[#E0E0E0]">
+              <div className="font-bebas text-2xl p-6 pb-2 font-normal  uppercase text-[black] border-b-[1px] border-[#E0E0E0]">
                 Order summary
               </div>
 
               <div className="flex items-center justify-between p-6">
-                <span className="uppercase text-[black] ">Total</span>
-                <span className="text-[red]" data-test="subtotal">
+                <span className="uppercase text-[black] font-bebas text-2xl">
+                  Total
+                </span>
+                <span
+                  className="text-[red] font-bebas text-2xl"
+                  data-test="subtotal"
+                >
                   {cost?.subtotalAmount?.amount ? (
                     <Money data={cost?.subtotalAmount} />
                   ) : (
@@ -343,7 +348,9 @@ function CartSummary({
                   )}
                 </span>
               </div>
-              <span className="p-6 ">Delivery calculated at checkout</span>
+              <span className="p-6 font-noto text-base">
+                Delivery calculated at checkout
+              </span>
             </div>
           )}
 
@@ -351,8 +358,13 @@ function CartSummary({
           {layout === 'drawer' && (
             <>
               <div className="flex items-center justify-between font-semibold ">
-                <span className="uppercase text-[black] pb-2">Subtotal</span>
-                <span className="text-[red]" data-test="subtotal">
+                <span className="uppercase text-[black] pb-2 font-bebas text-2xl font-normal">
+                  Subtotal
+                </span>
+                <span
+                  className="text-[red] font-bebas font-normal text-2xl"
+                  data-test="subtotal"
+                >
                   {cost?.subtotalAmount?.amount ? (
                     <Money data={cost?.subtotalAmount} />
                   ) : (
@@ -409,7 +421,7 @@ function CartLineItem({
 
       <div className="flex items-center justify-between flex-grow gap-6">
         <div className={additionalClasses.cartItem}>
-          <div className="max-w-[200px] pr-8">
+          <div className="max-w-[200px] pr-8 font-bebas text-base">
             <Heading as="h3" size="copy">
               {merchandise?.product?.handle ? (
                 <Link to={`/products/${merchandise.product.handle}`}>
@@ -487,7 +499,7 @@ function CartLineQuantityAdjust({line}: {line: CartLine}) {
       <label htmlFor={`quantity-${lineId}`} className="sr-only">
         Quantity, {quantity}
       </label>
-      <div className="flex items-center border rounded-[100px] border-black">
+      <div className="flex items-center border rounded-[100px] border-black font-bebas">
         <UpdateCartButton lines={[{id: lineId, quantity: prevQuantity}]}>
           <button
             name="decrease-quantity"
@@ -636,14 +648,18 @@ export function CartEmpty({
             </svg>
           </div>
 
-          <span className="text-[#D80F16] mb-2">OOOOPS...</span>
-          <span className="text-black">YOUR BAG IS EMPTY</span>
+          <span className="text-[#D80F16] mb-2 font-bebas font-normal text-[32px]">
+            OOOOPS...
+          </span>
+          <span className="text-black font-bebas font-normal text-[24px]">
+            YOUR BAG IS EMPTY
+          </span>
         </div>
         <div>
           <Link to="/products">
             <Button
               onClick={onClose}
-              className="flex items-center justify-center gap-x-5 px-3 py-4  bg-[#D80F16] rounded-[100px] w-full hover:opacity-80"
+              className="flex items-center justify-center gap-x-5 px-3 py-4  bg-[#D80F16] rounded-[100px] w-full hover:opacity-80 text-white font-noto uppercase text-xs font-bold	"
             >
               Start shopping
               <svg
