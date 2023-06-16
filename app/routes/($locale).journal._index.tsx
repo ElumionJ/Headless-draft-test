@@ -102,7 +102,6 @@ function ArticleCard({
           </div>
         )}
         <h2 className="mt-4 font-medium text-center">{article.title}</h2>
-        {/* <span className="block mt-1 text-center">{article.publishedAt}</span> */}
       </Link>
     </li>
   );

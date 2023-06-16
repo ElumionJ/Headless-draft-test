@@ -2,6 +2,7 @@ import {useParams, Form, Await, useMatches} from '@remix-run/react';
 import {useWindowScroll} from 'react-use';
 import {Disclosure} from '@headlessui/react';
 import {Suspense, useEffect, useMemo} from 'react';
+import {Image} from '@shopify/hydrogen';
 
 import {
   Drawer,
@@ -349,7 +350,14 @@ function MobileHeader({
           as={isHome ? 'h1' : 'h2'}
         >
           <div className="p-2 ">
-            <img src={logo} alt="" className="w-[50px] h-[50px]" />
+            <img
+              src={logo}
+              alt="Logo"
+              width={50}
+              height={50}
+              className="w-[50px] h-[50px]"
+              loading="lazy"
+            />
           </div>
         </Heading>
       </Link>
@@ -386,7 +394,7 @@ function DesktopHeader({
           : 'bg-contrast/80 text-primary'
       } ${
         !isHome && y > 50 && ' shadow-lightHeader'
-      } hidden h-fit lg:flex items-center justify-center sticky transition duration-300 backdrop-blur-lg z-40 top-0  w-full leading-none gap-10 px-12 `}
+      } hidden h-fit lg:flex items-center justify-center sticky transition duration-300 backdrop-blur-lg z-40 top-0  w-full leading-none gap-10 px-10 `}
     >
       <div className="flex justify-between items-center lg:gap-x-28 xl:gap-x-60 text-black ">
         <Form
@@ -411,7 +419,7 @@ function DesktopHeader({
                 return (
                   <div key={item.id} className="h-fit">
                     <Link to="/" key={item.id} className="w-[70px] block">
-                      <img src={logo} alt="" className="" />
+                      <img src={logo} alt="Logo" loading="lazy" />
                     </Link>
                   </div>
                 );
@@ -492,6 +500,7 @@ function DesktopHeader({
                                       alt={imagesLinks.text.value}
                                       width={200}
                                       height={500}
+                                      loading="lazy"
                                     />
                                   )}
                                 </div>
@@ -515,6 +524,7 @@ function DesktopHeader({
                                       alt={imagesLinks.text_2.value}
                                       width={200}
                                       height={500}
+                                      loading="lazy"
                                     />
                                   )}
                                 </div>
@@ -676,7 +686,14 @@ export function Footer({menu}: {menu?: EnhancedMenu}) {
       <div className="flex items-center justify-between  w-full border-b-[1px] border-b-[#E0E0E0] pb-[10px]">
         <Link to="/">
           <div className="">
-            <img src={logo} alt="" className="w-[72px] h-[72px]" />
+            <img
+              src={logo}
+              alt="Logo"
+              className="w-[72px] h-[72px]"
+              width={72}
+              height={72}
+              loading="lazy"
+            />
           </div>
         </Link>
 
@@ -867,7 +884,14 @@ function FooterMob({menu}: {menu?: EnhancedMenu}) {
     >
       <div className="flex flex-col items-center justify-center border-b-[1px] border-b-[#E0E0E0]">
         <div className="p-2">
-          <img src={logo} alt="" className="w-[70px] h-[70px]" />
+          <img
+            src={logo}
+            alt="Logo"
+            width={70}
+            height={70}
+            className="w-[70px] h-[70px]"
+            loading="lazy"
+          />
         </div>
         <div>
           <span className="flex items-center justify-center mb-[14px]">
@@ -1030,24 +1054,6 @@ function FooterMenuMob({menu}: {menu?: EnhancedMenu}) {
           </Disclosure>
         </section>
       ))}
-    </>
-  );
-}
-
-function MenuLinks({metaObject}: any) {
-  console.log(metaObject);
-  return (
-    <>
-      <h1>menu link</h1>
-
-      <div className="w-2/3 gt-m:w-full relative">
-        {/* <Image data={metaObject.image.value} className="w-full h-full" /> */}
-        {/* <MediaImage gid={imageValue} alt="test" className="w-full h-full" /> */}
-        {/* <Image src={`${banner1}`} alt="test" /> */}
-      </div>
-      {/* <span>{textValue}</span> */}
-
-      {/* <span>{menuLinks.nodes[1].fields[0].value}</span> */}
     </>
   );
 }
