@@ -2,9 +2,6 @@ import {useParams, Form, Await, useMatches} from '@remix-run/react';
 import {useWindowScroll} from 'react-use';
 import {Disclosure} from '@headlessui/react';
 import {Suspense, useEffect, useMemo} from 'react';
-import {Image as ImageComponent} from '@shopify/hydrogen';
-
-import {Image} from '@shopify/hydrogen';
 
 import {
   Drawer,
@@ -31,6 +28,7 @@ import {
 } from '~/lib/utils';
 import {useIsHydrated} from '~/hooks/useIsHydrated';
 import {useCartFetchers} from '~/hooks/useCartFetchers';
+
 import logo from '~/../public/logo.svg';
 import banner1 from '~/../public/banner1.png';
 import banner2 from '~/../public/banner2.png';
@@ -39,7 +37,13 @@ import footer from '~/../public/footer.png';
 
 import type {LayoutData} from '../root';
 
-import {ChildHeaderLink} from './ChildHeaderLink';
+interface ParsedMetaobject {
+  [key: string]: {
+    key: string;
+    type: string;
+    value: string | {url: string};
+  };
+}
 
 export function Layout({
   children,
@@ -63,6 +67,7 @@ export function Layout({
         <Header
           title={layout?.shop.name ?? 'Hydrogen'}
           menu={layout?.headerMenu}
+          imagesLinks={metaObject}
         />
         <main role="main" id="mainContent" className="flex-grow">
           {children}
@@ -74,15 +79,19 @@ export function Layout({
       <div className="md:hidden fr-md:!hidden">
         <FooterMob menu={layout?.footerMenu} />
       </div>
-
-      <div>
-        <MenuLinks metaObject={metaObject} menuLinks={menuLinks} />
-      </div>
     </>
   );
 }
 
-function Header({title, menu}: {title: string; menu?: EnhancedMenu}) {
+function Header({
+  title,
+  menu,
+  imagesLinks,
+}: {
+  title: string;
+  menu?: EnhancedMenu;
+  imagesLinks: ParsedMetaobject;
+}) {
   const isHome = useIsHomePath();
 
   const {
@@ -104,7 +113,6 @@ function Header({title, menu}: {title: string; menu?: EnhancedMenu}) {
     if (isCartOpen || !addToCartFetchers.length) return;
     openCart();
   }, [addToCartFetchers, isCartOpen, openCart]);
-
   return (
     <>
       <CartDrawer isOpen={isCartOpen} onClose={closeCart} />
@@ -116,6 +124,7 @@ function Header({title, menu}: {title: string; menu?: EnhancedMenu}) {
         title={title}
         menu={menu}
         openCart={openCart}
+        imagesLinks={imagesLinks}
       />
       <MobileHeader
         isHome={isHome}
@@ -358,11 +367,13 @@ function DesktopHeader({
   menu,
   openCart,
   title,
+  imagesLinks,
 }: {
   isHome: boolean;
   openCart: () => void;
   menu?: EnhancedMenu;
   title: string;
+  imagesLinks: ParsedMetaobject;
 }) {
   const params = useParams();
   const {y} = useWindowScroll();
@@ -427,10 +438,7 @@ function DesktopHeader({
                     {/* nested menu - 2 level*/}
 
                     {item?.items.length > 0 && (
-                      <div
-                        className="drop-down hidden absolute pt-10 bg-[#FFF] pb-8 top-full left-0 w-full"
-                        // onMouseLeave={dropDownMenuClose}
-                      >
+                      <div className="drop-down hidden absolute pt-10 bg-[#FFF] pb-8 top-full left-0 w-full">
                         <ul className="max-w-5xl flex gap-[125px] mx-auto">
                           {(item?.items || []).map((submenu) => (
                             <li
@@ -464,6 +472,52 @@ function DesktopHeader({
                               </ul>
                             </li>
                           ))}
+
+                          <div className="flex gap-x-10 pl-32">
+                            {imagesLinks &&
+                              typeof imagesLinks.navigation_relative.value ===
+                                'string' &&
+                              imagesLinks.navigation_relative.value.toLowerCase() ===
+                                item.title.toLowerCase() && (
+                                <div className="flex flex-col-reverse ">
+                                  <Link
+                                    to={imagesLinks.link.value}
+                                    className="pt-3 text-xl"
+                                  >
+                                    {imagesLinks.text.value}
+                                  </Link>
+
+                                  <img
+                                    src={imagesLinks.image.value.url}
+                                    alt={imagesLinks.text.value}
+                                    width={200}
+                                    height={500}
+                                  />
+                                </div>
+                              )}
+
+                            {imagesLinks &&
+                              typeof imagesLinks.navigation_relative.value ===
+                                'string' &&
+                              imagesLinks.navigation_relative.value.toLowerCase() ===
+                                item.title.toLowerCase() && (
+                                <div className="flex flex-col-reverse">
+                                  <Link
+                                    to={imagesLinks.link_2.value}
+                                    className="pt-3 text-xl"
+                                  >
+                                    {imagesLinks.text_2.value}
+                                  </Link>
+
+                                  <img
+                                    src={imagesLinks.image_2.value.url}
+                                    alt={imagesLinks.text_2.value}
+                                    width={200}
+                                    height={500}
+                                  />
+                                </div>
+                              )}
+                          </div>
                         </ul>
                       </div>
                     )}
@@ -979,12 +1033,13 @@ function FooterMenuMob({menu}: {menu?: EnhancedMenu}) {
 }
 
 function MenuLinks({metaObject}: any) {
+  console.log(metaObject);
   return (
     <>
       <h1>menu link</h1>
 
       <div className="w-2/3 gt-m:w-full relative">
-        <Image data={metaObject.image.value} className="w-full h-full" />
+        {/* <Image data={metaObject.image.value} className="w-full h-full" /> */}
         {/* <MediaImage gid={imageValue} alt="test" className="w-full h-full" /> */}
         {/* <Image src={`${banner1}`} alt="test" /> */}
       </div>
