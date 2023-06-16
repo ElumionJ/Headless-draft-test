@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {Link} from './Link';
+
 interface Props {
   data: {
     [key: string]: {
@@ -17,7 +19,7 @@ export function BrandsBanner({data}: Props) {
       style={{marginBottom: `${data.margin.value}px`}}
     >
       <div
-        className="w-2/5 mr-[20px] relative flex bg-center bg-no-repeat flex-col-reverse gt-m:w-full gt-m:h-[165px]"
+        className="w-2/5 ltr:mr-[20px] rtl:ml-[20px] relative flex bg-center bg-no-repeat flex-col-reverse gt-m:w-full gt-m:h-[165px]"
         style={{
           border: `1px solid #000000`,
           boxShadow: `0px 4px 4px rgba(0, 0, 0, 0.25)`,
@@ -36,12 +38,12 @@ export function BrandsBanner({data}: Props) {
             opacity: `0.6`,
           }}
         ></div>
-        <a
-          href="/products"
-          className="absolute left-[32px] bottom-[32px] font-normal text-[#fff] text-[30px] flex justify-center font-bebas tracking-wider leading-[120%]"
+        <Link
+          to={'/products'}
+          className="absolute ltr:left-[32px] rtl:right-[32px] bottom-[32px] font-normal text-[#fff] text-[30px] flex justify-center font-bebas tracking-wider leading-[120%]"
         >
           {data.title_1.value}
-          <span className="ml-[8px]">
+          <span className="ltr:ml-[8px] rtl:mr-[8px] rtl:scale-x-[-1]">
             <svg
               width="10"
               height="10"
@@ -65,7 +67,7 @@ export function BrandsBanner({data}: Props) {
               />
             </svg>
           </span>
-        </a>
+        </Link>
       </div>
       <div
         className="w-3/5 relative flex bg-center bg-no-repeat flex-col-reverse gt-m:w-full gt-m:h-[165px]"
@@ -87,12 +89,12 @@ export function BrandsBanner({data}: Props) {
             opacity: `0.6`,
           }}
         ></div>
-        <a
-          href="/products"
-          className="absolute left-[32px] bottom-[32px] font-normal text-[#fff] text-[30px] flex justify-center font-bebas tracking-wider leading-[120%]"
+        <Link
+          to={'/products'}
+          className="absolute ltr:left-[32px] rtl:right-[32px] bottom-[32px] font-normal text-[#fff] text-[30px] flex justify-center font-bebas tracking-wider leading-[120%]"
         >
           {data.title_2.value}
-          <span className="ml-[8px]">
+          <span className="ltr:ml-[8px] rtl:mr-[8px] rtl:scale-x-[-1]">
             <svg
               width="10"
               height="10"
@@ -116,7 +118,7 @@ export function BrandsBanner({data}: Props) {
               />
             </svg>
           </span>
-        </a>
+        </Link>
       </div>
       {/* <div className="w-3/5 relative flex flex-col gt-m:w-full gt-m:h-[165px]">
         <img
