@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {Image} from '@shopify/hydrogen';
+
 interface Props {
   data: {
     [key: string]: {
@@ -18,10 +20,14 @@ export function BrandsLogos({data}: Props) {
           key={index}
           className="h-[120px] bg-[#F3F3F3] flex justify-center p-[10px]"
         >
-          <img
-            src={data[`image_${index}`].value}
-            className="h-full object-none"
-            alt=""
+          <Image
+            width={200}
+            height={200}
+            className={`h-full object-scale-down`}
+            sizes="(min-width: 64em) 25vw, (min-width: 48em) 30vw, 45vw"
+            data={{url: data[`image_${index}`].value}}
+            alt={'Brand'}
+            loading={'lazy'}
           />
         </div>
       ))}
