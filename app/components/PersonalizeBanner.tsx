@@ -64,13 +64,13 @@ export function PersonalizeBanner({data}: Props) {
       </div>
 
       <div
-        className={`flex flex-col mr-[20px] mt-[32px] gt-m:mt-0 w-1/3 gt-m:w-full  ${
+        className={`flex flex-col mr-[20px] rtl:ml-[20px] rtl:mr-[0px] mt-[32px] gt-m:mt-0 w-1/3 gt-m:w-full  ${
           data.revert.value === 'true'
             ? 'ml-[20px] gt-m:mt-[24px]'
             : 'mr-[20px] gt-m:mb-[24px]'
         }`}
       >
-        <span className="font-bebas text-[72px] leading-[100%] font-normal gt-l:text-[48px]">
+        <span className="font-bebas text-[72px] leading-[100%] font-normal gt-l:text-[48px] ">
           {data.title.value}
         </span>
         {/* {data.description.value && (
