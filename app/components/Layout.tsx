@@ -174,7 +174,7 @@ export function MenuDrawer({
   return (
     <div
       className={`${
-        isOpen ? 'left-0' : 'left-[-105%]'
+        isOpen ? 'left-0' : 'left-[-150%]'
       }  top-0 fixed bg-c-red z-50 h-full flex flex-col transition-left duration-200 ease-in `}
     >
       <MenuMobileNav openCart={openCart} menu={menu} onClose={onClose} />
