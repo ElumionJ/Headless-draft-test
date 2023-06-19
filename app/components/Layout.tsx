@@ -204,17 +204,20 @@ function MenuMobileNav({
           <Link to={'/'} onClick={onClose}>
             <img src={mobileLogo} alt="mobile logo" />
           </Link>
-          <CartCount isHome={isHome || false} openCart={openCart} />
+          {/* Cart Icon */}
+          <div className="[&_svg]:border-white">
+            <CartCount isHome={isHome || false} openCart={openCart} />
+          </div>
         </div>
         <Form
           method="get"
           action={params.locale ? `/${params.locale}/search` : '/search'}
           onSubmit={onClose}
-          className=" font-noto items-center flex gap-2 sm:flex bg-white rounded-[100px] mb-8"
+          className=" font-noto items-center flex gap-2  sm:flex bg-white rounded-[100px] mt-[14px] mb-[14px] rtl:px-4"
         >
           <button
             type="submit"
-            className="relative flex items-center justify-center w-8 h-8 text-[#A0A0A0] pl-[10px]"
+            className="relative flex items-center justify-center w-8 h-8 text-[#A0A0A0] pl-4"
           >
             <div>
               <svg
