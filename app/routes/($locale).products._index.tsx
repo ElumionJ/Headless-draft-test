@@ -246,7 +246,7 @@ export default function AllProducts() {
           data={customize.title_image.value}
           className="object-cover h-full fadeIn relative title-bg-shadow "
         />
-        <div className="absolute z-10 h-full w-full title-bg-shadow flex items-center pl-[40px] top-0 left-0">
+        <div className="absolute z-10 h-full w-full title-bg-shadow flex items-center pl-6 md:pl-8 lg:pl-12 top-0 left-0">
           <h1 className=" font-bebas text-[#fff] tracking-wider text-3xl leading-[120%] uppercase">
             {customize.title.value}
           </h1>
