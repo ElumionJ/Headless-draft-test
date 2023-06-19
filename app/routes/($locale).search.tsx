@@ -99,7 +99,11 @@ export default function Search() {
             type="search"
             variant="search"
           />
-          <button className="absolute right-0 py-2" type="submit">
+          <button
+            className="absolute right-0 py-2 rtl:right-auto rtl:left-0"
+            type="submit"
+
+          >
             Go
           </button>
         </Form>
