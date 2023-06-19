@@ -182,7 +182,6 @@ function MenuMobileNav({
   isHome: boolean;
 }) {
   const params = useParams();
-
   return (
     <>
       <nav className="font-bebas grid gap-4 p-[17px] pt-6 sm:gap-6   sm:py-8 text-white">
@@ -328,9 +327,10 @@ function MobileHeader({
       role="banner"
       className={`${
         isHome
-          ? 'bg-white dark:bg-contrast/60 text-contrast dark:text-primary shadow-darkHeader'
+          ? 'bg-contrast/80 dark:bg-contrast/60 text-contrast dark:text-primary dark:shadow-darkHeader'
           : 'bg-contrast/80 text-primary'
-      } flex lg:hidden items-center  sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 px-4 py-8 md:px-8 h-fit`}
+      }
+       flex lg:hidden items-center  sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 px-4  md:px-8 h-fit`}
     >
       <div className="flex items-center justify-start w-full gap-4 ">
         <button
@@ -362,7 +362,7 @@ function MobileHeader({
         </Heading>
       </Link>
 
-      <div className="flex items-center justify-end w-full gap-4">
+      <div className="flex items-center justify-end w-full gap-4 ">
         {/* <AccountLink className="relative flex items-center justify-center w-8 h-8" />s */}
         <CartCount isHome={isHome} openCart={openCart} />
       </div>
@@ -390,13 +390,13 @@ function DesktopHeader({
       role="banner"
       className={`${
         isHome
-          ? 'bg-white dark:bg-contrast/60 text-contrast dark:text-primary shadow-darkHeader'
+          ? 'bg-contrast/80 dark:bg-contrast/60 text-contrast dark:text-primary dark:shadow-darkHeader'
           : 'bg-contrast/80 text-primary'
       } ${
-        !isHome && y > 50 && ' shadow-lightHeader'
+        !isHome && y > 50 && ' '
       } hidden h-fit lg:flex items-center justify-center sticky transition duration-300 backdrop-blur-lg z-40 top-0  w-full leading-none gap-10 px-10 `}
     >
-      <div className="flex justify-between items-center lg:gap-x-28 xl:gap-x-60 text-black ">
+      <div className="flex justify-between items-center lg:gap-x-28 xl:gap-x-60 text-black w-full">
         <Form
           method="get"
           action={params.locale ? `/${params.locale}/search` : '/search'}
@@ -495,13 +495,15 @@ function DesktopHeader({
                                   </Link>
 
                                   {imagesLinks.image && (
-                                    <img
-                                      src={imagesLinks.image.value.url}
-                                      alt={imagesLinks.text.value}
-                                      width={200}
-                                      height={500}
-                                      loading="lazy"
-                                    />
+                                    <Link to={imagesLinks.link.value}>
+                                      <img
+                                        src={imagesLinks.image.value.url}
+                                        alt={imagesLinks.text.value}
+                                        width={200}
+                                        height={500}
+                                        loading="lazy"
+                                      />
+                                    </Link>
                                   )}
                                 </div>
                               )}
@@ -519,13 +521,15 @@ function DesktopHeader({
                                     {imagesLinks.text_2.value}
                                   </Link>
                                   {imagesLinks.image_2 && (
-                                    <img
-                                      src={imagesLinks.image_2.value.url}
-                                      alt={imagesLinks.text_2.value}
-                                      width={200}
-                                      height={500}
-                                      loading="lazy"
-                                    />
+                                    <Link to={imagesLinks.link_2.value}>
+                                      <img
+                                        src={imagesLinks.image_2.value.url}
+                                        alt={imagesLinks.text_2.value}
+                                        width={200}
+                                        height={500}
+                                        loading="lazy"
+                                      />
+                                    </Link>
                                   )}
                                 </div>
                               )}
@@ -540,7 +544,8 @@ function DesktopHeader({
           </nav>
         </div>
 
-        <div className="flex items-center gap-9">
+        <div className="flex items-center gap-9 font-bebas">
+          <CountrySelector />
           <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5" />
           <CartCount isHome={isHome} openCart={openCart} />
         </div>
@@ -562,7 +567,7 @@ function AccountLink({className}: {className?: string}) {
   ) : (
     <Link to="/account/login" className={className}>
       {/* <IconLogin /> */}
-      <div className="tracking-widest font-bebas flex items-center justify-center   uppercase border-b-2  border-black dark:border-white w-fit gap-x-2 hover:opacity-80">
+      <div className="tracking-widest font-bebas flex items-center justify-center   uppercase border-b-2  border-black dark:border-white w-fit gap-x-2 hover:opacity-80 rtl:flex-row-reverse">
         Login
         <span className="">
           <svg
@@ -628,24 +633,26 @@ function Badge({
 }) {
   const isHydrated = useIsHydrated();
 
-  const BadgeCounter = useMemo(
-    () => (
+  const BadgeCounter = useMemo(() => {
+    if (count === 0) {
+      return <IconBag />;
+    }
+
+    return (
       <>
         <IconBag />
-
         <span
           className={`${
             dark
-              ? 'text-primary bg-contrast dark:text-contrast dark:bg-primary'
-              : 'text-contrast bg-primary'
-          } absolute bottom-1 right-1 text-[0.625rem] font-medium subpixel-antialiased h-3 min-w-[0.75rem] flex items-center justify-center leading-none text-center rounded-full w-auto px-[0.125rem] pb-px`}
+              ? 'bg-contrast text-primary dark:text-contrast dark:bg-primary'
+              : 'bg-contrast text-primary'
+          } absolute bottom-1 left-[12px]  lg:left-[6px] text-[0.625rem] font-medium subpixel-antialiased h-3 min-w-[0.75rem] flex items-center justify-center leading-none text-center rounded-full w-auto px-[0.125rem] pb-px border border-black`}
         >
           <span>{count || 0}</span>
         </span>
       </>
-    ),
-    [count, dark],
-  );
+    );
+  }, [count, dark]);
 
   return isHydrated ? (
     <button
@@ -683,7 +690,7 @@ export function Footer({menu}: {menu?: EnhancedMenu}) {
       bg-gradient-to-r from-white via-white to-white bg-no-repeat bg-cover dark:bg-primary dark:text-contrast text-primary  overflow-hidden`}
       style={{backgroundImage: `url(${footer})`}}
     >
-      <div className="flex items-center justify-between  w-full border-b-[1px] border-b-[#E0E0E0] pb-[10px]">
+      <div className="flex items-center justify-between w-full border-b-[1px] border-b-[#E0E0E0] pb-[10px]">
         <Link to="/">
           <div className="">
             <img
@@ -697,7 +704,7 @@ export function Footer({menu}: {menu?: EnhancedMenu}) {
           </div>
         </Link>
 
-        <div className="flex gap-x-8">
+        <div className="flex gap-x-8 pl-[50px]">
           <FooterMenu menu={menu} />
         </div>
 
@@ -711,7 +718,7 @@ export function Footer({menu}: {menu?: EnhancedMenu}) {
               viewBox="0 0 24 25"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="hover:fill-[#E1306C]"
+              className="hover:fill-[#E1306C] transition-colors duration-200"
             >
               <path
                 d="M17.5556 1.01758H6.44444C5.00043 1.01758 3.61559 1.59133 2.59457 2.61254C1.57356 3.63375 1 5.01876 1 6.46288V17.5761C1 19.0203 1.57356 20.4053 2.59457 21.4265C3.61559 22.4477 5.00043 23.0215 6.44444 23.0215H17.5556C18.9996 23.0215 20.3844 22.4477 21.4054 21.4265C22.4264 20.4053 23 19.0203 23 17.5761V6.46288C23 5.01876 22.4264 3.63375 21.4054 2.61254C20.3844 1.59133 18.9996 1.01758 17.5556 1.01758Z"
@@ -734,19 +741,15 @@ export function Footer({menu}: {menu?: EnhancedMenu}) {
           </a>
 
           {/* facebook */}
-          <a href="/" className=" cursor-pointer">
+          <a href="/" className="cursor-pointer">
             <svg
               width="24"
               height="24"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              // className="hover:fill-[#3b5998]"
+              className="hover:fill-[#3b5998] transition-colors duration-200"
             >
-              <path
-                d="M15.3201 11.3562V9.76226C15.3201 9.07154 15.4794 8.69961 16.595 8.69961H17.9762V6.04297H15.8513C13.1952 6.04297 12.1327 7.79635 12.1327 9.76226V11.3562H10.0078V14.0129H12.1327V21.9828H15.3201V14.0129H17.6575L17.9762 11.3562H15.3201Z"
-                fill="black"
-              />
               <rect
                 x="1"
                 y="1"
@@ -755,6 +758,10 @@ export function Footer({menu}: {menu?: EnhancedMenu}) {
                 rx="4"
                 stroke="black"
                 strokeWidth="2"
+              />
+              <path
+                d="M15.3201 11.3562V9.76226C15.3201 9.07154 15.4794 8.69961 16.595 8.69961H17.9762V6.04297H15.8513C13.1952 6.04297 12.1327 7.79635 12.1327 9.76226V11.3562H10.0078V14.0129H12.1327V21.9828H15.3201V14.0129H17.6575L17.9762 11.3562H15.3201Z"
+                fill="black"
               />
             </svg>
           </a>
@@ -767,7 +774,7 @@ export function Footer({menu}: {menu?: EnhancedMenu}) {
               viewBox="0 0 32 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="hover:fill-[#D80F16]"
+              className="hover:fill-[#D80F16] transition-colors duration-200"
             >
               <path
                 d="M30.3778 4.73562C30.1722 3.98918 29.7711 3.31128 29.2152 2.77481L29.2144 2.77397C28.6546 2.23298 27.9671 1.84436 27.216 1.64647C26.5642 1.47206 25.5162 1.35792 24.3944 1.27595C23.243 1.19183 21.9245 1.13623 20.6838 1.09931C19.4416 1.06234 18.2693 1.04388 17.4082 1.03466C16.9774 1.03004 16.6239 1.02773 16.3779 1.02658C16.2549 1.026 16.1587 1.02571 16.0932 1.02556L16.0182 1.02544L15.9987 1.02542L15.9978 1.02542C12.299 0.982833 8.60123 1.17129 4.92521 1.58972L4.84466 1.59889L4.76663 1.62092C4.02012 1.83165 3.33807 2.22639 2.78051 2.76835L2.78051 2.76835L2.77794 2.77087C2.22506 3.31217 1.82055 3.98379 1.60853 4.72501L1.59503 4.77224L1.58621 4.82056C1.1831 7.03031 0.987061 9.27394 1.0007 11.5213C0.98671 13.7667 1.18228 16.0097 1.58624 18.2223L1.59463 18.2683L1.60728 18.3133C1.816 19.0559 2.22139 19.7281 2.77843 20.2674C3.33648 20.8077 4.02625 21.1932 4.77727 21.3963L4.78292 21.3978C5.43964 21.5712 6.48928 21.6853 7.61359 21.7673C8.76486 21.8512 10.0806 21.9067 11.3178 21.9436C12.5564 21.9805 13.7242 21.9989 14.5818 22.0081C15.0108 22.0127 15.3626 22.015 15.6075 22.0162C15.73 22.0167 15.8257 22.017 15.891 22.0172L15.9656 22.0173L15.985 22.0173H15.9859C19.6893 22.0599 23.3917 21.8715 27.0723 21.453L27.1439 21.4449L27.2136 21.4266C27.966 21.2288 28.6547 20.8396 29.2153 20.2976L29.2167 20.2962C29.7758 19.7534 30.1762 19.0754 30.3776 18.3331L30.3881 18.2945L30.3954 18.2552C30.8091 16.046 31.0106 13.8012 30.997 11.5524C31.0275 9.28973 30.8259 7.02993 30.3954 4.80969L29.9556 4.85193L30.3778 4.73562Z"
@@ -785,7 +792,6 @@ export function Footer({menu}: {menu?: EnhancedMenu}) {
       </div>
 
       <div className="flex items-center  flex-row-reverse gap-x-72">
-        <CountrySelector />
         <div
           className={`text-sm self-end opacity-50 md:col-span-2 lg:col-span-${itemsCount}`}
         >
@@ -828,12 +834,14 @@ function FooterMenu({menu}: {menu?: EnhancedMenu}) {
               <>
                 <Disclosure.Button className="text-center md:cursor-default hover:text-[#D80F16] ">
                   <Heading className=" cursor-pointer" size="footer" as="h3">
-                    {item.title}
-                    {item?.items?.length > 0 && (
-                      <span className="md:hidden">
-                        <IconCaret direction={open ? 'up' : 'down'} />
-                      </span>
-                    )}
+                    <Link to={item.to}>
+                      {item.title}
+                      {item?.items?.length > 0 && (
+                        <span className="md:hidden">
+                          <IconCaret direction={open ? 'up' : 'down'} />
+                        </span>
+                      )}
+                    </Link>
                   </Heading>
                 </Disclosure.Button>
                 {item?.items?.length > 0 ? (
