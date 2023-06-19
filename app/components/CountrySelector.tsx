@@ -19,6 +19,7 @@ export function CountrySelector() {
     selectedLocale.pathPrefix,
     '',
   )}${search}`;
+  console.log(fetcher);
 
   const countries = (fetcher.data ?? {}) as Localizations;
   const defaultLocale = countries?.['default'];
@@ -54,19 +55,32 @@ export function CountrySelector() {
       onMouseLeave={closeDropdown}
     >
       <div className="flex items-center sm-max:justify-start justify-center ">
-        <Heading size="lead" className="cursor-default font-bebas " as="h3">
-          Choose country:
-        </Heading>
+        {/* <Heading size="lead" className="cursor-default font-bebas " as="h3">
+          Choose language:
+        </Heading> */}
         <div className="relative">
           <details
             // className="absolute w-max border rounded border-contrast/30 dark:border-white open:round-b-none overflow-clip"
             className="  w-max border rounded border-contrast/30 dark:border-white open:round-b-none overflow-clip"
             ref={closeRef}
           >
-            <summary className="flex items-center justify-between w-full px-4  cursor-pointer">
+            <summary className="flex items-center justify-between w-full  cursor-pointer">
               {selectedLocale.label}
+              <svg
+                className="ml-[5px] rtl:ml-0 rtl:mr-[5px]"
+                fill="black"
+                height="6px"
+                width="6px"
+                version="1.1"
+                id="Layer_1"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 407.437 407.437"
+                xmlSpace="preserve"
+              >
+                <polygon points="386.258,91.567 203.718,273.512 21.179,91.567 0,112.815 203.718,315.87 407.437,112.815 " />
+              </svg>
             </summary>
-            <div className="absolute left-[100%] bottom-[0] w-max overflow-auto border-t border-contrast/30 dark:border-white bg-contrast/30 max-h-36">
+            <div className="absolute  rounded-[10px] w-max overflow-auto border-t border-contrast/30 dark:border-white bg-contrast/30 max-h-36">
               {countries &&
                 Object.keys(countries).map((countryPath) => {
                   const countryLocale = countries[countryPath];
@@ -120,7 +134,7 @@ function Country({
       <Button
         className={clsx([
           'text-contrast dark:text-primary',
-          'bg-primary dark:bg-contrast w-full p-2 transition rounded flex justify-start',
+          'bg-primary dark:bg-contrast w-full p-2 transition  flex justify-start',
           'items-center text-left cursor-pointer py-2 px-4',
         ])}
         type="submit"
