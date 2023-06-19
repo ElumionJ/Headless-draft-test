@@ -4,7 +4,7 @@ import {Await, useLoaderData} from '@remix-run/react';
 import type {ProductConnection} from '@shopify/hydrogen/storefront-api-types';
 
 import {
-  ProductSwimlane,
+  ProductSwimlaneHome,
   BrandsBanner,
   HomePageBanner,
   PersonalizeBanner,
@@ -82,7 +82,7 @@ export async function loader({params, context}: LoaderArgs) {
               }
             }
           }
-          ProductSwimlane: metaobjects(type: "product_swimlane", first: 15) {
+          ProductSwimlaneHome: metaobjects(type: "product_swimlane", first: 15) {
             nodes {
               fields {
                 type
@@ -171,7 +171,7 @@ export default function Homepage() {
     <>
       <div>
         {allMetaobjectsArray.map((component) => {
-          if (component[0].name === 'ProductSwimlane') {
+          if (component[0].name === 'ProductSwimlaneHome') {
             return component[0].show.value === 'true'
               ? featuredProducts && (
                   <Suspense key={component[0].order.value}>
@@ -182,7 +182,7 @@ export default function Homepage() {
                       {({products}) => {
                         if (!products?.nodes) return <></>;
                         return (
-                          <ProductSwimlane
+                          <ProductSwimlaneHome
                             key={component[0].order.value}
                             products={products.nodes}
                             data={component[0]}

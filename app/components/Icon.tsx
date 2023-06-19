@@ -2,7 +2,7 @@ import clsx from 'clsx';
 
 type IconProps = JSX.IntrinsicElements['svg'] & {
   direction?: 'up' | 'right' | 'down' | 'left';
-};
+} & {variant?: 'white' | 'black'};
 
 function Icon({
   children,
@@ -133,11 +133,10 @@ export function IconSelect(props: IconProps) {
   );
 }
 
-export function IconBag(props: IconProps) {
+export function IconBag({variant, ...props}: IconProps) {
   return (
     <Icon {...props}>
       <title>Bag</title>
-
       <svg
         width="14"
         height="20"
@@ -147,7 +146,7 @@ export function IconBag(props: IconProps) {
       >
         <path
           d="M12 25H2C1.44772 25 1 24.5523 1 24V13.4002C1 13.1433 1.09886 12.8963 1.27608 12.7103L2.65517 11.2632L4.47725 9.17736C4.63642 8.99515 4.72414 8.76141 4.72414 8.51947V5.60004C4.72414 5.28823 4.57869 4.99426 4.33081 4.80509L4.08298 4.61596C3.8351 4.42679 3.68966 4.13282 3.68966 3.82101V2C3.68966 1.44772 4.13737 1 4.68965 1H9.31034C9.86263 1 10.3103 1.44772 10.3103 2V3.76666C10.3103 4.10866 10.1356 4.42694 9.84698 4.61047L9.56274 4.79124C9.25775 4.9852 9.08116 5.32866 9.10087 5.68957L9.25708 8.55078C9.26925 8.77366 9.35564 8.98606 9.50248 9.15416L11.3448 11.2632L12.7239 12.7103C12.9011 12.8963 13 13.1433 13 13.4002V24C13 24.5523 12.5523 25 12 25Z"
-          stroke="black"
+          stroke={variant || 'black'}
           strokeWidth="2"
         />
       </svg>

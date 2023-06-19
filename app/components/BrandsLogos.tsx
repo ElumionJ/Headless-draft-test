@@ -14,11 +14,11 @@ interface Props {
 
 export function BrandsLogos({data}: Props) {
   return (
-    <div className="grid grid-cols-4 gap-[15px] m-[40px] gt-l:m-[0px] mb-[80px] gt-l:grid-cols-none gt-l:swimlane gt-l:pb-8 gt-l:scroll-px-8 gt-l:px-12 gt-l:w-[100%] gt-l:pl-[15px] gt-l:pr-[15px]">
+    <div className="grid grid-cols-4 gap-[15px] m-[40px] gt-l:m-[0px] mb-[80px] gt-l:grid-cols-none swimlane gt-l:pb-8 gt-l:scroll-px-0 gt-l:px-12 gt-l:w-[100%] gt-l:pl-[15px] gt-l:pr-[15px] mr-0 ml-0">
       {[1, 2, 3, 4].map((index) => (
         <div
           key={index}
-          className="h-[120px] bg-[#F3F3F3] flex justify-center p-[10px] gt-l:snap-start gt-l:w-[360px] gt-m:w-[190px] gt-m:h-[80px] gt-m:p-[20px]"
+          className="h-[120px] bg-[#F3F3F3] flex justify-center p-[10px] gt-l:snap-start gt-l:w-[378px] gt-m:w-[205px] gt-m:h-[80px] gt-m:p-[20px]"
         >
           <Image
             width={200}
@@ -34,6 +34,3 @@ export function BrandsLogos({data}: Props) {
     </div>
   );
 }
-
-// gt-m:swimlane md:pb-8 md:scroll-px-8 lg:scroll-px-12 md:px-8 lg:px-12 w-[70%] gt-m:w-[100%] gt-m:mb-[60px]
-// h-[120px] bg-[#F3F3F3] flex justify-center p-[10px] gt-m:snap-start w-80
