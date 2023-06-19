@@ -201,13 +201,16 @@ function MenuMobileNav({
           <button className="text-[20px]" onClick={onClose}>
             <TfiClose />
           </button>
-          <img src={mobileLogo} alt="mobile logo" />
+          <Link to={'/'} onClick={onClose}>
+            <img src={mobileLogo} alt="mobile logo" />
+          </Link>
           <CartCount isHome={isHome || false} openCart={openCart} />
         </div>
         <Form
           method="get"
           action={params.locale ? `/${params.locale}/search` : '/search'}
-          className="font-noto items-center gap-2 sm:flex bg-white rounded-[100px] mb-8"
+          onSubmit={onClose}
+          className=" font-noto items-center flex gap-2 sm:flex bg-white rounded-[100px] mb-8"
         >
           <button
             type="submit"
@@ -242,11 +245,11 @@ function MenuMobileNav({
             </div>
           </button>
           <Input
-            className={
+            className={`${
               isHome
                 ? 'focus:border-contrast/20 dark:focus:border-primary/20 text-black w-full'
                 : 'focus:border-primary/20 text-black w-full'
-            }
+            } block `}
             type="search"
             variant="minisearch"
             placeholder="Tabasco, Cholula, Very Hot"
@@ -257,20 +260,20 @@ function MenuMobileNav({
         {(menu?.items || []).map((item) => {
           if (item.to === '/products') {
             return (
-              <Link to="/products" key={item.id}>
-                <div
+              <Link to="/products" onClick={onClose} key={item.id}>
+                <span
                   className="flex justify-center items-center bg-no-repeat w-[345px] h-[120px]"
                   style={{backgroundImage: `url(${banner1})`}}
                 >
                   <span className="uppercase  text-3xl">All products</span>
-                </div>
+                </span>
               </Link>
             );
           }
 
           if (item.to === '/collections/freestyle') {
             return (
-              <Link to="/collections" key={item.id}>
+              <Link to="/collections" onClick={onClose} key={item.id}>
                 <div
                   className="flex justify-center items-center  bg-no-repeat	 w-[345px] h-[120px]"
                   style={{backgroundImage: `url(${banner2})`}}
@@ -283,7 +286,7 @@ function MenuMobileNav({
 
           if (item.to === '/journal') {
             return (
-              <Link to="/journal" key={item.id}>
+              <Link to="/journal" onClick={onClose} key={item.id}>
                 <div
                   className="flex justify-center items-center  bg-no-repeat w-[345px] h-[120px]"
                   style={{backgroundImage: `url(${banner3})`}}
@@ -313,7 +316,7 @@ function MenuMobileNav({
         })}
       </nav>
 
-      <Link to="/account/login" className="mt-[80px] mx-3">
+      <Link to="/account/login" onClick={onClose} className="mt-[80px] mx-3">
         <Button
           as="span"
           width="full"
