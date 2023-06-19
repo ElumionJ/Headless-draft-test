@@ -13,7 +13,7 @@ interface Data {
 
 const mockProducts = new Array(12).fill('');
 
-export function ProductSwimlane({
+export function ProductSwimlaneHome({
   title = 'TRY something NEW',
   products = mockProducts,
   count = 12,
@@ -34,14 +34,14 @@ export function ProductSwimlane({
     >
       <div className="ltr:ml-[40px] rtl:mr-[40px] ltr:gt-m:ml-[24px] rtl:gt-m:mr-[24px]">
         <h2 className="font-bebas leading-[72px] text-[72px] rtl:tracking-normal tracking-widest mb-[64px] mt-[64px] gt-m:mb-[20px] gt-m:mt-[0px] gt-l:text-[48px]">
-          {title}
+          {data?.title.value}
         </h2>
         <div className="relative w-[fit-content] gt-m:mb-[20px]">
           <Link
             className="font-noto font-bold text-[12px] flex items-center tracking-widest rtl:tracking-normal"
             to={'/products'}
           >
-            See all products
+            {data?.button.value}
             <span className="ltr:ml-[8px] rtl:mr-[8px] rtl:scale-x-[-1]">
               <svg
                 width="10"

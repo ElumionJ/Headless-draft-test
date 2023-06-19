@@ -5,6 +5,7 @@ export {Input} from './Input';
 export {ProductGallery} from './ProductGallery';
 export {ProductCard} from './ProductCard';
 export {ProductSwimlane} from './ProductSwimlane';
+export {ProductSwimlaneHome} from './ProductSwimlaneHome';
 export {ProductGrid} from './ProductGrid';
 export {Skeleton} from './Skeleton';
 export {Button} from './Button';
