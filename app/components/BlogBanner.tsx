@@ -34,9 +34,7 @@ export function BlogBanner({data}: Props) {
         </div>
 
         <div
-          className={`flex flex-col gt-l:mt-0 w-1/3 gt-l:w-full bg-[#F3F3F3] p-[92px] gt-l:p-[15px] ${
-            data.revert.value === 'true' ? 'gt-m:mt-[24px]' : 'gt-m:mb-[24px]'
-          }`}
+          className={`flex flex-col gt-l:mt-0 w-1/3 gt-l:w-full bg-[#F3F3F3] p-[92px] gt-l:p-[15px]`}
         >
           <span className="font-bebas mb-[16px] text-[32px] leading-[100%] font-normal gt-l:text-[48px] gt-m:text-[20px]">
             {data.title.value}
@@ -49,7 +47,7 @@ export function BlogBanner({data}: Props) {
 
           <div className="relative w-[fit-content] gt-m:mb-[20px]">
             <Link
-              className="font-noto font-bold text-[12px] flex items-center tracking-widest text-[#D80F16]"
+              className="font-noto font-bold text-[12px] flex items-center tracking-widest text-[#D80F16] rtl:tracking-normal"
               to={'/products'}
             >
               {data.button.value}
