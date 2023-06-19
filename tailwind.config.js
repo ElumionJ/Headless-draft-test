@@ -73,6 +73,9 @@ export default {
         lightHeader: 'inset 0px -1px 0px 0px rgba(21, 21, 21, 0.05)',
         darkPopUp: '0px 0px 30px rgba(0, 0, 0, 0.1)',
       },
+      transitionProperty: {
+        left: 'left',
+      },
     },
   },
   plugins: [formsPlugin, typographyPlugin],

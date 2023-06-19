@@ -96,13 +96,13 @@ export function ProductCard({
           </div>
           <div className="grid gap-1">
             <Text
-              className="w-full overflow-hidden whitespace-nowrap text-[20px] leading-[110%] font-bebas tracking-wider"
+              className="w-full overflow-hidden whitespace-nowrap !text-[20px] leading-[110%] font-bebas tracking-wider"
               as="h3"
             >
               {product.title}
             </Text>
             <div className="flex gap-4">
-              <Text className="flex gap-4 text-[20px] leading-[130%]">
+              <Text className="flex gap-4 !text-[20px] leading-[130%]">
                 <Money
                   className="font-bebas tracking-wider leading-[130%]"
                   withoutTrailingZeros
@@ -128,7 +128,7 @@ export function ProductCard({
           },
         ]}
         variant="secondary"
-        className="mt-2 opacity-0 gt-l:opacity-100  flex justify-between items-center bg-c-red w-fit gap-[12px] py-4 px-[16px] rounded-[100px] text-[#fff]"
+        className="mt-2 opacity-0 gt-l:opacity-100  flex justify-between items-center bg-c-red w-fit gap-[12px] py-2 px-[16px] rounded-[100px] text-[#fff]"
         analytics={{
           products: [productAnalytics],
           totalValue: parseFloat(productAnalytics.price),

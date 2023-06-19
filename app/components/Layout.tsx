@@ -1,8 +1,9 @@
 import {useParams, Form, Await, useMatches} from '@remix-run/react';
 import {useWindowScroll} from 'react-use';
 import {Disclosure} from '@headlessui/react';
-import {Suspense, useEffect, useMemo} from 'react';
+import {Suspense, useEffect, useMemo, useState} from 'react';
 import {Image} from '@shopify/hydrogen';
+import {TfiClose} from 'react-icons/tfi';
 
 import {
   Drawer,
@@ -21,7 +22,6 @@ import {
   Link,
   Button,
 } from '~/components';
-
 import {
   type EnhancedMenu,
   type EnhancedMenuItem,
@@ -29,8 +29,8 @@ import {
 } from '~/lib/utils';
 import {useIsHydrated} from '~/hooks/useIsHydrated';
 import {useCartFetchers} from '~/hooks/useCartFetchers';
-
 import logo from '~/../public/logo.svg';
+import mobileLogo from '~/../public/mob-logo.svg';
 import banner1 from '~/../public/banner1.png';
 import banner2 from '~/../public/banner2.png';
 import banner3 from '~/../public/banner3.png';
@@ -101,11 +101,8 @@ function Header({
     closeDrawer: closeCart,
   } = useDrawer();
 
-  const {
-    isOpen: isMenuOpen,
-    openDrawer: openMenu,
-    closeDrawer: closeMenu,
-  } = useDrawer();
+  const [isMobNavigationOpen, setIsMobNavigationOpen] =
+    useState<boolean>(false);
 
   const addToCartFetchers = useCartFetchers('ADD_TO_CART');
 
@@ -118,7 +115,14 @@ function Header({
     <>
       <CartDrawer isOpen={isCartOpen} onClose={closeCart} />
       {menu && (
-        <MenuDrawer isOpen={isMenuOpen} onClose={closeMenu} menu={menu} />
+        <MenuDrawer
+          openCart={openCart}
+          isOpen={isMobNavigationOpen}
+          onClose={() => {
+            setIsMobNavigationOpen(false);
+          }}
+          menu={menu}
+        />
       )}
       <DesktopHeader
         isHome={isHome}
@@ -131,7 +135,9 @@ function Header({
         isHome={isHome}
         title={title}
         openCart={openCart}
-        openMenu={openMenu}
+        openMenu={() => {
+          setIsMobNavigationOpen(true);
+        }}
       />
     </>
   );
@@ -158,17 +164,21 @@ export function MenuDrawer({
   isOpen,
   onClose,
   menu,
+  openCart,
 }: {
   isOpen: boolean;
   onClose: () => void;
   menu: EnhancedMenu;
+  openCart: () => void;
 }) {
   return (
-    <Drawer open={isOpen} onClose={onClose} openFrom="left" heading="Menu">
-      <div className="grid ">
-        <MenuMobileNav menu={menu} onClose={onClose} />
-      </div>
-    </Drawer>
+    <div
+      className={`${
+        isOpen ? 'left-0' : 'left-[-105%]'
+      }  top-0 fixed bg-c-red z-50 h-full flex flex-col transition-left duration-200 ease-in `}
+    >
+      <MenuMobileNav openCart={openCart} menu={menu} onClose={onClose} />
+    </div>
   );
 }
 
@@ -176,19 +186,31 @@ function MenuMobileNav({
   menu,
   onClose,
   isHome,
+  openCart,
 }: {
   menu: EnhancedMenu;
   onClose: () => void;
-  isHome: boolean;
+  isHome?: boolean;
+  openCart: () => void;
 }) {
   const params = useParams();
   return (
     <>
-      <nav className="font-bebas grid gap-4 p-[17px] pt-6 sm:gap-6   sm:py-8 text-white">
+      <nav className="font-bebas grid gap-4 p-[17px] pt-6 sm:gap-6 sm:py-8 text-white">
+        <div className="flex justify-between items-center border-b-[1px] border-[#A8272D] pb-3">
+          <button className="text-[20px]" onClick={onClose}>
+            <TfiClose />
+          </button>
+          <Link to={'/'} onClick={onClose}>
+            <img src={mobileLogo} alt="mobile logo" />
+          </Link>
+          <CartCount isHome={isHome || false} openCart={openCart} />
+        </div>
         <Form
           method="get"
           action={params.locale ? `/${params.locale}/search` : '/search'}
-          className="font-noto items-center gap-2 sm:flex bg-white rounded-[100px] mb-8"
+          onSubmit={onClose}
+          className=" font-noto items-center flex gap-2 sm:flex bg-white rounded-[100px] mb-8"
         >
           <button
             type="submit"
@@ -223,11 +245,11 @@ function MenuMobileNav({
             </div>
           </button>
           <Input
-            className={
+            className={`${
               isHome
                 ? 'focus:border-contrast/20 dark:focus:border-primary/20 text-black w-full'
                 : 'focus:border-primary/20 text-black w-full'
-            }
+            } block `}
             type="search"
             variant="minisearch"
             placeholder="Tabasco, Cholula, Very Hot"
@@ -238,20 +260,20 @@ function MenuMobileNav({
         {(menu?.items || []).map((item) => {
           if (item.to === '/products') {
             return (
-              <Link to="/products" key={item.id}>
-                <div
+              <Link to="/products" onClick={onClose} key={item.id}>
+                <span
                   className="flex justify-center items-center bg-no-repeat w-[345px] h-[120px]"
                   style={{backgroundImage: `url(${banner1})`}}
                 >
                   <span className="uppercase  text-3xl">All products</span>
-                </div>
+                </span>
               </Link>
             );
           }
 
           if (item.to === '/collections/freestyle') {
             return (
-              <Link to="/collections" key={item.id}>
+              <Link to="/collections" onClick={onClose} key={item.id}>
                 <div
                   className="flex justify-center items-center  bg-no-repeat	 w-[345px] h-[120px]"
                   style={{backgroundImage: `url(${banner2})`}}
@@ -264,7 +286,7 @@ function MenuMobileNav({
 
           if (item.to === '/journal') {
             return (
-              <Link to="/journal" key={item.id}>
+              <Link to="/journal" onClick={onClose} key={item.id}>
                 <div
                   className="flex justify-center items-center  bg-no-repeat w-[345px] h-[120px]"
                   style={{backgroundImage: `url(${banner3})`}}
@@ -294,7 +316,7 @@ function MenuMobileNav({
         })}
       </nav>
 
-      <a href="/account/login" className="mt-[80px] mx-3">
+      <Link to="/account/login" onClick={onClose} className="mt-[80px] mx-3">
         <Button
           as="span"
           width="full"
@@ -302,7 +324,7 @@ function MenuMobileNav({
         >
           Login
         </Button>
-      </a>
+      </Link>
     </>
   );
 }
@@ -411,7 +433,7 @@ function DesktopHeader({
         </Form>
 
         <div className=" flex gap-12">
-          <nav className="flex gap-10 font-bebas items-center justify-center">
+          <nav className="flex font-bebas items-center justify-center">
             {/* Top level menu items */}
 
             {(menu?.items || []).map((item) => {
@@ -435,7 +457,7 @@ function DesktopHeader({
                       target={item.target}
                       prefetch="intent"
                       className={({isActive}) => {
-                        const mainStyles = `  block py-8 `;
+                        const mainStyles = `  block p-8 `;
                         return `${mainStyles} ${isActive ? ' ' : ' '} `;
                       }}
                     >
