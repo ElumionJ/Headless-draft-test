@@ -555,7 +555,7 @@ export function CartEmpty({
 
   return (
     <div ref={scrollRef} className={container[layout]} hidden={hidden}>
-      <section className="grid gap-64 pt-[200px] ">
+      <section className="grid gap-8 pt-12 ">
         <div className="flex flex-col items-center justify-center ">
           <div className="mb-2">
             <svg
@@ -614,7 +614,7 @@ export function CartEmpty({
           <Link to="/products">
             <Button
               onClick={onClose}
-              className="flex items-center justify-center gap-x-5 px-3 py-4  bg-[#D80F16] rounded-[100px] w-full hover:opacity-80 text-white font-noto uppercase text-xs font-bold	"
+              className="flex items-center justify-center gap-x-5 px-3 py-4 w-[200px] bg-[#D80F16] rounded-[100px] m-auto hover:opacity-80 text-white font-noto uppercase text-xs font-bold	"
             >
               Start shopping
               <svg
