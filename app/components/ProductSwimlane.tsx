@@ -32,13 +32,13 @@ export function ProductSwimlane({
       {...props}
       className=" gt-m:flex-col flex justify-between"
     >
-      <div className="ltr:ml-[40px] rtl:mr-[40px]">
-        <h2 className="font-bebas leading-[72px] text-[72px] tracking-widest mb-[64px] mt-[64px] gt-m:mb-[20px]">
+      <div className="ltr:ml-[40px] rtl:mr-[40px] ltr:gt-m:ml-[24px] rtl:gt-m:mr-[24px]">
+        <h2 className="font-bebas leading-[72px] text-[72px] rtl:tracking-normal tracking-widest mb-[64px] mt-[64px] gt-m:mb-[20px] gt-m:mt-[0px] gt-l:text-[48px]">
           {data?.title.value}
         </h2>
         <div className="relative w-[fit-content] gt-m:mb-[20px]">
           <Link
-            className="font-noto font-bold text-[12px] flex items-center tracking-widest "
+            className="font-noto font-bold text-[12px] flex items-center tracking-widest rtl:tracking-normal"
             to={'/products'}
           >
             {data?.button.value}
