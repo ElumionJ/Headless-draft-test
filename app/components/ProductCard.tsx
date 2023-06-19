@@ -89,7 +89,7 @@ export function ProductCard({
             <Text
               as="label"
               size="fine"
-              className="absolute top-0 right-0 m-4 text-right text-notice"
+              className="absolute top-0 right-0 rtl:right-auto rtl:left-0 m-4 text-right text-notice"
             >
               {cardLabel}
             </Text>
