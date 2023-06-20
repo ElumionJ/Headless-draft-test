@@ -19,7 +19,6 @@ export function CountrySelector() {
     selectedLocale.pathPrefix,
     '',
   )}${search}`;
-  console.log(fetcher);
 
   const countries = (fetcher.data ?? {}) as Localizations;
   const defaultLocale = countries?.['default'];
