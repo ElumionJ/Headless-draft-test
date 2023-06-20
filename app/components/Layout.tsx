@@ -27,6 +27,7 @@ import {
   type EnhancedMenuItem,
   useIsHomePath,
 } from '~/lib/utils';
+import type {ChildEnhancedMenuItem} from '~/lib/utils';
 import {useIsHydrated} from '~/hooks/useIsHydrated';
 import {useCartFetchers} from '~/hooks/useCartFetchers';
 import logo from '~/../public/logo.svg';
@@ -61,7 +62,7 @@ export function Layout({
     <>
       <div className="flex flex-col min-h-screen">
         <div className="">
-          <Link href="#mainContent" className="sr-only">
+          <Link to="#mainContent" className="sr-only">
             Skip to content
           </Link>
         </div>
@@ -469,8 +470,8 @@ function MobileHeader({
       role="banner"
       className={`${
         isHome
-          ? 'bg-contrast dark:bg-contrast/60 text-contrast dark:text-primary dark:shadow-darkHeader'
-          : 'bg-contrast text-primary'
+          ? 'bg-white dark:bg-contrast/60 text-contrast dark:text-primary dark:shadow-darkHeader'
+          : 'bg-white text-primary'
       }
        flex lg:hidden items-center  sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 px-4  md:px-8 h-fit`}
     >
@@ -497,7 +498,7 @@ function MobileHeader({
               alt="Logo"
               width={50}
               height={50}
-              className="w-[50px] h-[50px]"
+              className="w-[50px]"
               loading="lazy"
             />
           </div>
@@ -532,8 +533,8 @@ function DesktopHeader({
       role="banner"
       className={`${
         isHome
-          ? 'bg-contrast dark:bg-contrast/60 text-contrast dark:text-primary dark:shadow-darkHeader'
-          : 'bg-contrast text-primary'
+          ? 'bg-white  dark:bg-contrast/60 text-contrast dark:text-primary dark:shadow-darkHeader'
+          : 'bg-white text-primary'
       } ${
         !isHome && y > 50 && ' '
       } hidden h-fit lg:flex items-center justify-center sticky transition duration-300 backdrop-blur-lg z-40 top-0  w-full leading-none gap-10 px-10 `}
@@ -568,8 +569,8 @@ function DesktopHeader({
               }
 
               return (
-                <div key={`${item.id}`} className="w-[112px]">
-                  <div className="top-menu navigation-item">
+                <div key={`${item.id}`} className="w-fit">
+                  <div className="top-menu navigation-item [&_svg]:hover:rotate-180 [&_svg]:hover:transition-transform [&_svg]:hover:duration-300 [&_svg]:hover:ease-in-out">
                     <Link
                       // onMouseEnter={menuOpen}
                       key={item.id}
@@ -577,11 +578,30 @@ function DesktopHeader({
                       target={item.target}
                       prefetch="intent"
                       className={({isActive}) => {
-                        const mainStyles = `  block py-8 px-5`;
-                        return `${mainStyles} ${isActive ? ' ' : ' '} `;
+                        const mainStyles = 'py-8 px-5 flex';
+                        const activeStyle = '';
+
+                        return isActive
+                          ? `${activeStyle} ${mainStyles}`
+                          : `${mainStyles}`;
                       }}
                     >
                       {item.title}
+                      {item.items.length > 0 && (
+                        <svg
+                          className="ml-[10px] mt-[3px] rtl:mr-[10px] rtl:ml-0"
+                          fill="#000000"
+                          height="10px"
+                          width="10px"
+                          version="1.1"
+                          id="Layer_1"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 407.437 407.437"
+                          xmlSpace="preserve"
+                        >
+                          <polygon points="386.258,91.567 203.718,273.512 21.179,91.567 0,112.815 203.718,315.87 407.437,112.815 " />
+                        </svg>
+                      )}
                     </Link>
 
                     {/* nested menu - 2 level*/}
@@ -831,7 +851,7 @@ export function Footer({menu}: {menu?: EnhancedMenu}) {
       style={{backgroundImage: `url(${footer})`}}
     >
       <div className="flex items-center justify-between w-full border-b-[1px] border-b-[#E0E0E0] pb-[10px]">
-        <Link to="/">
+        <Link to="/" className="w-1/3">
           <div className="">
             <img
               src={logo}
@@ -844,11 +864,11 @@ export function Footer({menu}: {menu?: EnhancedMenu}) {
           </div>
         </Link>
 
-        <div className="flex gap-x-8 pl-[50px]">
+        <div className="flex items-center justify-center gap-x-8 w-1/3">
           <FooterMenu menu={menu} />
         </div>
 
-        <div className="flex items-center justify-center gap-x-6 ">
+        <div className="flex items-center justify-end gap-x-6 w-1/3">
           {/* instagram */}
 
           <Link to="/" className="cursor-pointer ">
