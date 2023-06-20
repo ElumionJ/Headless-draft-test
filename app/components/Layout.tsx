@@ -75,10 +75,10 @@ export function Layout({
         </main>
       </div>
       <div className="gt-md:hidden fr-md:!block">
-        <Footer menu={layout?.footerMenu} />
+        <Footer menu={layout?.footerMenu} imagesLinks={metaObject} />
       </div>
       <div className="md:hidden fr-md:!hidden">
-        <FooterMob menu={layout?.footerMenu} />
+        <FooterMob menu={layout?.footerMenu} imagesLinks={metaObject} />
       </div>
     </>
   );
@@ -122,6 +122,7 @@ function Header({
             setIsMobNavigationOpen(false);
           }}
           menu={menu}
+          imagesLinks={imagesLinks}
         />
       )}
       <DesktopHeader
@@ -138,6 +139,7 @@ function Header({
         openMenu={() => {
           setIsMobNavigationOpen(true);
         }}
+        imagesLinks={imagesLinks}
       />
     </>
   );
@@ -161,6 +163,7 @@ function CartDrawer({isOpen, onClose}: {isOpen: boolean; onClose: () => void}) {
 }
 
 export function MenuDrawer({
+  imagesLinks,
   isOpen,
   onClose,
   menu,
@@ -170,6 +173,7 @@ export function MenuDrawer({
   onClose: () => void;
   menu: EnhancedMenu;
   openCart: () => void;
+  imagesLinks: any;
 }) {
   return (
     <div
@@ -177,17 +181,24 @@ export function MenuDrawer({
         isOpen ? 'left-0 rtl:right-0' : 'left-[-105%] rtl:right-[-105%]'
       }  top-0 fixed bg-c-red z-50 h-full flex flex-col transition-left rtl:transition-right duration-200 ease-in w-full sm:w-[70%]`}
     >
-      <MenuMobileNav openCart={openCart} menu={menu} onClose={onClose} />
+      <MenuMobileNav
+        openCart={openCart}
+        menu={menu}
+        onClose={onClose}
+        imagesLinks={imagesLinks}
+      />
     </div>
   );
 }
 
 function MenuMobileNav({
+  imagesLinks,
   menu,
   onClose,
   isHome,
   openCart,
 }: {
+  imagesLinks: any;
   menu: EnhancedMenu;
   onClose: () => void;
   isHome?: boolean;
@@ -202,7 +213,11 @@ function MenuMobileNav({
             <TfiClose />
           </button>
           <Link to={'/'} onClick={onClose}>
-            <img src={mobileLogo} alt="mobile logo" />
+            <img
+              src={imagesLinks.header_logo.value.url}
+              className="h-10"
+              alt="mobile logo"
+            />
           </Link>
 
           <CartCount
@@ -454,11 +469,13 @@ function MobileHeader({
   isHome,
   openCart,
   openMenu,
+  imagesLinks,
 }: {
   title: string;
   isHome: boolean;
   openCart: () => void;
   openMenu: () => void;
+  imagesLinks: any;
 }) {
   // useHeaderStyleFix(containerStyle, setContainerStyle, isHome);
 
@@ -493,7 +510,7 @@ function MobileHeader({
         >
           <div className="p-2 ">
             <img
-              src={logo}
+              src={imagesLinks.header_logo.value.url}
               alt="Logo"
               width={50}
               height={50}
@@ -561,7 +578,11 @@ function DesktopHeader({
                 return (
                   <div key={item.id} className="h-fit">
                     <Link to="/" key={item.id} className="w-[70px] block">
-                      <img src={logo} alt="Logo" loading="lazy" />
+                      <img
+                        src={imagesLinks.header_logo.value.url}
+                        alt="Logo"
+                        loading="lazy"
+                      />
                     </Link>
                   </div>
                 );
@@ -820,7 +841,13 @@ function Badge({
 
 //FOOTER
 //Desktop
-export function Footer({menu}: {menu?: EnhancedMenu}) {
+export function Footer({
+  menu,
+  imagesLinks,
+}: {
+  menu?: EnhancedMenu;
+  imagesLinks: any;
+}) {
   const isHome = useIsHomePath();
   const itemsCount = menu
     ? menu?.items?.length + 1 > 4
@@ -841,7 +868,7 @@ export function Footer({menu}: {menu?: EnhancedMenu}) {
         <Link to="/">
           <div className="">
             <img
-              src={logo}
+              src={imagesLinks.header_logo.value.url}
               alt="Logo"
               className="w-[72px] h-[72px]"
               width={72}
@@ -1019,7 +1046,13 @@ function FooterMenu({menu}: {menu?: EnhancedMenu}) {
 
 // MOBILE
 
-function FooterMob({menu}: {menu?: EnhancedMenu}) {
+function FooterMob({
+  menu,
+  imagesLinks,
+}: {
+  menu?: EnhancedMenu;
+  imagesLinks: any;
+}) {
   const isHome = useIsHomePath();
   const itemsCount = menu
     ? menu?.items?.length + 1 > 4
@@ -1040,7 +1073,7 @@ function FooterMob({menu}: {menu?: EnhancedMenu}) {
       <div className="flex flex-col items-center justify-center border-b-[1px] border-b-[#E0E0E0]">
         <div className="p-2">
           <img
-            src={logo}
+            src={imagesLinks.header_logo.value.url}
             alt="Logo"
             width={70}
             height={70}
