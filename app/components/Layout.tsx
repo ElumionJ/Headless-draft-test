@@ -61,9 +61,9 @@ export function Layout({
     <>
       <div className="flex flex-col min-h-screen">
         <div className="">
-          <a href="#mainContent" className="sr-only">
+          <Link href="#mainContent" className="sr-only">
             Skip to content
-          </a>
+          </Link>
         </div>
         <Header
           title={layout?.shop.name ?? 'Hydrogen'}
@@ -265,44 +265,44 @@ function MenuMobileNav({
           </Form>
 
           {(menu?.items || []).map((item) => {
-            // if (item.to === '/products') {
-            //   return (
-            //     <Link to="/products" onClick={onClose} key={item.id}>
-            //       <span
-            //         className="flex justify-center items-center bg-no-repeat w-[345px] h-[120px]"
-            //         style={{backgroundImage: `url(${banner1})`}}
-            //       >
-            //         <span className="uppercase  text-3xl">All products</span>
-            //       </span>
-            //     </Link>
-            //   );
-            // }
+            if (item.to === '/products') {
+              return (
+                <Link to="/products" onClick={onClose} key={item.id}>
+                  <span
+                    className="flex justify-center items-center bg-no-repeat w-[345px] h-[120px]"
+                    style={{backgroundImage: `url(${banner1})`}}
+                  >
+                    <span className="uppercase  text-3xl">All products</span>
+                  </span>
+                </Link>
+              );
+            }
 
-            // if (item.to === '/collections/freestyle') {
-            //   return (
-            //     <Link to="/collections" onClick={onClose} key={item.id}>
-            //       <div
-            //         className="flex justify-center items-center  bg-no-repeat	 w-[345px] h-[120px]"
-            //         style={{backgroundImage: `url(${banner2})`}}
-            //       >
-            //         <span className="uppercase text-3xl">Shop bundles</span>
-            //       </div>
-            //     </Link>
-            //   );
-            // }
+            if (item.to === '/collections/freestyle') {
+              return (
+                <Link to="/collections" onClick={onClose} key={item.id}>
+                  <div
+                    className="flex justify-center items-center  bg-no-repeat	 w-[345px] h-[120px]"
+                    style={{backgroundImage: `url(${banner2})`}}
+                  >
+                    <span className="uppercase text-3xl">Shop bundles</span>
+                  </div>
+                </Link>
+              );
+            }
 
-            // if (item.to === '/journal') {
-            //   return (
-            //     <Link to="/journal" onClick={onClose} key={item.id}>
-            //       <div
-            //         className="flex justify-center items-center  bg-no-repeat w-[345px] h-[120px]"
-            //         style={{backgroundImage: `url(${banner3})`}}
-            //       >
-            //         <span className="uppercase  text-3xl">Journal</span>
-            //       </div>
-            //     </Link>
-            //   );
-            // }
+            if (item.to === '/journal') {
+              return (
+                <Link to="/journal" onClick={onClose} key={item.id}>
+                  <div
+                    className="flex justify-center items-center  bg-no-repeat w-[345px] h-[120px]"
+                    style={{backgroundImage: `url(${banner3})`}}
+                  >
+                    <span className="uppercase  text-3xl">Journal</span>
+                  </div>
+                </Link>
+              );
+            }
 
             return (
               <li key={item.id} className="block">
@@ -858,7 +858,7 @@ export function Footer({menu}: {menu?: EnhancedMenu}) {
         <div className="flex items-center justify-center gap-x-6 ">
           {/* instagram */}
 
-          <a href="/" className="cursor-pointer ">
+          <Link to="/" className="cursor-pointer ">
             <svg
               width="24"
               height="25"
@@ -885,10 +885,10 @@ export function Footer({menu}: {menu?: EnhancedMenu}) {
                 fill="black"
               />
             </svg>
-          </a>
+          </Link>
 
           {/* facebook */}
-          <a href="/" className="cursor-pointer">
+          <Link to="/" className="cursor-pointer">
             <svg
               width="24"
               height="24"
@@ -911,10 +911,10 @@ export function Footer({menu}: {menu?: EnhancedMenu}) {
                 fill="black"
               />
             </svg>
-          </a>
+          </Link>
 
           {/* youtube */}
-          <a href="/" className=" cursor-pointer">
+          <Link to="/" className=" cursor-pointer">
             <svg
               width="32"
               height="24"
@@ -934,7 +934,7 @@ export function Footer({menu}: {menu?: EnhancedMenu}) {
                 className="hover:fill-white"
               />
             </svg>
-          </a>
+          </Link>
         </div>
       </div>
 
@@ -953,9 +953,9 @@ export function Footer({menu}: {menu?: EnhancedMenu}) {
 function FooterLink({item}: {item: ChildEnhancedMenuItem}) {
   if (item.to.startsWith('http')) {
     return (
-      <a href={item.to} target={item.target} rel="noopener noreferrer">
+      <Link to={item.to} target={item.target} rel="noopener noreferrer">
         {item.title}
-      </a>
+      </Link>
     );
   }
 

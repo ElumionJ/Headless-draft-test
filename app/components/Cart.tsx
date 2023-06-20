@@ -199,7 +199,7 @@ function CartCheckoutActions({
 
   return (
     <div className="flex flex-col items-center justify-center mt-2">
-      <a href={checkoutUrl} target="_self" className="w-full">
+      <Link to={checkoutUrl} target="_self" className="w-full">
         <Button
           as="span"
           width="full"
@@ -229,10 +229,10 @@ function CartCheckoutActions({
             />
           </svg>
         </Button>
-      </a>
+      </Link>
 
       {layout === 'drawer' && (
-        <a href="/cart">
+        <Link to="/cart">
           <div className="font-bold font-noto text-xs flex items-center justify-center text-black uppercase border-b-2 border-black w-fit gap-x-2 hover:opacity-80">
             View bag
             <svg
@@ -258,7 +258,7 @@ function CartCheckoutActions({
               />
             </svg>
           </div>
-        </a>
+        </Link>
       )}
 
       {/* @todo: <CartShopPayButton cart={cart} /> */}
