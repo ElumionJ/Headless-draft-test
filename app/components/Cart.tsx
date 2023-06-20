@@ -52,7 +52,7 @@ export function CartDetails({
   const cartHasItems = !!cart && cart.totalQuantity > 0;
   const container = {
     drawer: 'grid grid-cols-1 h-screen-no-nav grid-rows-[1fr_auto] ',
-    page: 'w-full pt-4 pb-12 grid  md:pt-8 md:items-start gap-8 md:gap-8 lg:grid-cols-2 lg:gap-x-[155px] lg:px-[27px] xl:px-[155px] lg:pt-0 min-h-screen ',
+    page: 'w-full pt-4 pb-12 lg:flex  md:pt-8 md:items-start lg:pt-0 min-h-screen ',
   };
 
   if (layout === 'page' && !cartHasItems) {
@@ -150,12 +150,12 @@ function CartLines({
   const styles = {
     cartItem:
       layout === 'page'
-        ? 'item flex items-center justify-start'
-        : 'item ajax-styles grid gap-2',
+        ? 'item flex items-start justify-start md:w-1/4'
+        : 'item ajax-styles flex flex-col justify-between w-1/4',
 
     price:
       layout === 'page'
-        ? 'item flex flex-row-reverse gap-x-10 font-bebas text-[20px]'
+        ? 'item flex  flex-row-reverse gap-x-10 font-bebas text-[20px]'
         : 'item ajax-styles flex flex-col gap-y-16 font-bebas text-[20px]',
   };
 
@@ -163,8 +163,8 @@ function CartLines({
     // y > 0 ? 'border-t' : '',
     y > 0 ? '' : '',
     layout === 'page'
-      ? 'flex-grow md:translate-y-4 pr-6 pl-6 h-fit lg:pl-0 lg:pr-[488px] xl:pl-0 border-y-[1px] border-black pt-[40px]  xl:pl-12'
-      : 'px-6 pb-6 sm-max:pt-2 overflow-auto transition md:px-12 text-black',
+      ? 'flex-grow  md:translate-y-4 pr-6 pl-6 h-fit  border-y-[1px] border-black pt-[40px]  xl:pl-12'
+      : 'px-6 pb-6 sm-max:pt-2 overflow-auto transition  text-black',
   ]);
 
   return (
@@ -173,7 +173,7 @@ function CartLines({
       aria-labelledby="cart-contents"
       className={className}
     >
-      <ul className="grid gap-6 md:gap-10">
+      <ul className="">
         {currentLines.map((line) => (
           <CartLineItem
             key={line.id}
@@ -232,8 +232,8 @@ function CartCheckoutActions({
       </a>
 
       {layout === 'drawer' && (
-        <a href="/cart">
-          <div className="font-bold font-noto text-xs flex items-center justify-center text-black uppercase border-b-2 border-black w-fit gap-x-2 hover:opacity-80">
+        <Link to={'/cart' || '/cart/ar'}>
+          <span className="flex flex-row  items-center justify-center  font-bold font-noto text-xs  text-black uppercase border-b-2 border-black w-fit gap-x-2 hover:opacity-80">
             View bag
             <svg
               width="10"
@@ -257,8 +257,8 @@ function CartCheckoutActions({
                 strokeLinejoin="round"
               />
             </svg>
-          </div>
-        </a>
+          </span>
+        </Link>
       )}
 
       {/* @todo: <CartShopPayButton cart={cart} /> */}
@@ -277,12 +277,12 @@ function CartSummary({
 }) {
   const summary = {
     drawer: 'grid gap-6 p-6 border-t md:px-12 border-[black] bg-[#F2F2F2] ',
-    page: 'sticky top-nav grid gap-6 px-[15px] md:translate-y-4 rounded w-full w-[325px] ',
+    page: 'sticky top-nav grid gap-6 pt-8 lg:pt-0 md:translate-y-4 rounded lg:w-1/3 lg:ml-10 rtl:lg:mr-10 rtl:lg:ml-0',
   };
 
   return (
     <section aria-labelledby="summary-heading" className={summary[layout]}>
-      <div className="mb-5 p-4 md:px-6 bg-[#F2F2F2] h-fit">
+      <div className="mb-5 p-4 md:px-6 bg-[#F2F2F2] h-fit  ">
         <h2 id="summary-heading" className="sr-only">
           Order summary
         </h2>
@@ -367,7 +367,7 @@ function CartLineItem({
   return (
     <li
       key={id}
-      className={` flex gap-4 pb-8 border-solid border-b-[1px] border-[#E0E0E0] last:border-none`}
+      className={` gt-sm:relative flex gap-4 mb-4 border-solid border-b-[1px] border-[#E0E0E0] gt-sm:justify-end pb-4 last:border-none`}
     >
       <div className="flex-shrink w-max">
         {merchandise.image && (
@@ -375,16 +375,18 @@ function CartLineItem({
             width={110}
             height={110}
             data={merchandise.image}
-            className="object-cover object-center w-24 h-24 border rounded md:w-28 md:h-28"
+            className="object-cover object-center w-24 h-24 border rounded md:w-28 md:h-[120px]"
             alt={merchandise.title}
             loading="lazy"
           />
         )}
       </div>
 
-      <div className="flex items-center justify-between flex-grow gap-6">
+      {/*  className="flex items-center justify-between flex-grow gap-6" */}
+      <div className="flex flex-col md:flex-row justify-between flex-grow">
         <div className={additionalClasses.cartItem}>
-          <div className="max-w-[200px] pr-8 font-bebas text-base">
+          {/* max-w-[200px] */}
+          <div className="font-bebas text-base flex flex-col h-full justify-between">
             <Heading as="h3" size="copy">
               {merchandise?.product?.handle ? (
                 <Link to={`/products/${merchandise.product.handle}`}>
@@ -401,19 +403,23 @@ function CartLineItem({
               </span>
             )}
           </div>
+        </div>
 
-          <div className="flex justify-start text-copy">
-            <CartLineQuantityAdjust line={line} />
-          </div>
+        <div className="flex justify-start text-copy">
+          <CartLineQuantityAdjust line={line} />
         </div>
 
         <Text>
           <div className={additionalClasses.price}>
-            <div>
+            <div className="gt-sm:absolute gt-sm:top-0 gt-sm:right-0  rtl:gt-sm:right-auto rtl:gt-sm:left-0 flex justify-end">
               <ItemRemoveButton lineIds={[id]} />
             </div>
 
-            <CartLinePrice line={line} as="span" className="font-semibold" />
+            <CartLinePrice
+              line={line}
+              as="span"
+              className="font-semibold gt-sm:absolute gt-sm:bottom-[20px] gt-sm:right-0 rtl:gt-sm:right-auto rtl:gt-sm:left-0 "
+            />
           </div>
         </Text>
       </div>
@@ -425,7 +431,7 @@ function ItemRemoveButton({lineIds}: {lineIds: CartLine['id'][]}) {
   const fetcher = useFetcher();
 
   return (
-    <fetcher.Form action="/cart" method="post" className="w-6 m-auto -mr-[3px]">
+    <fetcher.Form action="/cart" method="post" className="w-6 ">
       <input
         type="hidden"
         name="cartAction"
@@ -454,12 +460,12 @@ function CartLineQuantityAdjust({line}: {line: CartLine}) {
       <label htmlFor={`quantity-${lineId}`} className="sr-only">
         Quantity, {quantity}
       </label>
-      <div className="flex items-center border rounded-[100px] border-black font-bebas">
+      <div className="gt-m:h-[38px] flex border rounded-[100px] border-black font-bebas h-fit items-center">
         <UpdateCartButton lines={[{id: lineId, quantity: prevQuantity}]}>
           <button
             name="decrease-quantity"
             aria-label="Decrease quantity"
-            className="w-10 h-10 font-semibold text-black transition hover:opacity-80 disabled:opacity-30"
+            className="gt-m:w-5 gt-m:h-5  w-10 h-10 font-semibold text-black transition hover:opacity-80 disabled:opacity-30"
             value={prevQuantity}
             disabled={quantity <= 1}
           >
@@ -468,7 +474,7 @@ function CartLineQuantityAdjust({line}: {line: CartLine}) {
         </UpdateCartButton>
 
         <div
-          className="px-2 font-semibold text-center"
+          className="gt-m:w-5 gt-m:h-5   px-2 font-semibold text-center"
           data-test="item-quantity"
         >
           {quantity}
@@ -476,7 +482,7 @@ function CartLineQuantityAdjust({line}: {line: CartLine}) {
 
         <UpdateCartButton lines={[{id: lineId, quantity: nextQuantity}]}>
           <button
-            className="w-10 h-10 font-semibold text-black transition hover:opacity-80"
+            className="gt-m:w-5 gt-m:h-5  w-10 h-10 font-semibold text-black transition hover:opacity-80"
             name="increase-quantity"
             value={nextQuantity}
             aria-label="Increase quantity"
