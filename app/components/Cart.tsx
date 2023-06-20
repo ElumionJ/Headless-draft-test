@@ -232,13 +232,8 @@ function CartCheckoutActions({
       </Link>
 
       {layout === 'drawer' && (
-<<<<<<< HEAD
-        <Link to="/cart">
-          <div className="font-bold font-noto text-xs flex items-center justify-center text-black uppercase border-b-2 border-black w-fit gap-x-2 hover:opacity-80">
-=======
         <Link to={'/cart' || '/cart/ar'}>
           <span className="flex flex-row  items-center justify-center  font-bold font-noto text-xs  text-black uppercase border-b-2 border-black w-fit gap-x-2 hover:opacity-80">
->>>>>>> cart-bugs
             View bag
             <svg
               width="10"
