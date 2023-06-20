@@ -288,21 +288,23 @@ export default function Product() {
           />
         </div>
       </Section>
-      <Suspense fallback={<Skeleton className="h-32" />}>
-        <Await
-          errorElement="There was a problem loading related products"
-          resolve={recommended}
-        >
-          {(products) => (
-            <ProductSwimlane
-              marginLeftMobile={10}
-              marginLeftDesktop={60}
-              title="Related Products"
-              products={products}
-            />
-          )}
-        </Await>
-      </Suspense>
+      <div className="gt-l:mx-[10px] mx-[60px]">
+        <Suspense fallback={<Skeleton className="h-32" />}>
+          <Await
+            errorElement="There was a problem loading related products"
+            resolve={recommended}
+          >
+            {(products) => (
+              <ProductSwimlane
+                marginLeftMobile={10}
+                marginLeftDesktop={60}
+                title="Related Products"
+                products={products}
+              />
+            )}
+          </Await>
+        </Suspense>
+      </div>
     </>
   );
 }
