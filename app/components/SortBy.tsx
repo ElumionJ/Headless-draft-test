@@ -25,7 +25,7 @@ export const SortBy = ({dataLinks, linkStr, activeSort}: Props) => {
         } py-[13px] px-[24px] rounded-[100px] flex justify-between items-center gap-1 w-[180px] gt-sm:w-full uppercase text-[20px]`}
         onClick={() => setOpen((prevState) => !prevState)}
       >
-        {activeSort || 'SORT BY'}
+        {dataLinks.find((el) => el.value === activeSort)?.name || 'SORT BY'}
         <HiArrowSmDown className={`${open && 'rotate-180'} `} />
       </button>
       <ul
