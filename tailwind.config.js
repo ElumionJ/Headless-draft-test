@@ -76,6 +76,9 @@ export default {
       transitionProperty: {
         left: 'left',
       },
+      gridTemplateColumns: {
+        header: '1fr 1fr 1fr',
+      },
     },
   },
   plugins: [formsPlugin, typographyPlugin],

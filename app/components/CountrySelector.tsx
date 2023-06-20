@@ -47,19 +47,13 @@ export function CountrySelector() {
   }, []);
 
   return (
-    <section
-      ref={observerRef}
-      // className="grid w-full gap-4"
-      className=" w-full "
-      onMouseLeave={closeDropdown}
-    >
+    <section ref={observerRef} className=" w-fit " onMouseLeave={closeDropdown}>
       <div className="flex items-center sm-max:justify-start justify-center ">
         {/* <Heading size="lead" className="cursor-default font-bebas " as="h3">
           Choose language:
         </Heading> */}
         <div className="relative">
           <details
-            // className="absolute w-max border rounded border-contrast/30 dark:border-white open:round-b-none overflow-clip"
             className="  w-max border rounded border-contrast/30 dark:border-white open:round-b-none overflow-clip"
             ref={closeRef}
           >

@@ -153,7 +153,7 @@ function CartDrawer({isOpen, onClose}: {isOpen: boolean; onClose: () => void}) {
           open={isOpen}
           onClose={onClose}
           heading="Cart"
-          openFrom="right"
+          openFrom={root?.params?.locale === 'ar-sa' ? 'left' : 'right'}
         />
       </Await>
     </Suspense>
@@ -538,11 +538,11 @@ function DesktopHeader({
         !isHome && y > 50 && ' '
       } hidden h-fit lg:flex items-center justify-center sticky transition duration-300 backdrop-blur-lg z-40 top-0  w-full leading-none gap-10 px-10 `}
     >
-      <div className="flex justify-between items-center lg:gap-x-28 xl:gap-x-60 text-black w-full">
+      <div className="grid grid-cols-header justify-between items-center  text-black w-full">
         <Form
           method="get"
           action={params.locale ? `/${params.locale}/search` : '/search'}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 "
         >
           <button
             type="submit"
@@ -552,15 +552,15 @@ function DesktopHeader({
           </button>
         </Form>
 
-        <div className=" flex gap-12">
-          <nav className="flex font-bebas items-center justify-center">
+        <div className=" flex gap-10 justify-center">
+          <nav className="flex font-bebas items-center justify-center ">
             {/* Top level menu items */}
 
             {(menu?.items || []).map((item) => {
               if (item.to === '/') {
                 return (
                   <div key={item.id} className="h-fit">
-                    <Link to="/" key={item.id} className="w-[70px] block">
+                    <Link to="/" key={item.id} className="w-[70px]  block ">
                       <img src={logo} alt="Logo" loading="lazy" />
                     </Link>
                   </div>
@@ -568,7 +568,7 @@ function DesktopHeader({
               }
 
               return (
-                <div key={`${item.id}`}>
+                <div key={`${item.id}`} className="w-[112px]">
                   <div className="top-menu navigation-item">
                     <Link
                       // onMouseEnter={menuOpen}
@@ -577,7 +577,7 @@ function DesktopHeader({
                       target={item.target}
                       prefetch="intent"
                       className={({isActive}) => {
-                        const mainStyles = `  block p-8 `;
+                        const mainStyles = `  block py-8 px-5`;
                         return `${mainStyles} ${isActive ? ' ' : ' '} `;
                       }}
                     >
@@ -622,7 +622,7 @@ function DesktopHeader({
                             </li>
                           ))}
 
-                          <li className="flex gap-x-10 pl-32">
+                          <li className="flex gap-x-10 pl-32 rtl:pr-32 rtl:pl-0">
                             {imagesLinks &&
                               typeof imagesLinks.navigation_relative.value ===
                                 'string' &&
@@ -686,7 +686,7 @@ function DesktopHeader({
           </nav>
         </div>
 
-        <div className="flex items-center gap-9 font-bebas">
+        <div className="flex items-center gap-9 font-bebas  justify-end">
           <CountrySelector />
           <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5" />
           <CartCount isHome={isHome} openCart={openCart} />
@@ -801,20 +801,13 @@ function Badge({
     );
   }, [count, dark]);
 
-  return isHydrated ? (
+  return (
     <button
       onClick={openCart}
       className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
     >
       {BadgeCounter}
     </button>
-  ) : (
-    <Link
-      to="/cart"
-      className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
-    >
-      {BadgeCounter}
-    </Link>
   );
 }
 
