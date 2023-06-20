@@ -253,7 +253,7 @@ export default function AllProducts() {
         <ImageComponent
           loading={'eager'}
           data={customize.title_image.value}
-          className="object-cover h-full fadeIn relative title-bg-shadow "
+          className="object-cover  h-full fadeIn relative title-bg-shadow max-h-[200px] "
         />
         <div className="absolute z-10 h-full w-full title-bg-shadow flex items-center px-6 md:px-8 lg:px-12 top-0 left-0">
           <h1 className=" font-bebas text-[#fff] tracking-wider text-3xl leading-[120%] uppercase">
@@ -348,7 +348,7 @@ export default function AllProducts() {
               <>
                 <Grid data-test="product-grid">{itemsMarkup}</Grid>
                 <div className="flex items-center justify-center mt-6">
-                  <div className="flex justify-center gap-2 font-noto">
+                  <div className="flex justify-center gap-2 font-noto ">
                     {pageInfo.hasPreviousPage && (
                       <Link
                         className="text-[12px] font-bold leading-[150%] hover:text-[#D80F16] block w-[100px] px-3 py-1 text-right rtl:text-left"
