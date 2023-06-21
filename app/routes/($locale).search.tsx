@@ -87,7 +87,7 @@ export default function Search() {
 
   return (
     <>
-      <div className="m-[40px] gt-m:m-[15px]">
+      <div className="m-[40px] sm-maximum:m-[16px] sm-maximum-md:m-[32px]">
         <Form method="get" className="relative flex w-full text-heading">
           <Input
             defaultValue={searchTerm}
@@ -161,13 +161,13 @@ function NoResults({
   return (
     <>
       {noResults && (
-        <div className="font-noto m-[40px] gt-m:m-[15px]">
+        <div className="font-noto m-[40px] sm-maximum:m-[15px] sm-maximum-md:m-[32px]">
           <Text className="opacity-50">
             No results, try a different search.
           </Text>
         </div>
       )}
-      <div className="ml-[40px] rtl:ml-[0px] rtl:mr-[40px] gt-m:ml-[15px] gt-m:rtl:mr-[15px]">
+      <div className="ml-[40px] rtl:ml-[0px] rtl:mr-[40px] sm-maximum:ml-[16px] sm-maximum:rtl:mr-[16px] sm-maximum-md:rtl:mr-[32px] sm-maximum-md:ml-[32px]">
         <Suspense>
           <Await
             errorElement="There was a problem loading related products"
