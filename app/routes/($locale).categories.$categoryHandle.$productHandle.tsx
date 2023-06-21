@@ -201,41 +201,64 @@ export default function Product() {
   const {media, title, vendor, descriptionHtml} = product;
   const {shippingPolicy, refundPolicy} = shop;
   const descriptionRef = useRef(null);
+  const [purifiedDescription, setPurifiedDescription] = useState('');
 
   useEffect(() => {
     const sanitizedHtml = DOMPurify.sanitize(descriptionHtml);
-    if (!descriptionRef.current) return;
-    (descriptionRef.current as unknown as HTMLParagraphElement).innerHTML =
-      sanitizedHtml;
+    setPurifiedDescription(sanitizedHtml);
   }, [descriptionHtml]);
+
   return (
     <>
       <Section className="!px-0 !py-0">
-        <div className=" justify-center !gap-[63px] !flex px-0 md:px-8 lg:px-12 gt-l:flex-col  gt-l:items-center bg-c-gray pt-[60px]">
-          <div className=" px-[4px] max-w-[325px]">
+        <div className=" justify-center !gap-[63px] gt-l:!gap-[24px] !flex px-0 md:px-8 lg:px-12 gt-l:flex-col  gt-l:items-center bg-c-gray pt-[60px]">
+          <div className=" gt-l:hidden  px-[4px] max-w-[325px]">
             <Heading as="h1" className="text-5xl  mb-8">
               {title}
             </Heading>
             {descriptionHtml && (
-              <p
+              <div
                 ref={descriptionRef}
+                dangerouslySetInnerHTML={{__html: purifiedDescription}}
                 className="text-[16px] text-[#333333]"
-              ></p>
+              ></div>
             )}
           </div>
           <div className="max-h-[468px] max-w-[368px] gt-ssm:w-[280px]">
             <SwiperImages media={media.nodes} />
           </div>
+          <div className=" gt-l:flex flex-col hidden  px-[4px] max-w-[325px]">
+            <Heading as="h1" className="text-5xl  mb-8">
+              {title}
+            </Heading>
+          </div>
 
           <div className="sticky md:-mb-nav md:top-nav md:-translate-y-nav md:pt-nav hiddenScroll md:overflow-y-scroll ">
             <section className="flex flex-col w-full max-w-xl gap-8 p-6 md:mx-auto md:max-w-sm md:px-0 gt-ssm:p-1">
               {vendor && (
-                <div className="flex gap-[8px] items-end">
+                <div className="gt-l:hidden flex gap-[8px] items-end">
                   <span className="text-xl text-[#000] uppercase">Brand:</span>
                   <span className="text-[#333]">{vendor}</span>
                 </div>
               )}
               <ProductForm />
+              {descriptionHtml && (
+                <div
+                  dangerouslySetInnerHTML={{__html: purifiedDescription}}
+                  ref={descriptionRef}
+                  className="gt-l:block hidden text-[14px] leading-[150%] font-noto text-[#333333]"
+                ></div>
+              )}
+              {vendor && (
+                <div className="gt-l:flex hidden gap-[8px] items-end">
+                  <span className="text-xl text-[#000] uppercase font-bebas tracking-wider">
+                    Brand:
+                  </span>
+                  <span className="text-[#333] text-[14px] font-noto ">
+                    {vendor}
+                  </span>
+                </div>
+              )}
               <div className="grid gap-4 py-4">
                 {shippingPolicy?.body && (
                   <ProductDetail
@@ -255,7 +278,7 @@ export default function Product() {
             </section>
           </div>
         </div>
-        <div className="mt-24 px-[60px] gt-l:px-[10px]">
+        <div className="mt-24 px-[60px] mb-24 gt-l:px-[10px]">
           <ProductTabs
             shippingInfoText={shippingInfoText}
             attributesTitle={attributesTitleString}
@@ -265,16 +288,23 @@ export default function Product() {
           />
         </div>
       </Section>
-      <Suspense fallback={<Skeleton className="h-32" />}>
-        <Await
-          errorElement="There was a problem loading related products"
-          resolve={recommended}
-        >
-          {(products) => (
-            <ProductSwimlane title="Related Products" products={products} />
-          )}
-        </Await>
-      </Suspense>
+      <div className="gt-l:mx-[10px] mx-[60px]">
+        <Suspense fallback={<Skeleton className="h-32" />}>
+          <Await
+            errorElement="There was a problem loading related products"
+            resolve={recommended}
+          >
+            {(products) => (
+              <ProductSwimlane
+                marginLeftMobile={10}
+                marginLeftDesktop={60}
+                title="Related Products"
+                products={products}
+              />
+            )}
+          </Await>
+        </Suspense>
+      </div>
     </>
   );
 }
@@ -357,18 +387,37 @@ export function ProductForm() {
   return (
     <div className="grid gap-10">
       <div className="grid gap-4">
+        <div className="gt-l:flex hidden gap-[8px] items-baseline">
+          <span className="font-bebas text-[20px] leading-[110%] uppercase tracking-wider">
+            Price:
+          </span>
+          <span className="font-bebas text-[32px] md-only:text-[20px] leading-[120%] tracking-wider text-[#D80F16]">
+            {selectedVariant.price.currencyCode}
+            {selectedVariant.price.amount}
+          </span>
+        </div>
         <ProductOptions
           options={product.options}
           searchParamsWithDefaults={searchParamsWithDefaults}
         />
+
         {selectedVariant && (
-          <div className="grid items-stretch gap-4">
+          <div className="flex flex-col items-start gap-4">
+            <div className="gt-l:hidden flex gap-[8px] items-baseline">
+              <span className="font-bebas text-[20px] leading-[110%] uppercase tracking-wider">
+                Price:
+              </span>
+              <span className="font-bebas text-[32px] md-only:text-[20px] leading-[120%] tracking-wider text-[#D80F16]">
+                {selectedVariant.price.currencyCode}
+                {selectedVariant.price.amount}
+              </span>
+            </div>
             {isOutOfStock ? (
               <Button variant="secondary" disabled>
                 <Text>Sold out</Text>
               </Button>
             ) : (
-              <div className="flex gap-[16px] items-center gt-xl:flex-col">
+              <div className="flex gap-[16px] items-center gt-xl:flex-col gt-l:flex-row">
                 <ProductQuantity
                   quantity={quantity}
                   changeQuantity={changeQuantity}
@@ -406,6 +455,7 @@ export function ProductForm() {
                 width="100%"
                 variantIds={[selectedVariant?.id!]}
                 storeDomain={storeDomain}
+                className="w-full"
               />
             )}
           </div>

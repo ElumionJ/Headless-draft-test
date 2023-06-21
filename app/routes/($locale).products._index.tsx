@@ -141,6 +141,15 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
 }
 
 export default function AllProducts() {
+  const sortKeys = [
+    {value: 'TITLE', name: 'Name'},
+    {value: 'PRICE', name: 'Price'},
+    {value: 'PRODUCT_TYPE', name: 'Type'},
+    {value: 'VENDOR', name: 'Brand'},
+    {value: 'UPDATED_AT', name: 'Update'},
+    {value: 'CREATED_AT', name: 'Date'},
+    {value: 'BEST_SELLING', name: 'Trending'},
+  ];
   const {
     products,
     varParams,
@@ -244,9 +253,9 @@ export default function AllProducts() {
         <ImageComponent
           loading={'eager'}
           data={customize.title_image.value}
-          className="object-cover h-full fadeIn relative title-bg-shadow "
+          className="object-cover  h-full fadeIn relative title-bg-shadow max-h-[200px] "
         />
-        <div className="absolute z-10 h-full w-full title-bg-shadow flex items-center pl-[40px] top-0 left-0">
+        <div className="absolute z-10 h-full w-full title-bg-shadow flex items-center px-6 md:px-8 lg:px-12 top-0 left-0">
           <h1 className=" font-bebas text-[#fff] tracking-wider text-3xl leading-[120%] uppercase">
             {customize.title.value}
           </h1>
@@ -295,10 +304,7 @@ export default function AllProducts() {
 
             <div data-filter className="gt-sm:w-full">
               <SortBy
-                dataLinks={[
-                  {value: 'TITLE', name: 'Name'},
-                  {value: 'PRICE', name: 'Price'},
-                ]}
+                dataLinks={sortKeys}
                 linkStr={`${selectedLocale.pathPrefix}/products?reverse=${varParams.reverse}&query=${vendorsQuery}`}
                 activeSort={rawParams.sortKey}
               />
@@ -342,10 +348,10 @@ export default function AllProducts() {
               <>
                 <Grid data-test="product-grid">{itemsMarkup}</Grid>
                 <div className="flex items-center justify-center mt-6">
-                  <div className="flex justify-center gap-2 font-noto">
+                  <div className="flex justify-center gap-2 font-noto ">
                     {pageInfo.hasPreviousPage && (
                       <Link
-                        className="text-[12px] font-bold leading-[150%] hover:text-[#D80F16] block w-[100px] px-3 py-1 text-right"
+                        className="text-[12px] font-bold leading-[150%] hover:text-[#D80F16] block w-[100px] px-3 py-1 text-right rtl:text-left"
                         to={`${selectedLocale.pathPrefix}/products?sortKey=${
                           varParams.sortKey
                         }&reverse=${varParams.reverse}&cursor=${
@@ -357,7 +363,7 @@ export default function AllProducts() {
                     )}
                     {pageInfo.hasNextPage && (
                       <Link
-                        className="text-[12px] font-bold leading-[150%] hover:text-[#D80F16] block w-[100px] px-3 py-1 text-left"
+                        className="text-[12px] font-bold leading-[150%] hover:text-[#D80F16] block w-[100px] px-3 py-1 text-left rtl:text-right"
                         to={`${selectedLocale.pathPrefix}/products?sortKey=${
                           varParams.sortKey
                         }&reverse=${varParams.reverse}&cursor=${

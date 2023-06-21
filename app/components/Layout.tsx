@@ -27,6 +27,7 @@ import {
   type EnhancedMenuItem,
   useIsHomePath,
 } from '~/lib/utils';
+import type {ChildEnhancedMenuItem} from '~/lib/utils';
 import {useIsHydrated} from '~/hooks/useIsHydrated';
 import {useCartFetchers} from '~/hooks/useCartFetchers';
 import logo from '~/../public/logo.svg';
@@ -61,9 +62,9 @@ export function Layout({
     <>
       <div className="flex flex-col min-h-screen">
         <div className="">
-          <a href="#mainContent" className="sr-only">
+          <Link to="#mainContent" className="sr-only">
             Skip to content
-          </a>
+          </Link>
         </div>
         <Header
           title={layout?.shop.name ?? 'Hydrogen'}
@@ -155,7 +156,7 @@ function CartDrawer({isOpen, onClose}: {isOpen: boolean; onClose: () => void}) {
           open={isOpen}
           onClose={onClose}
           heading="Cart"
-          openFrom="right"
+          openFrom={root?.params?.locale === 'ar-sa' ? 'left' : 'right'}
         />
       </Await>
     </Suspense>
@@ -282,44 +283,44 @@ function MenuMobileNav({
           </Form>
 
           {(menu?.items || []).map((item) => {
-            // if (item.to === '/products') {
-            //   return (
-            //     <Link to="/products" onClick={onClose} key={item.id}>
-            //       <span
-            //         className="flex justify-center items-center bg-no-repeat w-[345px] h-[120px]"
-            //         style={{backgroundImage: `url(${banner1})`}}
-            //       >
-            //         <span className="uppercase  text-3xl">All products</span>
-            //       </span>
-            //     </Link>
-            //   );
-            // }
+            if (item.to === '/products') {
+              return (
+                <Link to="/products" onClick={onClose} key={item.id}>
+                  <span
+                    className="flex justify-center items-center bg-no-repeat w-[345px] h-[120px]"
+                    style={{backgroundImage: `url(${banner1})`}}
+                  >
+                    <span className="uppercase  text-3xl">All products</span>
+                  </span>
+                </Link>
+              );
+            }
 
-            // if (item.to === '/collections/freestyle') {
-            //   return (
-            //     <Link to="/collections" onClick={onClose} key={item.id}>
-            //       <div
-            //         className="flex justify-center items-center  bg-no-repeat	 w-[345px] h-[120px]"
-            //         style={{backgroundImage: `url(${banner2})`}}
-            //       >
-            //         <span className="uppercase text-3xl">Shop bundles</span>
-            //       </div>
-            //     </Link>
-            //   );
-            // }
+            if (item.to === '/collections/freestyle') {
+              return (
+                <Link to="/collections" onClick={onClose} key={item.id}>
+                  <div
+                    className="flex justify-center items-center  bg-no-repeat	 w-[345px] h-[120px]"
+                    style={{backgroundImage: `url(${banner2})`}}
+                  >
+                    <span className="uppercase text-3xl">Shop bundles</span>
+                  </div>
+                </Link>
+              );
+            }
 
-            // if (item.to === '/journal') {
-            //   return (
-            //     <Link to="/journal" onClick={onClose} key={item.id}>
-            //       <div
-            //         className="flex justify-center items-center  bg-no-repeat w-[345px] h-[120px]"
-            //         style={{backgroundImage: `url(${banner3})`}}
-            //       >
-            //         <span className="uppercase  text-3xl">Journal</span>
-            //       </div>
-            //     </Link>
-            //   );
-            // }
+            if (item.to === '/journal') {
+              return (
+                <Link to="/journal" onClick={onClose} key={item.id}>
+                  <div
+                    className="flex justify-center items-center  bg-no-repeat w-[345px] h-[120px]"
+                    style={{backgroundImage: `url(${banner3})`}}
+                  >
+                    <span className="uppercase  text-3xl">Journal</span>
+                  </div>
+                </Link>
+              );
+            }
 
             return (
               <li key={item.id} className="block">
@@ -488,8 +489,8 @@ function MobileHeader({
       role="banner"
       className={`${
         isHome
-          ? 'bg-contrast dark:bg-contrast/60 text-contrast dark:text-primary dark:shadow-darkHeader'
-          : 'bg-contrast text-primary'
+          ? 'bg-white dark:bg-contrast/60 text-contrast dark:text-primary dark:shadow-darkHeader'
+          : 'bg-white text-primary'
       }
        flex lg:hidden items-center  sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 px-4  md:px-8 h-fit`}
     >
@@ -553,17 +554,17 @@ function DesktopHeader({
       role="banner"
       className={`${
         isHome
-          ? 'bg-contrast dark:bg-contrast/60 text-contrast dark:text-primary dark:shadow-darkHeader'
-          : 'bg-contrast text-primary'
+          ? 'bg-white  dark:bg-contrast/60 text-contrast dark:text-primary dark:shadow-darkHeader'
+          : 'bg-white text-primary'
       } ${
         !isHome && y > 50 && ' '
       } hidden h-fit lg:flex items-center justify-center sticky transition duration-300 backdrop-blur-lg z-40 top-0  w-full leading-none gap-10 px-10 `}
     >
-      <div className="flex justify-between items-center lg:gap-x-28 xl:gap-x-60 text-black w-full">
+      <div className="grid grid-cols-header justify-between items-center  text-black w-full">
         <Form
           method="get"
           action={params.locale ? `/${params.locale}/search` : '/search'}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 "
         >
           <button
             type="submit"
@@ -573,8 +574,8 @@ function DesktopHeader({
           </button>
         </Form>
 
-        <div className=" flex gap-12">
-          <nav className="flex font-bebas items-center justify-center">
+        <div className=" flex gap-10 justify-center">
+          <nav className="flex font-bebas items-center justify-center ">
             {/* Top level menu items */}
 
             {(menu?.items || []).map((item) => {
@@ -595,8 +596,8 @@ function DesktopHeader({
               }
 
               return (
-                <div key={`${item.id}`}>
-                  <div className="top-menu navigation-item">
+                <div key={`${item.id}`} className="w-fit">
+                  <div className="top-menu navigation-item [&_svg]:hover:rotate-180 [&_svg]:hover:transition-transform [&_svg]:hover:duration-300 [&_svg]:hover:ease-in-out">
                     <Link
                       // onMouseEnter={menuOpen}
                       key={item.id}
@@ -604,11 +605,30 @@ function DesktopHeader({
                       target={item.target}
                       prefetch="intent"
                       className={({isActive}) => {
-                        const mainStyles = `  block p-8 `;
-                        return `${mainStyles} ${isActive ? ' ' : ' '} `;
+                        const mainStyles = 'py-8 px-5 flex';
+                        const activeStyle = '';
+
+                        return isActive
+                          ? `${activeStyle} ${mainStyles}`
+                          : `${mainStyles}`;
                       }}
                     >
                       {item.title}
+                      {item.items.length > 0 && (
+                        <svg
+                          className="ml-[10px] mt-[3px] rtl:mr-[10px] rtl:ml-0"
+                          fill="#000000"
+                          height="10px"
+                          width="10px"
+                          version="1.1"
+                          id="Layer_1"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 407.437 407.437"
+                          xmlSpace="preserve"
+                        >
+                          <polygon points="386.258,91.567 203.718,273.512 21.179,91.567 0,112.815 203.718,315.87 407.437,112.815 " />
+                        </svg>
+                      )}
                     </Link>
 
                     {/* nested menu - 2 level*/}
@@ -649,7 +669,7 @@ function DesktopHeader({
                             </li>
                           ))}
 
-                          <li className="flex gap-x-10 pl-32">
+                          <li className="flex gap-x-10 pl-32 rtl:pr-32 rtl:pl-0">
                             {imagesLinks &&
                               typeof imagesLinks.navigation_relative.value ===
                                 'string' &&
@@ -713,7 +733,7 @@ function DesktopHeader({
           </nav>
         </div>
 
-        <div className="flex items-center gap-9 font-bebas">
+        <div className="flex items-center gap-9 font-bebas  justify-end">
           <CountrySelector />
           <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5" />
           <CartCount isHome={isHome} openCart={openCart} />
@@ -828,20 +848,13 @@ function Badge({
     );
   }, [count, dark]);
 
-  return isHydrated ? (
+  return (
     <button
       onClick={openCart}
       className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
     >
       {BadgeCounter}
     </button>
-  ) : (
-    <Link
-      to="/cart"
-      className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
-    >
-      {BadgeCounter}
-    </Link>
   );
 }
 
@@ -886,14 +899,14 @@ export function Footer({
           </Link>
         )}
 
-        <div className="flex gap-x-8 pl-[50px]">
+        <div className="flex items-center justify-center gap-x-8 w-1/3">
           <FooterMenu menu={menu} />
         </div>
 
-        <div className="flex items-center justify-center gap-x-6 ">
+        <div className="flex items-center justify-end gap-x-6 w-1/3">
           {/* instagram */}
 
-          <a href="/" className="cursor-pointer ">
+          <Link to="/" className="cursor-pointer ">
             <svg
               width="24"
               height="25"
@@ -920,10 +933,10 @@ export function Footer({
                 fill="black"
               />
             </svg>
-          </a>
+          </Link>
 
           {/* facebook */}
-          <a href="/" className="cursor-pointer">
+          <Link to="/" className="cursor-pointer">
             <svg
               width="24"
               height="24"
@@ -946,10 +959,10 @@ export function Footer({
                 fill="black"
               />
             </svg>
-          </a>
+          </Link>
 
           {/* youtube */}
-          <a href="/" className=" cursor-pointer">
+          <Link to="/" className=" cursor-pointer">
             <svg
               width="32"
               height="24"
@@ -969,7 +982,7 @@ export function Footer({
                 className="hover:fill-white"
               />
             </svg>
-          </a>
+          </Link>
         </div>
       </div>
 
@@ -988,9 +1001,9 @@ export function Footer({
 function FooterLink({item}: {item: ChildEnhancedMenuItem}) {
   if (item.to.startsWith('http')) {
     return (
-      <a href={item.to} target={item.target} rel="noopener noreferrer">
+      <Link to={item.to} target={item.target} rel="noopener noreferrer">
         {item.title}
-      </a>
+      </Link>
     );
   }
 

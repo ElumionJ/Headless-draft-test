@@ -18,9 +18,6 @@ interface Props {
 }
 
 export const VendorsFilter = ({vendors, click, url}: Props) => {
-  const [root] = useMatches();
-  const isArabic = root.data.selectedLocale.pathPrefix === '/ar-ar';
-  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const brandsFilterRef = useRef(null);
@@ -44,9 +41,9 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
           <HiArrowSmDown className={`${open && 'rotate-180'} `} />
         </button>
         <ul
-          className={`${open ? 'block' : 'hidden'} absolute top-full ${
-            isArabic ? 'right-0' : 'left-0'
-          }  bg-[#fff] w-fit p-[24px] font-noto shadow-darkPopUp mt-[13px] gt-l:hidden`}
+          className={`${
+            open ? 'block' : 'hidden'
+          } absolute top-full rtl:right-0 left-0 bg-[#fff] w-fit p-[24px] font-noto shadow-darkPopUp mt-[13px] gt-l:hidden`}
         >
           {vendors &&
             Object.entries(vendors).map((el) => (
@@ -93,7 +90,7 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
             </button>
           </div>
           <div className="h-[84vh] overflow-y-scroll">
-            <h3 className=" uppercase text-[12px] ml-[15px]  pt-[24px] font-noto font-bold leading-[150%]">
+            <h3 className=" uppercase text-[12px] px-[15px]  pt-[24px] font-noto font-bold leading-[150%]">
               Brands
             </h3>
             <ul className="">
@@ -123,7 +120,7 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
             </ul>
           </div>
 
-          <div className="py-[24px] px-[15px] border-t-[1px] border-[#E0E0E0]">
+          <div className="absolute w-full bottom-0 left-0 bg-[#fff] py-[24px] px-[15px] border-t-[1px] border-[#E0E0E0]">
             <button
               onClick={() => {
                 setMobileOpen(false);

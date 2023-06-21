@@ -18,13 +18,19 @@ export function ProductSwimlane({
   products = mockProducts,
   count = 12,
   data,
+  marginLeftMobile,
+  marginLeftDesktop,
   ...props
 }: {
   title?: string;
   products?: Product[];
   count?: number;
   data?: Data;
+  marginLeftMobile?: number | string;
+  marginLeftDesktop?: number | string;
 }) {
+  const mlMob = marginLeftMobile || '24';
+  const mlDesk = marginLeftDesktop || '40';
   return (
     <div
       heading={title}
@@ -32,7 +38,7 @@ export function ProductSwimlane({
       {...props}
       className=" gt-m:flex-col flex justify-between"
     >
-      <div className="ltr:ml-[40px] rtl:mr-[40px] ltr:gt-m:ml-[24px] rtl:gt-m:mr-[24px]">
+      <div>
         <h2 className="font-bebas leading-[72px] text-[72px] rtl:tracking-normal tracking-widest mb-[64px] mt-[64px] gt-m:mb-[20px] gt-m:mt-[0px] gt-l:text-[48px]">
           {title}
         </h2>
@@ -71,7 +77,7 @@ export function ProductSwimlane({
         </div>
       </div>
 
-      <div className="swimlane hiddenScroll md:pb-8 scroll-px-[15px] md:scroll-px-0 lg:scroll-px-0 md:px-8 lg:px-12 w-[70%] gt-m:w-[100%] gt-m:mb-[60px]">
+      <div className="grid w-full snap-x snap-mandatory  grid-flow-col justify-start gap-4 overflow-x-scroll pb-4 hiddenScroll md:pb-8 scroll-px-[10px] md:scroll-px-0 lg:scroll-px-0 md:px-8 lg:px-12  gt-m:w-[100%] gt-m:mb-[60px]">
         {products.map((product) => (
           <ProductCard
             product={product}
