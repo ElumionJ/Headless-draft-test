@@ -1,7 +1,4 @@
-import {Button} from './Button';
 import {Link} from './Link';
-
-import {Text} from './Text';
 
 interface Props {
   data: {
@@ -20,13 +17,21 @@ export function HomePageBanner({data}: Props) {
     padding: `${data.padding.value}px`,
   };
 
+  const backgroundGradient = {
+    background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%)`,
+  };
+
   return (
     <>
       <div
-        className="min-h-[714px] bg-center bg-no-repeat flex flex-col-reverse w-full bg-cover"
+        className="min-h-[714px] bg-center bg-no-repeat flex flex-col-reverse w-full bg-cover relative"
         style={backgroundStyle}
       >
-        <div className="flex flex-col items-start">
+        <div
+          className="absolute w-full h-full top-0 left-0 z-0"
+          style={backgroundGradient}
+        ></div>
+        <div className="flex flex-col items-start z-10">
           <h1 className="font-bebas text-white text-[92px] sm-max:text-[56px]">
             {data.title.value}
           </h1>

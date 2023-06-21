@@ -144,7 +144,9 @@ export default function Reset() {
         >
           {actionData?.formError && (
             <div className="flex items-center justify-center mb-6 bg-zinc-500">
-              <p className="m-4 text-s text-contrast">{actionData.formError}</p>
+              <p className="m-4 text-s text-contrast font-bebas ">
+                {actionData.formError}
+              </p>
             </div>
           )}
           <div className="mb-3">

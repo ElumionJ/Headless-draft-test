@@ -9,6 +9,7 @@ import {Cart} from '~/components';
 import CartCount from './Layout';
 
 import mobLogo from '~/../public/mob-logo.svg';
+import {useLanguageText} from '~/hooks/useLanguageText';
 
 /**
  * Drawer component that opens on user click.
@@ -41,6 +42,12 @@ export function Drawer({
     left: '-translate-x-full',
   };
   const cart = useAsyncValue();
+
+  //Kate
+  const arText = 'حقيبتك';
+  const enText = ' YOUR BAG';
+
+  const languageText = useLanguageText({ar_text: arText, en_text: enText});
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -56,7 +63,7 @@ export function Drawer({
           <div className="fixed inset-0 bg-black bg-opacity-25" />
         </Transition.Child>
 
-        <div className="fixed ltr:right-0 top-0 w-[512px] rtl:left-0">
+        <div className="fixed ltr:right-0 top-0 max-w-[512px] w-full rtl:left-0">
           <div className="absolute inset-0 overflow-hidden">
             <div className={`fixed inset-y-0 flex max-w-full `}>
               <Transition.Child
@@ -78,7 +85,7 @@ export function Drawer({
                       <Dialog.Title>
                         <Heading as="span" size="lead" id="cart-contents">
                           <span className="uppercase font-bebas !font-normal !text-[32px]">
-                            Your bag ({cart?.totalQuantity})
+                            {languageText} ({cart?.totalQuantity})
                           </span>
                         </Heading>
                       </Dialog.Title>

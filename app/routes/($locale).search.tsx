@@ -87,27 +87,26 @@ export default function Search() {
 
   return (
     <>
-      <PageHeader>
-        <Heading as="h1" size="copy">
-          Search
-        </Heading>
+      <div className="m-[40px] sm-maximum:m-[16px] sm-maximum-md:m-[32px]">
         <Form method="get" className="relative flex w-full text-heading">
           <Input
             defaultValue={searchTerm}
             name="q"
-            placeholder="Search…"
+            placeholder="Search..."
             type="search"
             variant="search"
+            className="font-bebas font-[10px]"
           />
           <button
-            className="absolute right-0 py-2 rtl:right-auto rtl:left-0"
+            className="absolute right-0 py-2 rtl:right-auto rtl:left-0 font-bebas"
             type="submit"
-
           >
             Go
           </button>
         </Form>
-      </PageHeader>
+      </div>
+
+      {/* </PageHeader> */}
       {!searchTerm || noResults ? (
         <NoResults
           noResults={noResults}
@@ -162,31 +161,35 @@ function NoResults({
   return (
     <>
       {noResults && (
-        <Section padding="x">
+        <div className="font-noto m-[40px] sm-maximum:m-[15px] sm-maximum-md:m-[32px]">
           <Text className="opacity-50">
             No results, try a different search.
           </Text>
-        </Section>
+        </div>
       )}
-      <Suspense>
-        <Await
-          errorElement="There was a problem loading related products"
-          resolve={recommendations}
-        >
-          {({featuredCollections, featuredProducts}) => (
-            <>
-              <FeaturedCollections
-                title="Trending Collections"
-                collections={featuredCollections as SerializeFrom<Collection[]>}
-              />
-              <ProductSwimlane
-                title="Trending Products"
-                products={featuredProducts as SerializeFrom<Product[]>}
-              />
-            </>
-          )}
-        </Await>
-      </Suspense>
+      <div className="ml-[40px] rtl:ml-[0px] rtl:mr-[40px] sm-maximum:ml-[16px] sm-maximum:rtl:mr-[16px] sm-maximum-md:rtl:mr-[32px] sm-maximum-md:ml-[32px]">
+        <Suspense>
+          <Await
+            errorElement="There was a problem loading related products"
+            resolve={recommendations}
+          >
+            {({featuredCollections, featuredProducts}) => (
+              <>
+                {/* <FeaturedCollections
+                  title="Trending Collections"
+                  collections={
+                    featuredCollections as SerializeFrom<Collection[]>
+                  }
+                /> */}
+                <ProductSwimlane
+                  title="Trending Products"
+                  products={featuredProducts as SerializeFrom<Product[]>}
+                />
+              </>
+            )}
+          </Await>
+        </Suspense>
+      </div>
     </>
   );
 }

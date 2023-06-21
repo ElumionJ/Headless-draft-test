@@ -135,9 +135,9 @@ export default function Activate() {
   };
 
   return (
-    <div className="flex justify-center my-24 px-4">
+    <div className="flex justify-center my-24 px-4 ">
       <div className="max-w-md w-full">
-        <h1 className="text-4xl">Activate Account.</h1>
+        <h1 className="text-4xl font-bebas">Activate Account.</h1>
         <p className="mt-4">Create your password to activate your account.</p>
         {/* TODO: Add onSubmit to validate _before_ submission with native? */}
         <Form
@@ -147,7 +147,9 @@ export default function Activate() {
         >
           {actionData?.formError && (
             <div className="flex items-center justify-center mb-6 bg-zinc-500">
-              <p className="m-4 text-s text-contrast">{actionData.formError}</p>
+              <p className="m-4 text-s text-contrast font-bebas">
+                {actionData.formError}
+              </p>
             </div>
           )}
           <div className="mb-3">
