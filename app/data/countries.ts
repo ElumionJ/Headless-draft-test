@@ -2,13 +2,13 @@ import type {Localizations} from '~/lib/type';
 
 export const countries: Localizations = {
   default: {
-    label: 'US',
+    label: 'english',
     language: 'EN',
     country: 'US',
     currency: 'USD',
   },
   '/ar-sa': {
-    label: 'Arabian (SAR ر.س)',
+    label: 'arabic',
     language: 'AR',
     country: 'SA',
     currency: 'SAR',
