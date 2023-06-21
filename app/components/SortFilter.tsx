@@ -1,5 +1,5 @@
 import type {SyntheticEvent} from 'react';
-import {useMemo, useState} from 'react';
+import {useContext, useMemo, useState} from 'react';
 import {Menu} from '@headlessui/react';
 import type {Location} from '@remix-run/react';
 import {
@@ -16,7 +16,14 @@ import type {
   Collection,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import {Heading, IconFilters, IconCaret, IconXMark, Text} from '~/components';
+import {
+  Heading,
+  IconFilters,
+  IconCaret,
+  IconXMark,
+  Text,
+  SortBy,
+} from '~/components';
 
 export type AppliedFilter = {
   label: string;
@@ -49,15 +56,7 @@ export function SortFilter({
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-      <div className="flex items-center justify-between w-full">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className={
-            'relative flex items-center justify-center w-8 h-8 focus:ring-primary/5'
-          }
-        >
-          <IconFilters />
-        </button>
+      <div className="flex items-center justify-end w-full">
         <SortMenu />
       </div>
       <div className="flex flex-col flex-wrap md:flex-row">
@@ -358,58 +357,37 @@ function filterInputToParams(
 }
 
 export default function SortMenu() {
-  const items: {label: string; key: SortParam}[] = [
-    {label: 'Featured', key: 'featured'},
+  const items: {name: string; value: SortParam}[] = [
+    {name: 'Featured', value: 'featured'},
     {
-      label: 'Price: Low - High',
-      key: 'price-low-high',
+      name: 'Price: Low - High',
+      value: 'price-low-high',
     },
     {
-      label: 'Price: High - Low',
-      key: 'price-high-low',
+      name: 'Price: High - Low',
+      value: 'price-high-low',
     },
     {
-      label: 'Best Selling',
-      key: 'best-selling',
+      name: 'Best Selling',
+      value: 'best-selling',
     },
     {
-      label: 'Newest',
-      key: 'newest',
+      name: 'Newest',
+      value: 'newest',
     },
   ];
   const [params] = useSearchParams();
+  // `${selectedLocale.pathPrefix}/products?reverse=${varParams.reverse}&query=${vendorsQuery}`
   const location = useLocation();
-  const activeItem = items.find((item) => item.key === params.get('sort'));
-
+  // const activeItem = items.find((item) => item.key === params.get('sort'));
   return (
-    <Menu as="div" className="relative z-40">
-      <Menu.Button className="flex items-center">
-        <span className="px-2">
-          <span className="px-2 font-medium">Sort by:</span>
-          <span>{(activeItem || items[0]).label}</span>
-        </span>
-        <IconCaret />
-      </Menu.Button>
-
-      <Menu.Items
-        as="nav"
-        className="absolute right-0 flex flex-col p-4 text-right rounded-sm bg-contrast"
-      >
-        {items.map((item) => (
-          <Menu.Item key={item.label}>
-            {() => (
-              <Link
-                className={`block text-sm pb-2 px-3 ${
-                  activeItem?.key === item.key ? 'font-bold' : 'font-normal'
-                }`}
-                to={getSortLink(item.key, params, location)}
-              >
-                {item.label}
-              </Link>
-            )}
-          </Menu.Item>
-        ))}
-      </Menu.Items>
-    </Menu>
+    <div className="flex items-center">
+      <SortBy
+        isCategoriesPage={true}
+        dataLinks={items}
+        linkStr={`${location.pathname}`}
+        activeSort={params.get('sort') || 'newest'}
+      />
+    </div>
   );
 }
