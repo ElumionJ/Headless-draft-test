@@ -14,6 +14,8 @@ import {useFetcher} from '@remix-run/react';
 import {Button, IconRemove, IconClose, Text, Link, Heading} from '~/components';
 import {CartAction} from '~/lib/type';
 
+import {useLanguageText} from '~/hooks/useLanguageText';
+
 type Layouts = 'page' | 'drawer';
 interface StaticPrice {
   amount: string;
@@ -59,12 +61,19 @@ export function CartDetails({
     return <></>;
   }
 
+  //Kate
+
+  const arText = 'حقيبتي';
+  const enText = 'My bag';
+
+  const languageText = useLanguageText({ar_text: arText, en_text: enText});
+
   return (
     // When its empty - work not correct
     <div className="flex flex-col w-full bg-[#FFFEFA] text-black ">
       {layout === 'page' && (
         <span className="pl-6 pt-3 lg:pt-8 lg:pb-6 lg:pl-[32px] xl:pl-[159px] font-normal uppercase font-bebas text-[32px]">
-          My bag ({cart?.totalQuantity})
+          {languageText} ({cart?.totalQuantity})
         </span>
       )}
       <div className={container[layout]}>
@@ -197,6 +206,21 @@ function CartCheckoutActions({
 }) {
   if (!checkoutUrl) return null;
 
+  //Kate
+
+  const arText = 'الخروج الآمن';
+  const enText = 'Secure Checkout';
+
+  const languageText = useLanguageText({ar_text: arText, en_text: enText});
+
+  const arTextForBag = 'حقيبة عرض';
+  const enTextForBag = 'View bag';
+
+  const languageTextForBag = useLanguageText({
+    ar_text: arTextForBag,
+    en_text: enTextForBag,
+  });
+
   return (
     <div className="flex flex-col items-center justify-center mt-2">
       <Link to={checkoutUrl} target="_self" className="w-full">
@@ -205,7 +229,7 @@ function CartCheckoutActions({
           width="full"
           className="font-bold text-white mb-4 uppercase text-xs font-noto flex items-center justify-center gap-x-2 px-3 py-4  bg-[#D80F16] rounded-[100px] w-full hover:opacity-80"
         >
-          Secure Checkout
+          {languageText}
           <svg
             width="11"
             height="10"
@@ -232,9 +256,9 @@ function CartCheckoutActions({
       </Link>
 
       {layout === 'drawer' && (
-        <Link to={'/cart' || '/cart/ar'}>
+        <Link to={'/cart' || '/cart/ar'} reloadDocument>
           <span className="flex flex-row  items-center justify-center  font-bold font-noto text-xs  text-black uppercase border-b-2 border-black w-fit gap-x-2 hover:opacity-80">
-            View bag
+            {languageTextForBag}
             <svg
               width="10"
               height="10"
@@ -280,23 +304,56 @@ function CartSummary({
     page: 'sticky top-nav grid gap-6 pt-8 lg:pt-0 md:translate-y-4 rounded lg:w-1/3 lg:ml-10 rtl:lg:mr-10 rtl:lg:ml-0',
   };
 
+  //Kate
+  const arText = 'ملخص الطلب';
+  const enText = 'Order summary';
+
+  const languageText = useLanguageText({ar_text: arText, en_text: enText});
+
+  //Kate
+  const arTextTotal = 'المجموع';
+  const enTextTotal = 'Total';
+
+  const languageTextTotal = useLanguageText({
+    ar_text: arTextTotal,
+    en_text: enTextTotal,
+  });
+
+  //Kate
+  const arTextTotalDelivery = 'التسليم يحسب عند الخروج';
+  const enTextTotalDelivery = ' Delivery calculated at checkout';
+
+  const languageTextDelivery = useLanguageText({
+    ar_text: arTextTotalDelivery,
+    en_text: enTextTotalDelivery,
+  });
+
+  //Kate
+  const arTextTotalSubtotal = 'المجموع الفرعي';
+  const enTextTotalSubtotal = 'Subtotal';
+
+  const languageTextSubtotal = useLanguageText({
+    ar_text: arTextTotalSubtotal,
+    en_text: enTextTotalSubtotal,
+  });
+
   return (
     <section aria-labelledby="summary-heading" className={summary[layout]}>
       <div className="mb-5 p-4 md:px-6 bg-[#F2F2F2] h-fit  ">
         <h2 id="summary-heading" className="sr-only">
-          Order summary
+          {languageText}
         </h2>
 
         <dl className="grid">
           {layout === 'page' && (
             <>
               <dt className="font-bebas text-2xl p-6 pb-6 font-normal uppercase text-[black] border-b-[1px] border-[#E0E0E0]">
-                Order summary
+                {languageText}
               </dt>
 
               <dd className="flex items-center justify-between p-6">
                 <span className="uppercase text-[black] font-bebas text-2xl">
-                  Total
+                  {languageTextTotal}
                 </span>
                 <span
                   className="text-[red] font-bebas text-2xl"
@@ -311,7 +368,7 @@ function CartSummary({
               </dd>
 
               <dd className="p-6 font-noto text-base">
-                Delivery calculated at checkout
+                {languageTextDelivery}
               </dd>
             </>
           )}
@@ -321,7 +378,7 @@ function CartSummary({
             <>
               <dt className="flex items-center justify-between font-semibold">
                 <span className="uppercase text-[black] pb-2 font-bebas text-2xl font-normal">
-                  Subtotal
+                  {languageTextSubtotal}
                 </span>
                 <span
                   className="text-[red] font-bebas font-normal text-2xl"
@@ -559,6 +616,20 @@ export function CartEmpty({
     ]),
   };
 
+  //Kate
+  const arText = 'حقيبتك فارغة';
+  const enText = ' YOUR BAG IS EMPTY';
+
+  const languageText = useLanguageText({ar_text: arText, en_text: enText});
+
+  const arTextStart = 'ابدأ التسوق';
+  const enTextStart = 'Start shopping';
+
+  const languageTextStart = useLanguageText({
+    ar_text: arTextStart,
+    en_text: enTextStart,
+  });
+
   return (
     <div ref={scrollRef} className={container[layout]} hidden={hidden}>
       <section className="grid gap-8 pt-12 ">
@@ -613,7 +684,7 @@ export function CartEmpty({
             OOOOPS...
           </span>
           <span className="text-black font-bebas font-normal text-[24px]">
-            YOUR BAG IS EMPTY
+            {languageText}
           </span>
         </div>
         <div>
@@ -622,7 +693,7 @@ export function CartEmpty({
               onClick={onClose}
               className="flex items-center justify-center gap-x-5 px-3 py-4 w-[200px] bg-[#D80F16] rounded-[100px] m-auto hover:opacity-80 text-white font-noto uppercase text-xs font-bold	"
             >
-              Start shopping
+              {languageTextStart}
               <svg
                 width="11"
                 height="10"

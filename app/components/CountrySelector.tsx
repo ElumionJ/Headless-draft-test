@@ -9,6 +9,8 @@ import type {Localizations, Locale} from '~/lib/type';
 import {CartAction} from '~/lib/type';
 import {DEFAULT_LOCALE} from '~/lib/utils';
 
+import {useLanguageText} from '~/hooks/useLanguageText';
+
 export function CountrySelector() {
   const [root] = useMatches();
   const fetcher = useFetcher();
@@ -42,21 +44,15 @@ export function CountrySelector() {
     fetcher.load('/api/countries');
   }, [inView, fetcher]);
 
-  // const [languageText, setLanguageText] = useState('');
-
-  // useEffect(() => {
-  //   const currentURL = window.location.href;
-
-  //   if (currentURL.includes('/ar-sa/')) {
-  //     setLanguageText(<span>تجربة اللغة العربية</span>);
-  //   } else {
-  //     setLanguageText(<span>Change language to:</span>);
-  //   }
-  // }, []);
-
   const closeDropdown = useCallback(() => {
     closeRef.current?.removeAttribute('open');
   }, []);
+  //Kate
+
+  const arText = 'تغيير اللغة إلى:';
+  const enText = 'Change language to:';
+
+  const languageText = useLanguageText({ar_text: arText, en_text: enText});
 
   return (
     <section ref={observerRef} className=" w-fit " onMouseLeave={closeDropdown}>
@@ -67,11 +63,8 @@ export function CountrySelector() {
             className="cursor-default font-bebas pr-3 rtl:pl-3 rtl:pr-0"
             as="h3"
           >
-            {/* {window.location.href.includes('/ar-sa/')
-              ? 'test'
-              : 'Change language to :'} */}
-            {/* {languageText} */}
-            Change language to
+            {languageText}
+            {/* Change language to: */}
           </Heading>
         </div>
 

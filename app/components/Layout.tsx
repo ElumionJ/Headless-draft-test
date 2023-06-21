@@ -37,6 +37,7 @@ import banner2 from '~/../public/banner2.png';
 import banner3 from '~/../public/banner3.png';
 import footer from '~/../public/footer.png';
 
+import {useLanguageText} from '~/hooks/useLanguageText';
 import type {LayoutData} from '../root';
 
 interface ParsedMetaobject {
@@ -206,6 +207,13 @@ function MenuMobileNav({
   openCart: () => void;
 }) {
   const params = useParams();
+
+  //Kate
+
+  const arText = 'تسجيل دخول';
+  const enText = 'Login';
+
+  const languageText = useLanguageText({ar_text: arText, en_text: enText});
   return (
     <>
       <nav className="font-bebas grid gap-4 p-[17px]  sm:gap-6 sm:pb-8  text-white">
@@ -346,7 +354,7 @@ function MenuMobileNav({
           width="full"
           className=" border-white border-2 text-white mb-4  flex items-center justify-center  px-3 py-4  bg-[#D80F16] rounded-[100px] w-full hover:opacity-80"
         >
-          Login
+          {languageText}
         </Button>
       </Link>
     </>
@@ -397,7 +405,7 @@ function MobileHeader({
           className="font-bold leading-none text-center"
           as={isHome ? 'h1' : 'h2'}
         >
-          <div className="p-2 ">
+          <div className="p-3 ">
             <img
               src={logo}
               alt="Logo"
@@ -612,8 +620,12 @@ function DesktopHeader({
         </div>
 
         <div className="flex items-center gap-9 font-bebas  justify-end  ">
-          <CountrySelector />
-          <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5" />
+          <div className="">
+            <CountrySelector />
+          </div>
+
+          <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5 rtl:w-1/3" />
+
           <CartCount isHome={isHome} openCart={openCart} />
         </div>
       </div>
@@ -624,6 +636,14 @@ function DesktopHeader({
 function AccountLink({className}: {className?: string}) {
   const [root] = useMatches();
   const isLoggedIn = root.data?.isLoggedIn;
+
+  //Kate
+
+  const arText = 'تسجيل دخول';
+  const enText = 'Login';
+
+  const languageText = useLanguageText({ar_text: arText, en_text: enText});
+
   return isLoggedIn ? (
     <Link to="/account" className={className}>
       <IconAccount />
@@ -635,7 +655,7 @@ function AccountLink({className}: {className?: string}) {
     <Link to="/account/login" className={className}>
       {/* <IconLogin /> */}
       <div className="tracking-widest font-bebas flex items-center justify-center   uppercase border-b-2  border-black dark:border-white w-fit gap-x-2 hover:opacity-80 ">
-        Login
+        {languageText}
         <span className="">
           <svg
             width="10"
