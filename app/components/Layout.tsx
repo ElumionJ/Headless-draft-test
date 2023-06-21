@@ -213,16 +213,9 @@ function MenuMobileNav({
           <button className="text-[20px]" onClick={onClose}>
             <TfiClose />
           </button>
-          {imagesLinks && imagesLinks.header_logo && (
-            <Link to={'/'} onClick={onClose}>
-              <img
-                src={imagesLinks.header_logo.value.url}
-                className="h-10"
-                alt="mobile logo"
-              />
-            </Link>
-          )}
-
+          <Link to={'/'} onClick={onClose}>
+            <img src={logo} className="w-[110px]" alt="mobile logo" />
+          </Link>
           <CartCount
             variant={'white'}
             isHome={isHome || false}
@@ -512,16 +505,14 @@ function MobileHeader({
           as={isHome ? 'h1' : 'h2'}
         >
           <div className="p-2 ">
-            {imagesLinks && imagesLinks.header_logo && (
-              <img
-                src={imagesLinks.header_logo.value.url}
-                alt="Logo"
-                width={50}
-                height={50}
-                className="w-[50px] h-[50px]"
-                loading="lazy"
-              />
-            )}
+            <img
+              src={logo}
+              alt="Logo"
+              width={50}
+              height={50}
+              className="w-[110px]"
+              loading="lazy"
+            />
           </div>
         </Heading>
       </Link>
@@ -582,15 +573,9 @@ function DesktopHeader({
               if (item.to === '/') {
                 return (
                   <div key={item.id} className="h-fit">
-                    {imagesLinks && imagesLinks.header_logo && (
-                      <Link to="/" key={item.id} className="w-[70px] block">
-                        <img
-                          src={imagesLinks.header_logo.value.url}
-                          alt="Logo"
-                          loading="lazy"
-                        />
-                      </Link>
-                    )}
+                    <Link to="/" key={item.id} className="w-[140px] block">
+                      <img src={logo} alt="Logo" loading="lazy" />
+                    </Link>
                   </div>
                 );
               }
@@ -884,20 +869,18 @@ export function Footer({
       style={{backgroundImage: `url(${footer})`}}
     >
       <div className="flex items-center justify-between w-full border-b-[1px] border-b-[#E0E0E0] pb-[10px]">
-        {imagesLinks && imagesLinks.header_logo && (
-          <Link to="/">
-            <div className="">
-              <img
-                src={imagesLinks.header_logo.value.url}
-                alt="Logo"
-                className="w-[72px] h-[72px]"
-                width={72}
-                height={72}
-                loading="lazy"
-              />
-            </div>
-          </Link>
-        )}
+        <Link to="/">
+          <div className="">
+            <img
+              src={logo}
+              alt="Logo"
+              className="w-[140px]"
+              width={72}
+              height={72}
+              loading="lazy"
+            />
+          </div>
+        </Link>
 
         <div className="flex items-center justify-center gap-x-8 w-1/3">
           <FooterMenu menu={menu} />
@@ -1093,16 +1076,14 @@ function FooterMob({
     >
       <div className="flex flex-col items-center justify-center border-b-[1px] border-b-[#E0E0E0]">
         <div className="p-2">
-          {imagesLinks && imagesLinks.header_logo && (
-            <img
-              src={imagesLinks.header_logo.value.url}
-              alt="Logo"
-              width={70}
-              height={70}
-              className="w-[70px] h-[70px]"
-              loading="lazy"
-            />
-          )}
+          <img
+            src={logo}
+            alt="Logo"
+            width={70}
+            height={70}
+            className="w-[110px]"
+            loading="lazy"
+          />
         </div>
         <div>
           <span className="flex items-center justify-center mb-[14px]">

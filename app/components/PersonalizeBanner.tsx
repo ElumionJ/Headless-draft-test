@@ -16,7 +16,7 @@ interface Props {
 export function PersonalizeBanner({data}: Props) {
   return (
     <div
-      className={`flex mr-[40px] ml-[40px] gt-m:mr-[15px] gt-m:ml-[15px] ${
+      className={`flex  gt-m:mr-[15px] gt-m:ml-[15px] ml-[40px] mr-[40px] sm-maximum:ml-[16px] sm-maximum:mr-[16px] sm-maximum-md:ml-[32px] sm-maximum-md:mr-[32px] ${
         data.revert.value === 'true'
           ? 'flex-row gt-m:flex-col'
           : 'flex-row-reverse gt-m:flex-col-reverse'
@@ -70,7 +70,7 @@ export function PersonalizeBanner({data}: Props) {
             : 'mr-[20px] gt-m:mb-[24px]'
         }`}
       >
-        <span className="font-bebas text-[72px] leading-[100%] font-normal gt-l:text-[48px] ">
+        <span className="font-bebas text-[72px] leading-[100%] font-normal gt-xl:text-[48px] ">
           {data.title.value}
         </span>
         {/* {data.description.value && (

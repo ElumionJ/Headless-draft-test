@@ -34,7 +34,7 @@ export function BlogBanner({data}: Props) {
         </div>
 
         <div
-          className={`flex flex-col gt-l:mt-0 w-1/3 gt-l:w-full bg-[#F3F3F3] p-[92px] gt-l:p-[15px]`}
+          className={`flex flex-col gt-l:mt-0 w-1/3 gt-l:w-full bg-[#F3F3F3] p-[40px] sm-maximum:p-[16px] sm-maximum-md:p-[32px] xl:p-[92px]`}
         >
           <span className="font-bebas mb-[16px] text-[32px] leading-[100%] font-normal gt-l:text-[48px] gt-m:text-[20px]">
             {data.title.value}

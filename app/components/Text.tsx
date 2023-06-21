@@ -167,7 +167,7 @@ export function PageHeader({
   children?: React.ReactNode;
   className?: string;
   heading?: string;
-  variant?: 'default' | 'blog' | 'blogPost' | 'allCollections';
+  variant?: 'default' | 'blog' | 'blogPost' | 'allCollections' | 'search';
   [key: string]: any;
 }) {
   const variants: Record<string, string> = {
@@ -177,6 +177,7 @@ export function PageHeader({
       'grid md:text-center w-full gap-4 p-6 py-8 md:p-8 lg:p-12 md:justify-items-center font-normal', // - title article page
     allCollections:
       'flex justify-between items-baseline gap-8 p-6 md:p-8 lg:p-12',
+    search: 'grid w-full gap-8 p-6 py-8 md:p-8 lg:p-12 justify-items-start',
   };
 
   const styles = clsx(variants[variant], className);
