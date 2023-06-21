@@ -180,7 +180,7 @@ export function MenuDrawer({
     <div
       className={`${
         isOpen ? 'left-0 rtl:right-0' : 'left-[-105%] rtl:right-[-105%]'
-      }  top-0 fixed bg-c-red z-50 h-full flex flex-col transition-left rtl:transition-right duration-200 ease-in w-full sm:w-[70%]`}
+      }  top-0 fixed bg-c-red z-50 h-full flex flex-col transition-left rtl:transition-right duration-200 ease-in w-full md-only:w-[60%]`}
     >
       <MenuMobileNav
         openCart={openCart}
@@ -208,7 +208,7 @@ function MenuMobileNav({
   const params = useParams();
   return (
     <>
-      <nav className="font-bebas grid gap-4 p-[17px] pt-6 sm:gap-6 sm:py-8 text-white">
+      <nav className="font-bebas grid gap-4 p-[17px]  sm:gap-6 sm:pb-8  text-white">
         <div className="flex justify-between items-center border-b-[1px] border-[#A8272D] pb-3">
           <button className="text-[20px]" onClick={onClose}>
             <TfiClose />
@@ -272,7 +272,7 @@ function MenuMobileNav({
             <Input
               className={`${
                 isHome
-                  ? 'focus:border-contrast/20 dark:focus:border-primary/20 text-black w-full'
+                  ? 'focus:border-contrast/20 dark:focus:border-primary/20 text-black w-full '
                   : 'focus:border-primary/20 text-black w-full'
               } block `}
               type="search"
@@ -283,44 +283,44 @@ function MenuMobileNav({
           </Form>
 
           {(menu?.items || []).map((item) => {
-            if (item.to === '/products') {
-              return (
-                <Link to="/products" onClick={onClose} key={item.id}>
-                  <span
-                    className="flex justify-center items-center bg-no-repeat w-[345px] h-[120px]"
-                    style={{backgroundImage: `url(${banner1})`}}
-                  >
-                    <span className="uppercase  text-3xl">All products</span>
-                  </span>
-                </Link>
-              );
-            }
+            // if (item.to === '/products') {
+            //   return (
+            //     <Link to="/products" onClick={onClose} key={item.id}>
+            //       <span
+            //         className="flex justify-center items-center bg-no-repeat w-[345px] h-[120px]"
+            //         style={{backgroundImage: `url(${banner1})`}}
+            //       >
+            //         <span className="uppercase  text-3xl">All products</span>
+            //       </span>
+            //     </Link>
+            //   );
+            // }
 
-            if (item.to === '/collections/freestyle') {
-              return (
-                <Link to="/collections" onClick={onClose} key={item.id}>
-                  <div
-                    className="flex justify-center items-center  bg-no-repeat	 w-[345px] h-[120px]"
-                    style={{backgroundImage: `url(${banner2})`}}
-                  >
-                    <span className="uppercase text-3xl">Shop bundles</span>
-                  </div>
-                </Link>
-              );
-            }
+            // if (item.to === '/collections/freestyle') {
+            //   return (
+            //     <Link to="/collections" onClick={onClose} key={item.id}>
+            //       <div
+            //         className="flex justify-center items-center  bg-no-repeat	 w-[345px] h-[120px]"
+            //         style={{backgroundImage: `url(${banner2})`}}
+            //       >
+            //         <span className="uppercase text-3xl">Shop bundles</span>
+            //       </div>
+            //     </Link>
+            //   );
+            // }
 
-            if (item.to === '/journal') {
-              return (
-                <Link to="/journal" onClick={onClose} key={item.id}>
-                  <div
-                    className="flex justify-center items-center  bg-no-repeat w-[345px] h-[120px]"
-                    style={{backgroundImage: `url(${banner3})`}}
-                  >
-                    <span className="uppercase  text-3xl">Journal</span>
-                  </div>
-                </Link>
-              );
-            }
+            // if (item.to === '/journal') {
+            //   return (
+            //     <Link to="/journal" onClick={onClose} key={item.id}>
+            //       <div
+            //         className="flex justify-center items-center  bg-no-repeat w-[345px] h-[120px]"
+            //         style={{backgroundImage: `url(${banner3})`}}
+            //       >
+            //         <span className="uppercase  text-3xl">Journal</span>
+            //       </div>
+            //     </Link>
+            //   );
+            // }
 
             return (
               <li key={item.id} className="block">
@@ -342,116 +342,9 @@ function MenuMobileNav({
             );
           })}
         </ul>
-
-        {/* Correct */}
-        {/* <Form
-          method="get"
-          action={params.locale ? `/${params.locale}/search` : '/search'}
-          onSubmit={onClose}
-          className=" font-noto items-center flex gap-2  sm:flex bg-white rounded-[100px] mt-[14px] mb-[14px] rtl:px-4"
-        >
-          <button
-            type="submit"
-            className="relative flex items-center justify-center w-8 h-8 text-[#A0A0A0] pl-4"
-          >
-            <div>
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 18 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle
-                  cx="6.74142"
-                  cy="6.74142"
-                  r="6.74142"
-                  transform="matrix(-1 0 0 1 15.918 2.08398)"
-                  stroke="#A0A0A0"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M4.48828 13.8652L1.84526 16.5014"
-                  stroke="#A0A0A0"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-          </button>
-          <Input
-            className={`${
-              isHome
-                ? 'focus:border-contrast/20 dark:focus:border-primary/20 text-black w-full'
-                : 'focus:border-primary/20 text-black w-full'
-            } block `}
-            type="search"
-            variant="minisearch"
-            placeholder="Tabasco, Cholula, Very Hot"
-            name="q"
-          />
-        </Form> */}
-        {/* Top level menu items */}
-        {/* {(menu?.items || []).map((item) => {
-          if (item.to === '/products') {
-            return (
-              <Link to="/products" onClick={onClose} key={item.id}>
-                <span
-                  className="flex justify-center items-center bg-no-repeat w-[345px] h-[120px]"
-                  style={{backgroundImage: `url(${banner1})`}}
-                >
-                  <span className="uppercase  text-3xl">All products</span>
-                </span>
-              </Link>
-            );
-          }
-
-          if (item.to === '/collections/freestyle') {
-            return (
-              <Link to="/collections" onClick={onClose} key={item.id}>
-                <div
-                  className="flex justify-center items-center  bg-no-repeat	 w-[345px] h-[120px]"
-                  style={{backgroundImage: `url(${banner2})`}}
-                >
-                  <span className="uppercase text-3xl">Shop bundles</span>
-                </div>
-              </Link>
-            );
-          }
-
-          if (item.to === '/journal') {
-            return (
-              <Link to="/journal" onClick={onClose} key={item.id}>
-                <div
-                  className="flex justify-center items-center  bg-no-repeat w-[345px] h-[120px]"
-                  style={{backgroundImage: `url(${banner3})`}}
-                >
-                  <span className="uppercase  text-3xl">Journal</span>
-                </div>
-              </Link>
-            );
-          }
-
-          return (
-            <span key={item.id} className="block">
-              <Link
-                to={item.to}
-                target={item.target}
-                onClick={onClose}
-                className={({isActive}) =>
-                  isActive ? 'pb-1 border-b -mb-px' : 'pb-1'
-                }
-              >
-                <Text as="span" size="copy">
-                  {item.title}
-                </Text>
-              </Link>
-            </span>
-          );
-        })} */}
+        <div className="text-white border-none text-2xl">
+          <CountrySelector />
+        </div>
       </nav>
 
       <Link to="/account/login" onClick={onClose} className="mt-[80px] mx-3">
@@ -492,12 +385,12 @@ function MobileHeader({
           ? 'bg-white dark:bg-contrast/60 text-contrast dark:text-primary dark:shadow-darkHeader'
           : 'bg-white text-primary'
       }
-       flex lg:hidden items-center  sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 px-4  md:px-8 h-fit`}
+       flex lg:hidden items-center  sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 sm-maximum:px-4 sm-maximum-md:px-8 md-lg:px-10 h-fit`}
     >
       <div className="flex items-center justify-start w-full gap-4 ">
         <button
           onClick={openMenu}
-          className="relative flex items-center justify-center w-8 h-8 text-black"
+          className="relative flex items-center justify-center w-5 h-8 text-black"
         >
           <IconMenu />
         </button>
@@ -568,14 +461,14 @@ function DesktopHeader({
         >
           <button
             type="submit"
-            className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
+            className="relative flex items-center justify-center w-5 h-8 focus:ring-primary/5"
           >
             <IconSearch />
           </button>
         </Form>
 
-        <div className=" flex gap-10 justify-center">
-          <nav className="flex font-bebas items-center justify-center ">
+        <div className=" flex gap-10 justify-center  rtl:justify-normal">
+          <nav className="flex font-bebas items-center justify-center">
             {/* Top level menu items */}
 
             {(menu?.items || []).map((item) => {
@@ -596,8 +489,8 @@ function DesktopHeader({
               }
 
               return (
-                <div key={`${item.id}`} className="w-fit">
-                  <div className="top-menu navigation-item [&_svg]:hover:rotate-180 [&_svg]:hover:transition-transform [&_svg]:hover:duration-300 [&_svg]:hover:ease-in-out">
+                <div key={`${item.id}`} className="rtl:w-1/5">
+                  <div className="top-menu navigation-item [&_svg]:hover:rotate-180 [&_svg]:hover:transition-transform [&_svg]:hover:duration-300 [&_svg]:hover:ease-in-out ">
                     <Link
                       // onMouseEnter={menuOpen}
                       key={item.id}
@@ -605,7 +498,7 @@ function DesktopHeader({
                       target={item.target}
                       prefetch="intent"
                       className={({isActive}) => {
-                        const mainStyles = 'py-8 px-5 flex';
+                        const mainStyles = 'py-8 px-5 flex ';
                         const activeStyle = '';
 
                         return isActive
@@ -733,7 +626,7 @@ function DesktopHeader({
           </nav>
         </div>
 
-        <div className="flex items-center gap-9 font-bebas  justify-end">
+        <div className="flex items-center gap-9 font-bebas  justify-end  ">
           <CountrySelector />
           <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5" />
           <CartCount isHome={isHome} openCart={openCart} />
@@ -756,7 +649,7 @@ function AccountLink({className}: {className?: string}) {
   ) : (
     <Link to="/account/login" className={className}>
       {/* <IconLogin /> */}
-      <div className="tracking-widest font-bebas flex items-center justify-center   uppercase border-b-2  border-black dark:border-white w-fit gap-x-2 hover:opacity-80 rtl:flex-row-reverse">
+      <div className="tracking-widest font-bebas flex items-center justify-center   uppercase border-b-2  border-black dark:border-white w-fit gap-x-2 hover:opacity-80 ">
         Login
         <span className="">
           <svg
@@ -765,6 +658,7 @@ function AccountLink({className}: {className?: string}) {
             viewBox="0 0 10 10"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            className="rtl:scale-x-[-1]"
           >
             <path
               d="M7.07025 2.25054L2.12057 7.20022"
@@ -839,8 +733,8 @@ function Badge({
           className={`${
             dark
               ? 'bg-contrast text-primary dark:text-contrast dark:bg-primary'
-              : 'bg-contrast text-primary'
-          } absolute bottom-1 left-[12px]  lg:left-[6px] text-[0.625rem] font-medium subpixel-antialiased h-3 min-w-[0.75rem] flex items-center justify-center leading-none text-center rounded-full w-auto px-[0.125rem] pb-px border border-black`}
+              : ' text-white bg-black border-[white]'
+          } absolute bottom-1 left-[10px] text-[0.625rem] font-medium subpixel-antialiased h-3 min-w-[0.75rem] flex items-center justify-center leading-none text-center rounded-full w-auto px-[0.125rem] pb-px border border-black`}
         >
           <span>{count || 0}</span>
         </span>
@@ -851,15 +745,34 @@ function Badge({
   return (
     <button
       onClick={openCart}
-      className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
+      className="relative flex items-center justify-center w-5 h-8 focus:ring-primary/5"
     >
       {BadgeCounter}
     </button>
   );
 }
 
+//   return isHydrated ? (
+//     <button
+//       onClick={openCart}
+//       className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
+//     >
+//       {BadgeCounter}
+//     </button>
+//   ) : (
+//     <Link
+//       to="/cart"
+//       className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
+//     >
+//       {BadgeCounter}
+//     </Link>
+//   );
+// }
+
 //FOOTER
 //Desktop
+
+//Footer desktop
 export function Footer({
   menu,
   imagesLinks,
@@ -879,7 +792,7 @@ export function Footer({
       divider={isHome ? 'none' : 'top'}
       as="footer"
       role="contentinfo"
-      className={`font-bebas uppercase !w-auto  md:gap-5
+      className={`font-bebas uppercase !w-auto  md:gap-5  sm-maximum:px-4 sm-maximum-md:px-8 md-lg:px-10 
       bg-gradient-to-r from-white via-white to-white bg-no-repeat bg-cover dark:bg-primary dark:text-contrast text-primary  overflow-hidden`}
       style={{backgroundImage: `url(${footer})`}}
     >
@@ -899,11 +812,11 @@ export function Footer({
           </Link>
         )}
 
-        <div className="flex items-center justify-center gap-x-8 w-1/3">
+        <div className="flex items-center justify-center gap-x-8 w-1/3 rtl:w-1/6">
           <FooterMenu menu={menu} />
         </div>
 
-        <div className="flex items-center justify-end gap-x-6 w-1/3">
+        <div className="flex items-center justify-end gap-x-6 rtl:justify-start">
           {/* instagram */}
 
           <Link to="/" className="cursor-pointer ">
@@ -1086,7 +999,7 @@ function FooterMob({
       divider={isHome ? 'none' : 'top'}
       as="footer"
       role="contentinfo"
-      className={`font-bebas uppercase min-h-[15px] grid items-start grid-flow-row w-full py-8 px-6 md:px-8       lg:px-12   lg:gap-12 grid-cols-1  lg:grid-cols-${itemsCount}
+      className={`font-bebas uppercase min-h-[15px] grid items-start grid-flow-row w-full py-8 sm-maximum:px-4 sm-maximum-md:px-8 md-lg:px-10  lg:gap-12 grid-cols-1  lg:grid-cols-${itemsCount}
 
       bg-gradient-to-r from-white via-white to-white bg-no-repeat bg-cover dark:bg-primary dark:text-contrast text-primary overflow-hidden`}
       style={{backgroundImage: `url(${footer})`}}
@@ -1191,9 +1104,6 @@ function FooterMob({
         >
           &copy; {new Date().getFullYear()} / Shopify, Inc. Hydrogen is an MIT
           Licensed Open Source project.
-        </div>
-        <div className="flex !items-start">
-          <CountrySelector />
         </div>
       </div>
     </Section>

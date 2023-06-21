@@ -101,7 +101,9 @@ function ArticleCard({
             />
           </div>
         )}
-        <h2 className="mt-4 font-medium text-center">{article.title}</h2>
+        <h2 className="mt-4 font-medium text-center font-bebas">
+          {article.title}
+        </h2>
       </Link>
     </li>
   );

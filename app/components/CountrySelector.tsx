@@ -1,5 +1,5 @@
 import {useFetcher, useLocation, useMatches} from '@remix-run/react';
-import {useCallback, useEffect, useRef} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {useInView} from 'react-intersection-observer';
 import clsx from 'clsx';
 import type {CartBuyerIdentityInput} from '@shopify/hydrogen/storefront-api-types';
@@ -42,6 +42,18 @@ export function CountrySelector() {
     fetcher.load('/api/countries');
   }, [inView, fetcher]);
 
+  // const [languageText, setLanguageText] = useState('');
+
+  // useEffect(() => {
+  //   const currentURL = window.location.href;
+
+  //   if (currentURL.includes('/ar-sa/')) {
+  //     setLanguageText(<span>تجربة اللغة العربية</span>);
+  //   } else {
+  //     setLanguageText(<span>Change language to:</span>);
+  //   }
+  // }, []);
+
   const closeDropdown = useCallback(() => {
     closeRef.current?.removeAttribute('open');
   }, []);
@@ -49,18 +61,29 @@ export function CountrySelector() {
   return (
     <section ref={observerRef} className=" w-fit " onMouseLeave={closeDropdown}>
       <div className="flex items-center sm-max:justify-start justify-center ">
-        {/* <Heading size="lead" className="cursor-default font-bebas " as="h3">
-          Choose language:
-        </Heading> */}
+        <div className="lg:hidden">
+          <Heading
+            size="lead"
+            className="cursor-default font-bebas pr-3 rtl:pl-3 rtl:pr-0"
+            as="h3"
+          >
+            {/* {window.location.href.includes('/ar-sa/')
+              ? 'test'
+              : 'Change language to :'} */}
+            {/* {languageText} */}
+            Change language to
+          </Heading>
+        </div>
+
         <div className="relative">
           <details
-            className="  w-max border rounded border-contrast/30 dark:border-white open:round-b-none overflow-clip"
+            className="  w-max border-none rounded border-contrast/30 dark:border-white open:round-b-none overflow-clip"
             ref={closeRef}
           >
-            <summary className="flex items-center justify-between w-full  cursor-pointer">
+            <summary className="flex items-center justify-between w-full  cursor-pointer font-bebas">
               {selectedLocale.label}
               <svg
-                className="ml-[5px] rtl:ml-0 rtl:mr-[5px]"
+                className="ml-[5px] rtl:ml-0 rtl:mr-[5px]  hidden lg:block"
                 fill="black"
                 height="6px"
                 width="6px"

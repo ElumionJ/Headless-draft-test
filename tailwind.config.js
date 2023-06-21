@@ -19,6 +19,9 @@ export default {
         xl: '80em',
         '2xl': '96em',
         'sm-max': {max: '48em'},
+        'sm-maximum': {max: '37.5em'}, //600px
+        'sm-maximum-md': {min: '37.5em', max: '56.3em'}, //600 - 900
+        'md-lg': {min: '56.3em'}, //900 and higher
         'sm-only': {min: '32em', max: '48em'},
         'md-only': {min: '48em', max: '64em'},
         'lg-only': {min: '64em', max: '80em'},
