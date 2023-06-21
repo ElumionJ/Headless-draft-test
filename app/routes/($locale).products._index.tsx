@@ -18,6 +18,7 @@ import {getImageLoadingPriority} from '~/lib/const';
 import {seoPayload} from '~/lib/seo.server';
 import {routeHeaders, CACHE_SHORT} from '~/data/cache';
 import type {Storefront} from '~/lib/type';
+import parseMetaobject from '~/helpers/parseMetaobject';
 
 const PAGE_BY = 8;
 
@@ -70,33 +71,7 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
   });
   const allProducts = await getAllProducts(storefront);
 
-  // console.log(data);
-
-  const func = async () => {
-    const parsedMetaobject = {};
-
-    await Promise.all(
-      data.metaobject.fields.map(async (el) => {
-        if (el.type === 'file_reference') {
-          const imgUrl = await storefront.query(IMAGE_QUERY, {
-            variables: {id: el.value},
-          });
-          parsedMetaobject[el.key] = {...el, value: imgUrl.node.image};
-          return;
-        } else if (el.type === 'number_integer') {
-          parsedMetaobject[el.key] = {
-            ...el,
-            value: isNaN(+el.value) ? 0 : +el.value,
-          };
-          return;
-        }
-        parsedMetaobject[el.key] = {...el};
-      }),
-    );
-    return parsedMetaobject;
-  };
-  const metaObject = await func();
-
+  const metaObject = await parseMetaobject(data.metaobject, storefront);
   invariant(data, 'No data returned from Shopify API');
 
   const seoCollection = {
@@ -192,7 +167,6 @@ export default function AllProducts() {
       const splittedVendors = vendorsQuery.split(',');
       const removeIndex = splittedVendors.indexOf(`'${value}'`);
       if (removeIndex >= 0) splittedVendors.splice(removeIndex, 1);
-      console.log(removeIndex);
       newVendors = splittedVendors.join(',') + `,'${value}'`;
     } else if (!checked) {
       const splittedVendors = vendorsQuery.split(',');
@@ -442,23 +416,6 @@ query FetchAllProducts($cursor:String){
     }
   }
 }`;
-
-const IMAGE_QUERY = `#graphql
-query GetImage($id:ID!){
-  node(id: $id) {
-    id
-    ... on MediaImage {
-      image {
-        url
-        altText
-        height
-        id
-        width
-      }
-    }
-  }
-}
-`;
 
 const getAllProducts = async (storefront: Storefront) => {
   const resultArr = [];
