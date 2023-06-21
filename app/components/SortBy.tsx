@@ -8,9 +8,15 @@ interface Props {
   dataLinks: {value: string; name: string}[];
   linkStr: string;
   activeSort: string;
+  isCategoriesPage?: boolean;
 }
 
-export const SortBy = ({dataLinks, linkStr, activeSort}: Props) => {
+export const SortBy = ({
+  dataLinks,
+  linkStr,
+  activeSort,
+  isCategoriesPage = false,
+}: Props) => {
   const [open, setOpen] = useState(false);
   const filterRef = useRef(null);
   useOutsideClick(filterRef, setOpen);
@@ -40,7 +46,9 @@ export const SortBy = ({dataLinks, linkStr, activeSort}: Props) => {
               onClick={() => {
                 setOpen(false);
               }}
-              to={`${linkStr}&sortKey=${el.value}`}
+              to={`${linkStr}${isCategoriesPage ? '?sort' : '&sortKey'}=${
+                el.value
+              }`}
             >
               {el.name}
             </Link>
