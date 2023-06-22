@@ -27,7 +27,7 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
 
   return (
     <>
-      <div ref={brandsFilterRef} className="relative z-20 gt-sm:w-full">
+      <div ref={brandsFilterRef} className="relative z-30 gt-sm:w-full">
         <button
           className={`${
             open ? 'bg-c-red text-[#fff]' : 'bg-c-gray text-[#000]'
@@ -43,13 +43,13 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
         <ul
           className={`${
             open ? 'block' : 'hidden'
-          } absolute top-full rtl:right-0 left-0 bg-[#fff] w-fit p-[24px] font-noto shadow-darkPopUp mt-[13px] gt-l:hidden`}
+          } absolute top-full rtl:right-0 left-0 bg-[#fff] w-fit p-[24px] font-noto shadow-darkPopUp mt-[13px] z-30 gt-l:hidden`}
         >
           {vendors &&
             Object.entries(vendors).map((el) => (
-              <li key={el[0]} className="">
+              <li key={el[0]} className=" z-30">
                 <label
-                  htmlFor={el[1].title}
+                  htmlFor={`${el[1].title}-desktop`}
                   className=" flex items-center justify-between gap-[60px] py-[8px]"
                 >
                   <span className="min-w-[180px] font-noto leading-[150%]">
@@ -63,7 +63,7 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
                     className="text-[#D80F16]"
                     type="checkbox"
                     value={el[0]}
-                    id={el[1].title}
+                    id={`${el[1].title}-desktop`}
                   />
                 </label>
               </li>
@@ -98,7 +98,7 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
                 Object.entries(vendors).map((el) => (
                   <li key={el[0]} className="">
                     <label
-                      htmlFor={el[1].title}
+                      htmlFor={`${el[1].title}-mobile`}
                       className=" flex items-center justify-between px-[15px] py-[9px]"
                     >
                       <span className="min-w-[180px] font-noto leading-[150%] text-[14px]">
@@ -112,7 +112,7 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
                         className="text-[#D80F16]"
                         type="checkbox"
                         value={el[0]}
-                        id={el[1].title}
+                        id={`${el[1].title}-mobile`}
                       />
                     </label>
                   </li>
@@ -130,7 +130,7 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
               <span className="font-noto font-bold tracking-widest text-[12px] leading-4 ">
                 SHOW RESULTS
               </span>
-              <ImArrowUpRight2 className="text-[10px]" />
+              <ImArrowUpRight2 className="text-[10px] rtl:rotate-[-90deg]" />
             </button>
           </div>
         </div>

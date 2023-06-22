@@ -54,10 +54,11 @@ export function SortFilter({
   collections = [],
 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
+  const itemsCount = children.props.collection.products.nodes.length;
   return (
     <>
       <div className="flex items-center justify-end w-full">
-        <SortMenu />
+        <SortMenu itemsCount={itemsCount} />
       </div>
       <div className="flex flex-col flex-wrap md:flex-row">
         <div
@@ -356,7 +357,7 @@ function filterInputToParams(
   return params;
 }
 
-export default function SortMenu() {
+export default function SortMenu({itemsCount}: {itemsCount: number}) {
   const items: {name: string; value: SortParam}[] = [
     {name: 'Featured', value: 'featured'},
     {
@@ -381,13 +382,19 @@ export default function SortMenu() {
   const location = useLocation();
   // const activeItem = items.find((item) => item.key === params.get('sort'));
   return (
-    <div className="flex items-center">
-      <SortBy
-        isCategoriesPage={true}
-        dataLinks={items}
-        linkStr={`${location.pathname}`}
-        activeSort={params.get('sort') || 'newest'}
-      />
-    </div>
+    <>
+      {itemsCount > 0 ? (
+        <div className="flex items-center">
+          <SortBy
+            isCategoriesPage={true}
+            dataLinks={items}
+            linkStr={`${location.pathname}`}
+            activeSort={params.get('sort') || 'newest'}
+          />
+        </div>
+      ) : (
+        <></>
+      )}
+    </>
   );
 }
