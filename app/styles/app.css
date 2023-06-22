@@ -135,6 +135,9 @@ shop-pay-button {
     @apply grid w-full snap-x snap-mandatory scroll-px-6 grid-flow-col justify-start gap-4 overflow-x-scroll px-6 pb-4;
   }
 }
+.article {
+  @apply font-noto;
+}
 
 @layer utilities {
   .fadeIn {
@@ -243,4 +246,14 @@ shop-pay-button {
   /* background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%); */
   background-color: #5a31f4;
   /* opacity: 0.7; */
+}
+.image-zoom img{
+  height: 100% ;
+  width: 100%;
+  object-fit: cover;
+  aspect-ratio: 3/4;
+}
+
+.bg-inherit {
+  background-image: inherit !important;
 }
