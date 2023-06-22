@@ -69,9 +69,9 @@ export function ProductCard({
             {!availableForSale && (
               <div
                 data-outofstock-overlay
-                className="absolute w-full h-full top-0 left-0 z-20 backdrop-grayscale "
+                className="absolute w-full h-full top-0  z-20 backdrop-grayscale "
               >
-                <span className="absolute top-[16px] left-[16px] rounded-[2px] w-fit uppercase p-2 bg-black text-[#fff] text-[12px] font-bold leading-[150%] font-noto">
+                <span className="absolute top-[16px] z-20 ltr:left-[16px] rtl:right-[16px] rounded-[2px] w-fit uppercase p-2 bg-black text-[#fff] text-[12px] font-bold leading-[150%] font-noto">
                   OUT OF SToCK
                 </span>
               </div>
@@ -89,7 +89,7 @@ export function ProductCard({
             <Text
               as="label"
               size="fine"
-              className="absolute top-0 right-0 rtl:right-auto rtl:left-0 m-4 text-right text-notice"
+              className="absolute top-0 ltr:left-0 rtl:right-0 m-4 text-right text-notice"
             >
               {cardLabel}
             </Text>
@@ -128,7 +128,8 @@ export function ProductCard({
           },
         ]}
         variant="secondary"
-        className="mt-2 opacity-0 gt-l:opacity-100  flex justify-between items-center bg-c-red w-fit gap-[12px] py-2 px-[16px] rounded-[100px] text-[#fff]"
+        disabled={!availableForSale}
+        className="mt-2 opacity-0 gt-l:opacity-100 disabled:bg-[#808080ac] flex justify-between items-center bg-c-red w-fit gap-[12px] py-2 px-[16px] rounded-[100px] text-[#fff]"
         analytics={{
           products: [productAnalytics],
           totalValue: parseFloat(productAnalytics.price),
@@ -138,9 +139,11 @@ export function ProductCard({
           as="span"
           className="flex items-center justify-center gap-2 uppercase text-[12px] leading-4 font-noto tracking-widest font-bold"
         >
-          Add to Bag
+          {availableForSale ? 'Add to Bag' : 'Out of stock'}
         </Text>
-        <IconAddToCartBag className="mt-[-4px] ml-[-4px]" />
+        {availableForSale && (
+          <IconAddToCartBag className="mt-[-4px] ml-[-4px]" />
+        )}
       </AddToCartButton>
     </div>
   );

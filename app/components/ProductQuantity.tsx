@@ -19,7 +19,7 @@ export function ProductQuantity({quantity, changeQuantity}: Props) {
 
       <span
         data-quantity
-        className="w-[20px] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-center"
+        className="w-[20px] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-center font-bebas text-[16px]"
       >
         {quantity}
       </span>
