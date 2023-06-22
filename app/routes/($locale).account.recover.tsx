@@ -76,8 +76,8 @@ export default function Recover() {
           </>
         ) : (
           <>
-            <h1 className="text-4xl">Forgot Password.</h1>
-            <p className="mt-4">
+            <h1 className="text-4xl font-bebas">Forgot Password.</h1>
+            <p className="mt-4 font-noto">
               Enter the email address associated with your account to receive a
               link to reset your password.
             </p>
@@ -89,14 +89,16 @@ export default function Recover() {
             >
               {actionData?.formError && (
                 <div className="flex items-center justify-center mb-6 bg-zinc-500">
-                  <p className="m-4 text-s text-contrast">
+                  <p className="m-4 text-s text-contrast font-bebas ">
                     {actionData.formError}
                   </p>
                 </div>
               )}
               <div>
                 <input
-                  className={`mb-1 ${getInputStyleClasses(nativeEmailError)}`}
+                  className={`mb-1 font-noto ${getInputStyleClasses(
+                    nativeEmailError,
+                  )}`}
                   id="email"
                   name="email"
                   type="email"
@@ -123,16 +125,19 @@ export default function Recover() {
               </div>
               <div className="flex items-center justify-between">
                 <button
-                  className="bg-primary text-contrast rounded py-2 px-4 focus:shadow-outline block w-full"
+                  className="bg-primary text-contrast rounded py-3 px-4 focus:shadow-outline block w-full text-xs uppercase font-noto"
                   type="submit"
                 >
                   Request Reset Link
                 </button>
               </div>
               <div className="flex items-center mt-8 border-t border-gray-300">
-                <p className="align-baseline text-sm mt-6">
-                  Return to &nbsp;
-                  <Link className="inline underline" to="/account/login">
+                <p className="align-baseline text-sm mt-6 font-noto">
+                  Return to&nbsp;
+                  <Link
+                    className="inline underline font-noto"
+                    to="/account/login"
+                  >
                     Login
                   </Link>
                 </p>

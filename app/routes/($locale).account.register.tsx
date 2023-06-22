@@ -103,7 +103,7 @@ export default function Register() {
   return (
     <div className="flex justify-center my-24 px-4">
       <div className="max-w-md w-full">
-        <h1 className="text-4xl">Create an Account.</h1>
+        <h1 className="text-4xl font-bebas">Create an Account.</h1>
         {/* TODO: Add onSubmit to validate _before_ submission with native? */}
         <Form
           method="post"
@@ -112,12 +112,16 @@ export default function Register() {
         >
           {actionData?.formError && (
             <div className="flex items-center justify-center mb-6 bg-zinc-500">
-              <p className="m-4 text-s text-contrast">{actionData.formError}</p>
+              <p className="m-4 text-s text-contrast font-bebas ">
+                {actionData.formError}
+              </p>
             </div>
           )}
           <div>
             <input
-              className={`mb-1 ${getInputStyleClasses(nativeEmailError)}`}
+              className={`mb-1 font-noto ${getInputStyleClasses(
+                nativeEmailError,
+              )}`}
               id="email"
               name="email"
               type="email"
@@ -142,7 +146,9 @@ export default function Register() {
           </div>
           <div>
             <input
-              className={`mb-1 ${getInputStyleClasses(nativePasswordError)}`}
+              className={`mb-1 font-noto ${getInputStyleClasses(
+                nativePasswordError,
+              )}`}
               id="password"
               name="password"
               type="password"
@@ -177,14 +183,14 @@ export default function Register() {
           </div>
           <div className="flex items-center justify-between">
             <button
-              className="bg-primary text-contrast rounded py-2 px-4 focus:shadow-outline block w-full"
+              className="bg-primary text-contrast rounded py-3 px-4 focus:shadow-outline block w-full font-noto uppercase text-xs"
               type="submit"
               disabled={!!(nativePasswordError || nativeEmailError)}
             >
               Create Account
             </button>
           </div>
-          <div className="flex items-center mt-8 border-t border-gray-300">
+          <div className="flex items-center mt-8 border-t border-gray-300 font-noto ">
             <p className="align-baseline text-sm mt-6">
               Already have an account? &nbsp;
               <Link className="inline underline" to="/account/login">

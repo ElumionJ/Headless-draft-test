@@ -13,24 +13,18 @@ interface Data {
 
 const mockProducts = new Array(12).fill('');
 
-export function ProductSwimlane({
+export function ProductSwimlaneHome({
   title = 'TRY something NEW',
   products = mockProducts,
   count = 12,
   data,
-  marginLeftMobile,
-  marginLeftDesktop,
   ...props
 }: {
   title?: string;
   products?: Product[];
   count?: number;
   data?: Data;
-  marginLeftMobile?: number | string;
-  marginLeftDesktop?: number | string;
 }) {
-  const mlMob = marginLeftMobile || '24';
-  const mlDesk = marginLeftDesktop || '40';
   return (
     <div
       heading={title}
@@ -38,16 +32,16 @@ export function ProductSwimlane({
       {...props}
       className=" gt-m:flex-col flex justify-between"
     >
-      <div>
+      <div className="ml-[40px] rtl:mr-[40px] sm-maximum:ml-[16px] rtl:sm-maximum:mr-[16px] sm-maximum-md:ml-[32px] rtl:sm-maximum-md:mr-[32px]">
         <h2 className="font-bebas leading-[72px] text-[72px] rtl:tracking-normal tracking-widest mb-[64px] mt-[64px] gt-m:mb-[20px] gt-m:mt-[0px] gt-l:text-[48px]">
-          {title}
+          {data?.title.value}
         </h2>
         <div className="relative w-[fit-content] gt-m:mb-[20px]">
           <Link
             className="font-noto font-bold text-[12px] flex items-center tracking-widest rtl:tracking-normal"
             to={'/products'}
           >
-            See all products
+            {data?.button.value}
             <span className="ltr:ml-[8px] rtl:mr-[8px] rtl:scale-x-[-1]">
               <svg
                 width="10"
@@ -77,7 +71,7 @@ export function ProductSwimlane({
         </div>
       </div>
 
-      <div className="grid w-full snap-x snap-mandatory  grid-flow-col justify-start gap-4 overflow-x-scroll pb-4 hiddenScroll md:pb-8 scroll-px-[10px] md:scroll-px-0 lg:scroll-px-0 md:px-8 lg:px-12  gt-m:w-[100%] gt-m:mb-[60px]">
+      <div className="swimlane hiddenScroll md:pb-8 scroll-px-[15px] md:scroll-px-0 lg:scroll-px-0 md:px-8 lg:px-12 gt-xl:w-[56%] w-[64%] gt-m:w-[100%] gt-m:mb-[60px]">
         {products.map((product) => (
           <ProductCard
             product={product}

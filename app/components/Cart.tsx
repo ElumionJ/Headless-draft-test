@@ -9,19 +9,12 @@ import type {
   CartLineUpdateInput,
   Product,
 } from '@shopify/hydrogen/storefront-api-types';
-import {useFetcher, useLoaderData} from '@remix-run/react';
+import {useFetcher} from '@remix-run/react';
 
-import {
-  Button,
-  IconRemove,
-  IconClose,
-  Text,
-  Link,
-  Heading,
-  FeaturedProducts,
-} from '~/components';
-import {getInputStyleClasses} from '~/lib/utils';
+import {Button, IconRemove, IconClose, Text, Link, Heading} from '~/components';
 import {CartAction} from '~/lib/type';
+
+import {useLanguageText} from '~/hooks/useLanguageText';
 
 type Layouts = 'page' | 'drawer';
 interface StaticPrice {
@@ -42,12 +35,7 @@ export function Cart({
 
   return (
     <>
-      {/* {!cart || cart.totalQuantity === 0 ? (
-        <CartEmpty hidden={linesCount} onClose={onClose} layout={layout} />
-      ) : (
-        <CartDetails cart={cart} layout={layout} />
-      )} */}
-      <CartEmpty hidden={linesCount} onClose={onClose} layout={layout} /> 
+      <CartEmpty hidden={linesCount} onClose={onClose} layout={layout} />
       <CartDetails cart={cart} layout={layout} />
     </>
   );
@@ -66,19 +54,26 @@ export function CartDetails({
   const cartHasItems = !!cart && cart.totalQuantity > 0;
   const container = {
     drawer: 'grid grid-cols-1 h-screen-no-nav grid-rows-[1fr_auto] ',
-    page: 'w-full pt-4 pb-12 grid  md:pt-8 md:items-start gap-8 md:gap-8 lg:grid-cols-2 lg:gap-x-[155px] lg:px-[27px] xl:px-[155px] lg:pt-0 min-h-screen ',
+    page: 'w-full pt-4 pb-12 lg:flex  md:pt-8 md:items-start lg:pt-0 min-h-screen ',
   };
 
   if (layout === 'page' && !cartHasItems) {
-    return <></>
+    return <></>;
   }
+
+  //Kate
+
+  const arText = 'حقيبتي';
+  const enText = 'My bag';
+
+  const languageText = useLanguageText({ar_text: arText, en_text: enText});
 
   return (
     // When its empty - work not correct
     <div className="flex flex-col w-full bg-[#FFFEFA] text-black ">
       {layout === 'page' && (
-        <span className="pl-6 pt-3 lg:pt-8 lg:pb-6 lg:pl-[32px] xl:pl-[159px] font-semibold uppercase">
-          My bag ({cart?.totalQuantity})
+        <span className="pl-6 pt-3 lg:pt-8 lg:pb-6 lg:pl-[32px] xl:pl-[159px] font-normal uppercase font-bebas text-[32px]">
+          {languageText} ({cart?.totalQuantity})
         </span>
       )}
       <div className={container[layout]}>
@@ -99,21 +94,6 @@ export function CartDetails({
         )}
       </div>
     </div>
-
-    // <div className={container[layout]}>
-    //   <CartLines lines={cart?.lines} layout={layout} />
-
-    //   {cartHasItems && (
-    //     <CartSummary
-    //       cartQuantity={cart.totalQuantity}
-    //       cost={cart.cost}
-    //       layout={layout}
-    //     >
-    //       <CartDiscounts discountCodes={cart.discountCodes} />
-    //       <CartCheckoutActions checkoutUrl={cart.checkoutUrl} />
-    //     </CartSummary>
-    //   )}
-    // </div>
   );
 }
 
@@ -148,26 +128,6 @@ function CartDiscounts({
           </div>
         </div>
       </dl>
-
-      {/* No discounts, show an input to apply a discount */}
-      {/* <UpdateDiscountForm>
-        <div
-          className={clsx(
-            codes ? 'hidden' : 'flex',
-            'items-center gap-4 justify-between text-copy',
-          )}
-        >
-          <input
-            className={getInputStyleClasses()}
-            type="text"
-            name="discountCode"
-            placeholder="Discount code"
-          />
-          <button className="flex justify-end font-medium whitespace-nowrap">
-            Apply Discount
-          </button>
-        </div>
-      </UpdateDiscountForm> */}
     </>
   );
 }
@@ -199,21 +159,21 @@ function CartLines({
   const styles = {
     cartItem:
       layout === 'page'
-        ? 'item flex items-center justify-start'
-        : 'item ajax-styles grid gap-2',
+        ? 'item flex items-start justify-start md:w-1/4'
+        : 'item ajax-styles flex flex-col justify-between w-1/4',
 
     price:
       layout === 'page'
-        ? 'item flex flex-row-reverse gap-x-10'
-        : 'item ajax-styles flex flex-col gap-y-16',
+        ? 'item flex  flex-row-reverse gap-x-10 font-bebas text-[20px]'
+        : 'item ajax-styles flex flex-col gap-y-16 font-bebas text-[20px]',
   };
 
   const className = clsx([
     // y > 0 ? 'border-t' : '',
     y > 0 ? '' : '',
     layout === 'page'
-      ? 'flex-grow md:translate-y-4 pr-6 pl-6  lg:pl-0 lg:pr-[488px] xl:pl-0 border-y-[1px] border-black pt-[40px]  xl:pl-12'
-      : 'px-6 pb-6 sm-max:pt-2 overflow-auto transition md:px-12 text-black',
+      ? 'flex-grow  md:translate-y-4 pr-6 pl-6 h-fit  border-y-[1px] border-black pt-[40px]  xl:pl-12'
+      : 'px-6 pb-6 sm-max:pt-2 overflow-auto transition  text-black',
   ]);
 
   return (
@@ -222,7 +182,7 @@ function CartLines({
       aria-labelledby="cart-contents"
       className={className}
     >
-      <ul className="grid gap-6 md:gap-10">
+      <ul className="">
         {currentLines.map((line) => (
           <CartLineItem
             key={line.id}
@@ -246,15 +206,30 @@ function CartCheckoutActions({
 }) {
   if (!checkoutUrl) return null;
 
+  //Kate
+
+  const arText = 'الخروج الآمن';
+  const enText = 'Secure Checkout';
+
+  const languageText = useLanguageText({ar_text: arText, en_text: enText});
+
+  const arTextForBag = 'حقيبة عرض';
+  const enTextForBag = 'View bag';
+
+  const languageTextForBag = useLanguageText({
+    ar_text: arTextForBag,
+    en_text: enTextForBag,
+  });
+
   return (
     <div className="flex flex-col items-center justify-center mt-2">
-      <a href={checkoutUrl} target="_self" className="w-full">
+      <Link to={checkoutUrl} target="_self" className="w-full">
         <Button
           as="span"
           width="full"
-          className="text-white mb-4 uppercase flex items-center justify-center gap-x-2 px-3 py-4  bg-[#D80F16] rounded-[100px] w-full hover:opacity-80"
+          className="font-bold text-white mb-4 uppercase text-xs font-noto flex items-center justify-center gap-x-2 px-3 py-4  bg-[#D80F16] rounded-[100px] w-full hover:opacity-80"
         >
-          Secure Checkout
+          {languageText}
           <svg
             width="11"
             height="10"
@@ -278,12 +253,12 @@ function CartCheckoutActions({
             />
           </svg>
         </Button>
-      </a>
+      </Link>
 
       {layout === 'drawer' && (
-        <a href="/cart">
-          <div className="flex items-center justify-center text-black uppercase border-b-2 border-black w-fit gap-x-2 hover:opacity-80">
-            View bag
+        <Link to={'/cart' || '/cart/ar'} reloadDocument>
+          <span className="flex flex-row  items-center justify-center  font-bold font-noto text-xs  text-black uppercase border-b-2 border-black w-fit gap-x-2 hover:opacity-80">
+            {languageTextForBag}
             <svg
               width="10"
               height="10"
@@ -306,8 +281,8 @@ function CartCheckoutActions({
                 strokeLinejoin="round"
               />
             </svg>
-          </div>
-        </a>
+          </span>
+        </Link>
       )}
 
       {/* @todo: <CartShopPayButton cart={cart} /> */}
@@ -326,50 +301,97 @@ function CartSummary({
 }) {
   const summary = {
     drawer: 'grid gap-6 p-6 border-t md:px-12 border-[black] bg-[#F2F2F2] ',
-    page: 'sticky top-nav grid gap-6 md:translate-y-4 rounded w-full w-[325px] ',
+    page: 'sticky top-nav grid gap-6 pt-8 lg:pt-0 md:translate-y-4 rounded lg:w-1/3 lg:ml-10 rtl:lg:mr-10 rtl:lg:ml-0',
   };
+
+  //Kate
+  const arText = 'ملخص الطلب';
+  const enText = 'Order summary';
+
+  const languageText = useLanguageText({ar_text: arText, en_text: enText});
+
+  //Kate
+  const arTextTotal = 'المجموع';
+  const enTextTotal = 'Total';
+
+  const languageTextTotal = useLanguageText({
+    ar_text: arTextTotal,
+    en_text: enTextTotal,
+  });
+
+  //Kate
+  const arTextTotalDelivery = 'التسليم يحسب عند الخروج';
+  const enTextTotalDelivery = ' Delivery calculated at checkout';
+
+  const languageTextDelivery = useLanguageText({
+    ar_text: arTextTotalDelivery,
+    en_text: enTextTotalDelivery,
+  });
+
+  //Kate
+  const arTextTotalSubtotal = 'المجموع الفرعي';
+  const enTextTotalSubtotal = 'Subtotal';
+
+  const languageTextSubtotal = useLanguageText({
+    ar_text: arTextTotalSubtotal,
+    en_text: enTextTotalSubtotal,
+  });
 
   return (
     <section aria-labelledby="summary-heading" className={summary[layout]}>
-      <div className="mb-5 p-4 md:px-6 bg-[#F2F2F2]">
+      <div className="mb-5 p-4 md:px-6 bg-[#F2F2F2] h-fit  ">
         <h2 id="summary-heading" className="sr-only">
-          Order summary
+          {languageText}
         </h2>
+
         <dl className="grid">
           {layout === 'page' && (
-            <div className="w-full">
-              <div className=" p-6 pb-2 font-semibold  uppercase text-[black] border-b-[1px] border-[#E0E0E0]">
-                Order summary
-              </div>
+            <>
+              <dt className="font-bebas text-2xl p-6 pb-6 font-normal uppercase text-[black] border-b-[1px] border-[#E0E0E0]">
+                {languageText}
+              </dt>
 
-              <div className="flex items-center justify-between p-6">
-                <span className="uppercase text-[black] ">Total</span>
-                <span className="text-[red]" data-test="subtotal">
+              <dd className="flex items-center justify-between p-6">
+                <span className="uppercase text-[black] font-bebas text-2xl">
+                  {languageTextTotal}
+                </span>
+                <span
+                  className="text-[red] font-bebas text-2xl"
+                  data-test="subtotal"
+                >
                   {cost?.subtotalAmount?.amount ? (
                     <Money data={cost?.subtotalAmount} />
                   ) : (
                     '-'
                   )}
                 </span>
-              </div>
-              <span className="p-6 ">Delivery calculated at checkout</span>
-            </div>
+              </dd>
+
+              <dd className="p-6 font-noto text-base">
+                {languageTextDelivery}
+              </dd>
+            </>
           )}
 
           {/* drawer */}
           {layout === 'drawer' && (
             <>
-              <div className="flex items-center justify-between font-semibold ">
-                <span className="uppercase text-[black] pb-2">Subtotal</span>
-                <span className="text-[red]" data-test="subtotal">
+              <dt className="flex items-center justify-between font-semibold">
+                <span className="uppercase text-[black] pb-2 font-bebas text-2xl font-normal">
+                  {languageTextSubtotal}
+                </span>
+                <span
+                  className="text-[red] font-bebas font-normal text-2xl"
+                  data-test="subtotal"
+                >
                   {cost?.subtotalAmount?.amount ? (
                     <Money data={cost?.subtotalAmount} />
                   ) : (
                     '-'
                   )}
                 </span>
-              </div>
-              <div>{children}</div>
+              </dt>
+              <dd>{children}</dd>
             </>
           )}
         </dl>
@@ -402,7 +424,7 @@ function CartLineItem({
   return (
     <li
       key={id}
-      className={` flex gap-4 pb-8 border-solid border-b-[1px] border-[#E0E0E0] last:border-none`}
+      className={` gt-sm:relative flex gap-4 mb-4 border-solid border-b-[1px] border-[#E0E0E0] gt-sm:justify-end pb-4 last:border-none`}
     >
       <div className="flex-shrink w-max">
         {merchandise.image && (
@@ -410,15 +432,18 @@ function CartLineItem({
             width={110}
             height={110}
             data={merchandise.image}
-            className="object-cover object-center w-24 h-24 border rounded md:w-28 md:h-28"
+            className="object-cover object-center w-24 h-24 border rounded md:w-28 md:h-[120px]"
             alt={merchandise.title}
+            loading="lazy"
           />
         )}
       </div>
 
-      <div className="flex items-center justify-between flex-grow gap-6">
+      {/*  className="flex items-center justify-between flex-grow gap-6" */}
+      <div className="flex flex-col md:flex-row justify-between flex-grow">
         <div className={additionalClasses.cartItem}>
-          <div className="max-w-[200px] pr-8">
+          {/* max-w-[200px] */}
+          <div className="font-bebas text-base flex flex-col h-full justify-between">
             <Heading as="h3" size="copy">
               {merchandise?.product?.handle ? (
                 <Link to={`/products/${merchandise.product.handle}`}>
@@ -435,27 +460,23 @@ function CartLineItem({
               </span>
             )}
           </div>
+        </div>
 
-          {/* <div className="grid pb-2">
-            {(merchandise?.selectedOptions || []).map((option) => (
-              <Text color="subtle" key={option.name}>
-                {option.name}: {option.value}
-              </Text>
-            ))}
-          </div> */}
-
-          <div className="flex justify-start text-copy">
-            <CartLineQuantityAdjust line={line} />
-          </div>
+        <div className="flex justify-start text-copy">
+          <CartLineQuantityAdjust line={line} />
         </div>
 
         <Text>
           <div className={additionalClasses.price}>
-            <div>
+            <div className="gt-sm:absolute gt-sm:top-0 gt-sm:right-0  rtl:gt-sm:right-auto rtl:gt-sm:left-0 flex justify-end">
               <ItemRemoveButton lineIds={[id]} />
             </div>
 
-            <CartLinePrice line={line} as="span" className="font-semibold" />
+            <CartLinePrice
+              line={line}
+              as="span"
+              className="font-semibold gt-sm:absolute gt-sm:bottom-[20px] gt-sm:right-0 rtl:gt-sm:right-auto rtl:gt-sm:left-0 "
+            />
           </div>
         </Text>
       </div>
@@ -467,7 +488,7 @@ function ItemRemoveButton({lineIds}: {lineIds: CartLine['id'][]}) {
   const fetcher = useFetcher();
 
   return (
-    <fetcher.Form action="/cart" method="post" className="w-6 m-auto -mr-[3px]">
+    <fetcher.Form action="/cart" method="post" className="w-6 ">
       <input
         type="hidden"
         name="cartAction"
@@ -496,12 +517,12 @@ function CartLineQuantityAdjust({line}: {line: CartLine}) {
       <label htmlFor={`quantity-${lineId}`} className="sr-only">
         Quantity, {quantity}
       </label>
-      <div className="flex items-center border rounded-[100px] border-black">
+      <div className="gt-m:h-[38px] flex border rounded-[100px] border-black font-bebas h-fit items-center">
         <UpdateCartButton lines={[{id: lineId, quantity: prevQuantity}]}>
           <button
             name="decrease-quantity"
             aria-label="Decrease quantity"
-            className="w-10 h-10 font-semibold text-black transition hover:opacity-80 disabled:opacity-30"
+            className="gt-m:w-5 gt-m:h-5  w-10 h-10 font-semibold text-black transition hover:opacity-80 disabled:opacity-30"
             value={prevQuantity}
             disabled={quantity <= 1}
           >
@@ -510,7 +531,7 @@ function CartLineQuantityAdjust({line}: {line: CartLine}) {
         </UpdateCartButton>
 
         <div
-          className="px-2 font-semibold text-center"
+          className="gt-m:w-5 gt-m:h-5   px-2 font-semibold text-center"
           data-test="item-quantity"
         >
           {quantity}
@@ -518,7 +539,7 @@ function CartLineQuantityAdjust({line}: {line: CartLine}) {
 
         <UpdateCartButton lines={[{id: lineId, quantity: nextQuantity}]}>
           <button
-            className="w-10 h-10 font-semibold text-black transition hover:opacity-80"
+            className="gt-m:w-5 gt-m:h-5  w-10 h-10 font-semibold text-black transition hover:opacity-80"
             name="increase-quantity"
             value={nextQuantity}
             aria-label="Increase quantity"
@@ -595,9 +616,23 @@ export function CartEmpty({
     ]),
   };
 
+  //Kate
+  const arText = 'حقيبتك فارغة';
+  const enText = ' YOUR BAG IS EMPTY';
+
+  const languageText = useLanguageText({ar_text: arText, en_text: enText});
+
+  const arTextStart = 'ابدأ التسوق';
+  const enTextStart = 'Start shopping';
+
+  const languageTextStart = useLanguageText({
+    ar_text: arTextStart,
+    en_text: enTextStart,
+  });
+
   return (
     <div ref={scrollRef} className={container[layout]} hidden={hidden}>
-      <section className="grid gap-64 pt-[200px] ">
+      <section className="grid gap-8 pt-12 ">
         <div className="flex flex-col items-center justify-center ">
           <div className="mb-2">
             <svg
@@ -645,16 +680,20 @@ export function CartEmpty({
             </svg>
           </div>
 
-          <span className="text-[#D80F16] mb-2">OOOOPS...</span>
-          <span className="text-black">YOUR BAG IS EMPTY</span>
+          <span className="text-[#D80F16] mb-2 font-bebas font-normal text-[32px]">
+            OOOOPS...
+          </span>
+          <span className="text-black font-bebas font-normal text-[24px]">
+            {languageText}
+          </span>
         </div>
         <div>
           <Link to="/products">
             <Button
               onClick={onClose}
-              className="flex items-center justify-center gap-x-5 px-3 py-4  bg-[#D80F16] rounded-[100px] w-full hover:opacity-80"
+              className="flex items-center justify-center gap-x-5 px-3 py-4 w-[200px] bg-[#D80F16] rounded-[100px] m-auto hover:opacity-80 text-white font-noto uppercase text-xs font-bold	"
             >
-              Start shopping
+              {languageTextStart}
               <svg
                 width="11"
                 height="10"
@@ -681,9 +720,6 @@ export function CartEmpty({
           </Link>
         </div>
       </section>
-     
     </div>
-
-   
   );
 }

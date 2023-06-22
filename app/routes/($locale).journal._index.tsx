@@ -57,7 +57,7 @@ export default function Journals() {
 
   return (
     <>
-      <PageHeader heading={BLOG_HANDLE} variant="blog"/>
+      <PageHeader heading={BLOG_HANDLE} variant="blog" />
       <Section>
         <Grid as="ol" layout="blog">
           {/* Kate */}
@@ -101,8 +101,9 @@ function ArticleCard({
             />
           </div>
         )}
-        <h2 className="mt-4 font-medium text-center">{article.title}</h2>
-        {/* <span className="block mt-1 text-center">{article.publishedAt}</span> */}
+        <h2 className="mt-4 font-medium text-center font-bebas">
+          {article.title}
+        </h2>
       </Link>
     </li>
   );

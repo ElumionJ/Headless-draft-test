@@ -17,6 +17,9 @@ export default {
         md: '48em',
         lg: '64em',
         xl: '80em',
+        'sm-maximum': {max: '37.5em'}, //600px
+        'sm-maximum-md': {min: '37.5em', max: '56.3em'}, //600 - 900
+        'md-lg': {min: '56.3em'}, //900 and higher
         '2xl': '96em',
         'sm-max': {max: '48em'},
         'sm-only': {min: '32em', max: '48em'},
@@ -24,8 +27,11 @@ export default {
         'lg-only': {min: '64em', max: '80em'},
         'xl-only': {min: '80em', max: '96em'},
         '2xl-only': {min: '96em'},
+        'fr-md': {min: '47em', max: '49em'},
         'gt-xl': {max: '80em'},
         'gt-l': {max: '58em'},
+        'gt-md': {max: '48em'},
+        'gt-lg': {max: '64em'},
         'gt-m': {max: '37em'},
         'gt-sm': {max: '32em'},
         'gt-ssm': {max: '30em'},
@@ -69,6 +75,12 @@ export default {
         darkHeader: 'inset 0px -1px 0px 0px rgba(21, 21, 21, 0.4)',
         lightHeader: 'inset 0px -1px 0px 0px rgba(21, 21, 21, 0.05)',
         darkPopUp: '0px 0px 30px rgba(0, 0, 0, 0.1)',
+      },
+      transitionProperty: {
+        left: 'left',
+      },
+      gridTemplateColumns: {
+        header: '1fr 1fr 1fr',
       },
     },
   },

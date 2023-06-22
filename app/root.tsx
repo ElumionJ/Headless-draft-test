@@ -17,7 +17,11 @@ import {
 } from '@remix-run/react';
 import {ShopifySalesChannel, Seo} from '@shopify/hydrogen';
 import invariant from 'tiny-invariant';
-import type {Shop, Cart} from '@shopify/hydrogen/storefront-api-types';
+import type {
+  Shop,
+  Cart,
+  Metaobject,
+} from '@shopify/hydrogen/storefront-api-types';
 
 import {Layout} from '~/components';
 import {seoPayload} from '~/lib/seo.server';
@@ -57,9 +61,37 @@ export async function loader({request, context}: LoaderArgs) {
     getLayoutData(context),
   ]);
 
+  const func = async () => {
+    const parsedMetaobject = {};
+
+    layout.megaMenu.nodes.map(async (item) => {
+      return await Promise.all(
+        item.fields.map(async (el) => {
+          if (el.type === 'file_reference') {
+            const imgUrl = await context.storefront.query(IMAGE_QUERY, {
+              variables: {id: el.value},
+            });
+            parsedMetaobject[el.key] = {...el, value: imgUrl.node.image};
+            return;
+          } else if (el.type === 'number_integer') {
+            parsedMetaobject[el.key] = {
+              ...el,
+              value: isNaN(+el.value) ? 0 : +el.value,
+            };
+            return;
+          }
+          parsedMetaobject[el.key] = {...el};
+        }),
+      );
+    });
+    return parsedMetaobject;
+  };
+  const metaObject = await func();
+
   const seo = seoPayload.root({shop: layout.shop, url: request.url});
 
   return defer({
+    metaObject,
     isLoggedIn: Boolean(customerAccessToken),
     layout,
     selectedLocale: context.storefront.i18n,
@@ -76,11 +108,18 @@ export default function App() {
   const data = useLoaderData<typeof loader>();
   const locale = data.selectedLocale ?? DEFAULT_LOCALE;
   const hasUserConsent = true;
+  const [root] = useMatches();
+  // console.log('ROOT', data.selectedLocale);
+
+  // console.log(data.metaObject);
 
   useAnalytics(hasUserConsent, locale);
 
   return (
-    <html lang={locale.language}>
+    <html
+      lang={locale.language}
+      dir={root.params.locale === 'ar-sa' ? 'rtl' : 'ltr'}
+    >
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -112,6 +151,8 @@ export default function App() {
         <Layout
           layout={data.layout as LayoutData}
           key={`${locale.language}-${locale.country}`}
+          menuLinks={data.layout.megaMenu}
+          metaObject={data.metaObject}
         >
           <Outlet />
         </Layout>
@@ -149,6 +190,7 @@ export function ErrorBoundary({error}: {error: Error}) {
         <Layout
           layout={root?.data?.layout}
           key={`${locale.language}-${locale.country}`}
+          menuLinks={[]}
         >
           {isRouteError ? (
             <>
@@ -171,56 +213,80 @@ export function ErrorBoundary({error}: {error: Error}) {
 }
 
 const LAYOUT_QUERY = `#graphql
-  query layoutMenus(
-    $language: LanguageCode
-    $headerMenuHandle: String!
-    $footerMenuHandle: String!
-  ) @inContext(language: $language) {
-    shop {
-      id
-      name
-      description
-      primaryDomain {
+query layoutMenus($language: LanguageCode, $headerMenuHandle: String!, $metaObjectType: String!, $footerMenuHandle: String!) @inContext(language: $language) {
+  shop {
+    id
+    name
+    description
+    primaryDomain {
+      url
+    }
+    brand {
+      logo {
+        image {
+          url
+        }
+      }
+    }
+  }
+  headerMenu: menu(handle: $headerMenuHandle) {
+    id
+    items {
+      ...MenuItem
+      items {
+        ...MenuItem
+        items {
+          ...MenuItem
+        }
+      }
+    }
+  }
+  megaMenu: metaobjects(type: $metaObjectType, first: 10) {
+    nodes {
+      type
+      fields {
+        key
+        type
+        value
+      }
+    }
+  }
+  footerMenu: menu(handle: $footerMenuHandle) {
+    id
+    items {
+      ...MenuItem
+      items {
+        ...MenuItem
+      }
+    }
+  }
+}
+
+fragment MenuItem on MenuItem {
+  id
+  resourceId
+  tags
+  title
+  type
+  url
+}
+`;
+
+const IMAGE_QUERY = `
+query ImageUrl($id: ID!) {
+  node(id: $id) {
+    id
+    ... on MediaImage {
+      image {
         url
       }
-      brand {
-       logo {
-         image {
-          url
-         }
-       }
-     }
-    }
-    headerMenu: menu(handle: $headerMenuHandle) {
-      id
-      items {
-        ...MenuItem
-        items {
-          ...MenuItem
-        }
-      }
-    }
-    footerMenu: menu(handle: $footerMenuHandle) {
-      id
-      items {
-        ...MenuItem
-        items {
-          ...MenuItem
-        }
-      }
     }
   }
-  fragment MenuItem on MenuItem {
-    id
-    resourceId
-    tags
-    title
-    type
-    url
-  }
+}
 `;
 
 export interface LayoutData {
+  megaMenu: {nodes: Metaobject[]};
   headerMenu: EnhancedMenu;
   footerMenu: EnhancedMenu;
   shop: Shop;
@@ -228,11 +294,13 @@ export interface LayoutData {
 }
 
 async function getLayoutData({storefront}: AppLoadContext) {
+  const MEGA_MENU_TYPE = 'mega_menu';
   const HEADER_MENU_HANDLE = 'main-menu';
   const FOOTER_MENU_HANDLE = 'footer';
 
   const data = await storefront.query<LayoutData>(LAYOUT_QUERY, {
     variables: {
+      metaObjectType: MEGA_MENU_TYPE,
       headerMenuHandle: HEADER_MENU_HANDLE,
       footerMenuHandle: FOOTER_MENU_HANDLE,
       language: storefront.i18n.language,
@@ -251,6 +319,8 @@ async function getLayoutData({storefront}: AppLoadContext) {
   */
   const customPrefixes = {BLOG: '', CATALOG: 'products'};
 
+  const megaMenu = data?.megaMenu;
+
   const headerMenu = data?.headerMenu
     ? parseMenu(data.headerMenu, customPrefixes)
     : undefined;
@@ -259,7 +329,7 @@ async function getLayoutData({storefront}: AppLoadContext) {
     ? parseMenu(data.footerMenu, customPrefixes)
     : undefined;
 
-  return {shop: data.shop, headerMenu, footerMenu};
+  return {shop: data.shop, headerMenu, footerMenu, megaMenu};
 }
 
 const CART_QUERY = `#graphql

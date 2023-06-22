@@ -1,19 +1,22 @@
 import {json, type LoaderArgs} from '@shopify/remix-oxygen';
-import {useLoaderData} from '@remix-run/react';
+import {useLoaderData, useMatches} from '@remix-run/react';
 import type {
   Collection as CollectionType,
   CollectionConnection,
   Filter,
+  Metaobject,
 } from '@shopify/hydrogen/storefront-api-types';
 import {flattenConnection, AnalyticsPageType} from '@shopify/hydrogen';
 import invariant from 'tiny-invariant';
+import {Image as ImageComponent} from '@shopify/hydrogen';
 
-import {PageHeader, Section, Text, SortFilter} from '~/components';
+import {PageHeader, Section, Text, SortFilter, Link} from '~/components';
 import {ProductGrid} from '~/components/ProductGrid';
 import {PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
 import {CACHE_SHORT, routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
 import type {AppliedFilter, SortParam} from '~/components/SortFilter';
+import parseMetaobject from '~/helpers/parseMetaobject';
 
 export const headers = routeHeaders;
 
@@ -89,9 +92,10 @@ export async function loader({params, request, context}: LoaderArgs) {
     });
   }
 
-  const {collection, collections} = await context.storefront.query<{
+  const {collection, collections, metaobject} = await context.storefront.query<{
     collection: CollectionType;
     collections: CollectionConnection;
+    metaobject: Metaobject;
   }>(COLLECTION_QUERY, {
     variables: {
       handle: collectionHandle,
@@ -105,15 +109,23 @@ export async function loader({params, request, context}: LoaderArgs) {
     },
   });
 
+  const customizeObject = await parseMetaobject(metaobject, context.storefront);
   if (!collection) {
     throw new Response('collection', {status: 404});
   }
 
   const collectionNodes = flattenConnection(collections);
+  const bannerImg = await context.storefront.query(BANNER_IMAGE_QUERY, {
+    variables: {
+      id: collection.metafield?.value,
+    },
+  });
+  // console.log(await bannerImg);
   const seo = seoPayload.collection({collection, url: request.url});
 
   return json(
     {
+      bannerImg,
       collection,
       appliedFilters,
       collections: collectionNodes,
@@ -133,22 +145,28 @@ export async function loader({params, request, context}: LoaderArgs) {
 }
 
 export default function Collection() {
-  const {collection, collections, appliedFilters} =
+  const {collection, collections, appliedFilters, bannerImg} =
     useLoaderData<typeof loader>();
-
   return (
     <>
-      <PageHeader heading={collection.title}>
-        {collection?.description && (
-          <div className="flex items-baseline justify-between w-full">
-            <div>
-              <Text format width="narrow" as="p" className="inline-block">
-                {collection.description}
-              </Text>
-            </div>
+      <div className="relative pt-[20px] h-[200px] flex items-center">
+        <ImageComponent
+          className=" z-[-1] w-full h-full object-cover banner-shadow"
+          data={bannerImg.node.previewImage}
+        />
+        <h1 className=" px-[48px] z-3 text-[#fff] font-bebas text-[32px] leading-[120%] tracking-wider uppercase ">
+          {collection.title}
+        </h1>
+      </div>
+      {collection?.description && (
+        <div className=" px-[48px] mt-[32px] text-[16px] font-noto leading-[150%] text-[#333] flex items-baseline justify-between w-full">
+          <div>
+            <Text format width="narrow" as="p" className="inline-block">
+              {collection.description}
+            </Text>
           </div>
-        )}
-      </PageHeader>
+        </div>
+      )}
       <Section>
         <SortFilter
           filters={collection.products.filters as Filter[]}
@@ -178,7 +196,19 @@ const COLLECTION_QUERY = `#graphql
     $sortKey: ProductCollectionSortKeys!
     $reverse: Boolean
   ) @inContext(country: $country, language: $language) {
+    metaobject(
+      handle: {handle: "collections-all-customize", type: "collections_all_customize"}
+    ) {
+      fields{
+        key
+        value
+        type
+      }
+    }
     collection(handle: $handle) {
+      metafield(namespace: "categories", key: "banner"){
+        value
+      }
       id
       handle
       title
@@ -232,6 +262,22 @@ const COLLECTION_QUERY = `#graphql
   }
   ${PRODUCT_CARD_FRAGMENT}
 `;
+
+const BANNER_IMAGE_QUERY = `
+#graphql
+query GetBannerImage($id:ID!) {
+  node(id: $id) {
+    id
+    ... on Media {
+      previewImage {
+        url
+        height
+        width
+        altText
+      }
+    }
+  }
+}`;
 
 function getSortValuesFromParam(sortParam: SortParam | null) {
   switch (sortParam) {

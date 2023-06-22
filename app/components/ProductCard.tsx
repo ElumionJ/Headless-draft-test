@@ -57,7 +57,11 @@ export function ProductCard({
     <div className="product-card flex flex-col gap-2 ">
       <Link
         onClick={onClick}
-        to={`/products/${product.handle}`}
+        to={
+          product.collections.nodes[0].handle
+            ? `/categories/${product.collections.nodes[0].handle}/${product.handle}`
+            : `/products/${product.handle}`
+        }
         prefetch="intent"
       >
         <div className={clsx('grid gap-4', className)}>
@@ -85,20 +89,20 @@ export function ProductCard({
             <Text
               as="label"
               size="fine"
-              className="absolute top-0 right-0 m-4 text-right text-notice"
+              className="absolute top-0 right-0 rtl:right-auto rtl:left-0 m-4 text-right text-notice"
             >
               {cardLabel}
             </Text>
           </div>
           <div className="grid gap-1">
             <Text
-              className="w-full overflow-hidden whitespace-nowrap text-[20px] leading-[110%] font-bebas tracking-wider"
+              className="w-full overflow-hidden whitespace-nowrap !text-[20px] leading-[110%] font-bebas tracking-wider"
               as="h3"
             >
               {product.title}
             </Text>
             <div className="flex gap-4">
-              <Text className="flex gap-4 text-[20px] leading-[130%]">
+              <Text className="flex gap-4 !text-[20px] leading-[130%]">
                 <Money
                   className="font-bebas tracking-wider leading-[130%]"
                   withoutTrailingZeros
@@ -124,7 +128,7 @@ export function ProductCard({
           },
         ]}
         variant="secondary"
-        className="mt-2 opacity-0 gt-l:opacity-100  flex justify-between items-center bg-c-red w-fit gap-[12px] py-4 px-[16px] rounded-[100px] text-[#fff]"
+        className="mt-2 opacity-0 gt-l:opacity-100  flex justify-between items-center bg-c-red w-fit gap-[12px] py-2 px-[16px] rounded-[100px] text-[#fff]"
         analytics={{
           products: [productAnalytics],
           totalValue: parseFloat(productAnalytics.price),
@@ -136,7 +140,7 @@ export function ProductCard({
         >
           Add to Bag
         </Text>
-        <IconAddToCartBag />
+        <IconAddToCartBag className="mt-[-4px] ml-[-4px]" />
       </AddToCartButton>
     </div>
   );

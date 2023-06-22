@@ -1,47 +1,24 @@
-import {json, redirect, type LoaderArgs} from '@shopify/remix-oxygen';
+import {json, type LoaderArgs} from '@shopify/remix-oxygen';
 import {Image as ImageComponent} from '@shopify/hydrogen';
 import {LuArrowDownUp} from 'react-icons/lu';
 import {TfiClose} from 'react-icons/tfi';
-import {
-  Link,
-  useLoaderData,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from '@remix-run/react';
+import {Link, useLoaderData, useNavigate} from '@remix-run/react';
 import type {
   ProductConnection,
   Collection,
-  PageInfo,
   Metaobject,
-  Node,
-  Media,
-  Image,
 } from '@shopify/hydrogen/storefront-api-types';
 import invariant from 'tiny-invariant';
-import {
-  Pagination__unstable as Pagination,
-  flattenConnection,
-  getClientBrowserParameters,
-  getPaginationVariables__unstable as getPaginationVariables,
-} from '@shopify/hydrogen';
-import {useEffect, useRef, useState} from 'react';
-import {useLocation} from 'react-use';
+import {Pagination__unstable as Pagination} from '@shopify/hydrogen';
+import {useEffect, useState} from 'react';
 
-import {
-  PageHeader,
-  Section,
-  ProductCard,
-  Grid,
-  Button,
-  SortBy,
-  VendorsFilter,
-} from '~/components';
+import {Section, ProductCard, Grid, SortBy, VendorsFilter} from '~/components';
 import {PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
 import {getImageLoadingPriority} from '~/lib/const';
 import {seoPayload} from '~/lib/seo.server';
 import {routeHeaders, CACHE_SHORT} from '~/data/cache';
 import type {Storefront} from '~/lib/type';
+import parseMetaobject from '~/helpers/parseMetaobject';
 
 const PAGE_BY = 8;
 
@@ -92,43 +69,9 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
       },
     },
   });
-  // const titleImg = await storefront.query<{
-  //   node: Node & {image: Image};
-  // }>(IMAGE_QUERY, {
-  //   variables: {
-  //     id: data.metaobject.field?.value,
-  //   },
-  // });
-  // console.log(titleImg.node.image.url);
   const allProducts = await getAllProducts(storefront);
 
-  console.log(data);
-
-  const func = async () => {
-    const parsedMetaobject = {};
-
-    await Promise.all(
-      data.metaobject.fields.map(async (el) => {
-        if (el.type === 'file_reference') {
-          const imgUrl = await storefront.query(IMAGE_QUERY, {
-            variables: {id: el.value},
-          });
-          parsedMetaobject[el.key] = {...el, value: imgUrl.node.image};
-          return;
-        } else if (el.type === 'number_integer') {
-          parsedMetaobject[el.key] = {
-            ...el,
-            value: isNaN(+el.value) ? 0 : +el.value,
-          };
-          return;
-        }
-        parsedMetaobject[el.key] = {...el};
-      }),
-    );
-    return parsedMetaobject;
-  };
-  const metaObject = await func();
-
+  const metaObject = await parseMetaobject(data.metaobject, storefront);
   invariant(data, 'No data returned from Shopify API');
 
   const seoCollection = {
@@ -156,6 +99,8 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
       customize: metaObject,
       rawUrl: request.url,
       allProducts,
+      selectedLocale: storefront.i18n,
+      origin: url.origin,
       rawParams: paramsObj,
       varParams: variablesFromParams,
       pageInfo: data.products.pageInfo,
@@ -171,6 +116,15 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
 }
 
 export default function AllProducts() {
+  const sortKeys = [
+    {value: 'TITLE', name: 'Name'},
+    {value: 'PRICE', name: 'Price'},
+    {value: 'PRODUCT_TYPE', name: 'Type'},
+    {value: 'VENDOR', name: 'Brand'},
+    {value: 'UPDATED_AT', name: 'Update'},
+    {value: 'CREATED_AT', name: 'Date'},
+    {value: 'BEST_SELLING', name: 'Trending'},
+  ];
   const {
     products,
     varParams,
@@ -179,13 +133,15 @@ export default function AllProducts() {
     allProducts,
     rawUrl,
     customize,
+    selectedLocale,
   } = useLoaderData<typeof loader>();
+
+  // console.log(selectedLocale);
 
   const [timer, setTimer] = useState<number | null>(null);
   const navigate = useNavigate();
 
   const [brands, setBrands] = useState({});
-  const vendorsFilterRef = useRef(null);
   const [vendorsQuery, setVendorsQuery] = useState<string>(
     rawParams.query || '',
   );
@@ -211,7 +167,6 @@ export default function AllProducts() {
       const splittedVendors = vendorsQuery.split(',');
       const removeIndex = splittedVendors.indexOf(`'${value}'`);
       if (removeIndex >= 0) splittedVendors.splice(removeIndex, 1);
-      console.log(removeIndex);
       newVendors = splittedVendors.join(',') + `,'${value}'`;
     } else if (!checked) {
       const splittedVendors = vendorsQuery.split(',');
@@ -244,13 +199,14 @@ export default function AllProducts() {
 
     // Set a new timer to redirect after 2 seconds
     const newTimer = setTimeout(() => {
-      navigate(
-        `/products?sortKey=${varParams.sortKey}&reverse=${varParams.reverse}&query=${vendorsQuery}`,
-        {
-          preventScrollReset: true,
-        },
-      );
-      console.log(vendorsQuery);
+      if (rawParams.query !== undefined || vendorsQuery.length)
+        navigate(
+          `${selectedLocale.pathPrefix}/products?sortKey=${varParams.sortKey}&reverse=${varParams.reverse}&query=${vendorsQuery}`,
+          {
+            preventScrollReset: true,
+          },
+        );
+      // console.log(vendorsQuery);
     }, 2000);
 
     // Update the timer state
@@ -271,9 +227,9 @@ export default function AllProducts() {
         <ImageComponent
           loading={'eager'}
           data={customize.title_image.value}
-          className="object-cover h-full fadeIn relative title-bg-shadow "
+          className="object-cover  h-full fadeIn relative title-bg-shadow max-h-[200px] "
         />
-        <div className="absolute z-10 h-full w-full title-bg-shadow flex items-center pl-[40px] top-0 left-0">
+        <div className="absolute z-10 h-full w-full title-bg-shadow flex items-center px-6 md:px-8 lg:px-12 top-0 left-0">
           <h1 className=" font-bebas text-[#fff] tracking-wider text-3xl leading-[120%] uppercase">
             {customize.title.value}
           </h1>
@@ -311,7 +267,7 @@ export default function AllProducts() {
           </div>
           <div className="flex gap-[16px] items-center gt-sm:w-full">
             <Link
-              to={`/products?sortKey=${
+              to={`${selectedLocale.pathPrefix}/products?sortKey=${
                 varParams.sortKey
               }&reverse=${!varParams.reverse}&query=${vendorsQuery}`}
               preventScrollReset
@@ -322,11 +278,8 @@ export default function AllProducts() {
 
             <div data-filter className="gt-sm:w-full">
               <SortBy
-                dataLinks={[
-                  {value: 'TITLE', name: 'Name'},
-                  {value: 'PRICE', name: 'Price'},
-                ]}
-                linkStr={`/products?reverse=${varParams.reverse}&query=${vendorsQuery}`}
+                dataLinks={sortKeys}
+                linkStr={`${selectedLocale.pathPrefix}/products?reverse=${varParams.reverse}&query=${vendorsQuery}`}
                 activeSort={rawParams.sortKey}
               />
 
@@ -367,16 +320,15 @@ export default function AllProducts() {
 
             return (
               <>
-                <div className="flex items-center justify-center mt-6"></div>
                 <Grid data-test="product-grid">{itemsMarkup}</Grid>
                 <div className="flex items-center justify-center mt-6">
-                  <div className="flex justify-center gap-2 font-noto">
+                  <div className="flex justify-center gap-2 font-noto ">
                     {pageInfo.hasPreviousPage && (
                       <Link
-                        className="text-[12px] font-bold leading-[150%] hover:text-[#D80F16] block w-[100px] px-3 py-1 text-right"
-                        to={`/products?sortKey=${varParams.sortKey}&reverse=${
-                          varParams.reverse
-                        }&cursor=${
+                        className="text-[12px] font-bold leading-[150%] hover:text-[#D80F16] block w-[100px] px-3 py-1 text-right rtl:text-left"
+                        to={`${selectedLocale.pathPrefix}/products?sortKey=${
+                          varParams.sortKey
+                        }&reverse=${varParams.reverse}&cursor=${
                           pageInfo.startCursor || null
                         }&query=${vendorsQuery}&direction=prev`}
                       >
@@ -385,10 +337,10 @@ export default function AllProducts() {
                     )}
                     {pageInfo.hasNextPage && (
                       <Link
-                        className="text-[12px] font-bold leading-[150%] hover:text-[#D80F16] block w-[100px] px-3 py-1 text-left"
-                        to={`/products?sortKey=${varParams.sortKey}&reverse=${
-                          varParams.reverse
-                        }&cursor=${
+                        className="text-[12px] font-bold leading-[150%] hover:text-[#D80F16] block w-[100px] px-3 py-1 text-left rtl:text-right"
+                        to={`${selectedLocale.pathPrefix}/products?sortKey=${
+                          varParams.sortKey
+                        }&reverse=${varParams.reverse}&cursor=${
                           pageInfo.endCursor || null
                         }&query=${vendorsQuery}&direction=next`}
                       >
@@ -464,23 +416,6 @@ query FetchAllProducts($cursor:String){
     }
   }
 }`;
-
-const IMAGE_QUERY = `#graphql
-query GetImage($id:ID!){
-  node(id: $id) {
-    id
-    ... on MediaImage {
-      image {
-        url
-        altText
-        height
-        id
-        width
-      }
-    }
-  }
-}
-`;
 
 const getAllProducts = async (storefront: Storefront) => {
   const resultArr = [];
