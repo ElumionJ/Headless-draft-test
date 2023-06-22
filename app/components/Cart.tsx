@@ -164,8 +164,8 @@ function CartLines({
 
     price:
       layout === 'page'
-        ? 'item flex  flex-row-reverse gap-x-10 font-bebas text-[20px]'
-        : 'item ajax-styles flex flex-col gap-y-16 font-bebas text-[20px]',
+        ? 'item flex  flex-row-reverse gap-x-8 font-bebas text-[20px]'
+        : 'item ajax-styles flex flex-col gap-y-16 font-bebas text-[20px] max-w-[65px] w-full',
   };
 
   const className = clsx([
@@ -531,7 +531,7 @@ function CartLineQuantityAdjust({line}: {line: CartLine}) {
         </UpdateCartButton>
 
         <div
-          className="gt-m:w-5 gt-m:h-5   px-2 font-semibold text-center"
+          className="gt-m:w-5 gt-m:h-5 font-semibold text-center"
           data-test="item-quantity"
         >
           {quantity}

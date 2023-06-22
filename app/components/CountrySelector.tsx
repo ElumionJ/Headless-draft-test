@@ -64,22 +64,21 @@ export function CountrySelector() {
             as="h3"
           >
             {languageText}
-            {/* Change language to: */}
           </Heading>
         </div>
 
-        <div className="relative">
+        <div className="relative ">
           <details
-            className="  w-max border-none rounded border-contrast/30 dark:border-white open:round-b-none overflow-clip"
+            className="  w-max border-none rounded border-contrast/30 dark:border-white open:round-b-none overflow-clip "
             ref={closeRef}
           >
             <summary className="flex items-center justify-between w-full  cursor-pointer font-bebas">
               {selectedLocale.label}
               <svg
-                className="ml-[5px] rtl:ml-0 rtl:mr-[5px]  hidden lg:block"
+                className="ml-1 mb-[1px] rtl:ml-0 rtl:mr-1  hidden lg:block"
                 fill="black"
-                height="6px"
-                width="6px"
+                height="7px"
+                width="7px"
                 version="1.1"
                 id="Layer_1"
                 xmlns="http://www.w3.org/2000/svg"

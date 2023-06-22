@@ -210,7 +210,7 @@ function MenuMobileNav({
 
   //Kate
 
-  const arText = 'تسجيل دخول';
+  const arText = 'تسجيلدخول';
   const enText = 'Login';
 
   const languageText = useLanguageText({ar_text: arText, en_text: enText});
@@ -466,15 +466,19 @@ function DesktopHeader({
           </button>
         </Form>
 
-        <div className=" flex gap-10 justify-center  rtl:justify-normal">
-          <nav className="flex font-bebas items-center justify-center">
+        <div className=" flex gap-10 justify-center">
+          <nav className=" font-bebas  grid grid-cols-navigation items-center gap-x-10 rtl:gap-x-6">
             {/* Top level menu items */}
 
             {(menu?.items || []).map((item) => {
               if (item.to === '/') {
                 return (
                   <div key={item.id} className="h-fit">
-                    <Link to="/" key={item.id} className="w-[140px] block">
+                    <Link
+                      to="/"
+                      key={item.id}
+                      className="w-[140px]   flex justify-center items-center"
+                    >
                       <img src={logo} alt="Logo" loading="lazy" />
                     </Link>
                   </div>
@@ -482,7 +486,7 @@ function DesktopHeader({
               }
 
               return (
-                <div key={`${item.id}`} className="rtl:w-1/5">
+                <div key={`${item.id}`} className="">
                   <div className="top-menu navigation-item [&_svg]:hover:rotate-180 [&_svg]:hover:transition-transform [&_svg]:hover:duration-300 [&_svg]:hover:ease-in-out ">
                     <Link
                       // onMouseEnter={menuOpen}
@@ -491,7 +495,8 @@ function DesktopHeader({
                       target={item.target}
                       prefetch="intent"
                       className={({isActive}) => {
-                        const mainStyles = 'py-8 px-5 flex ';
+                        const mainStyles =
+                          ' py-8 rtl:py-6  flex justify-center items-center';
                         const activeStyle = '';
 
                         return isActive
@@ -502,10 +507,10 @@ function DesktopHeader({
                       {item.title}
                       {item.items.length > 0 && (
                         <svg
-                          className="ml-[10px] mt-[3px] rtl:mr-[10px] rtl:ml-0"
+                          className="ml-1 mb-[1px] rtl:ml-0 rtl:mr-1"
                           fill="#000000"
-                          height="10px"
-                          width="10px"
+                          height="7px"
+                          width="7px"
                           version="1.1"
                           id="Layer_1"
                           xmlns="http://www.w3.org/2000/svg"
@@ -619,7 +624,7 @@ function DesktopHeader({
           </nav>
         </div>
 
-        <div className="flex items-center gap-9 font-bebas  justify-end  ">
+        <div className="flex items-center gap-x-9 font-bebas  justify-end">
           <div className="">
             <CountrySelector />
           </div>
@@ -639,16 +644,20 @@ function AccountLink({className}: {className?: string}) {
 
   //Kate
 
-  const arText = 'تسجيل دخول';
+  const arText = 'تسجيلدخول';
   const enText = 'Login';
 
   const languageText = useLanguageText({ar_text: arText, en_text: enText});
 
   return isLoggedIn ? (
     <Link to="/account" className={className}>
-      <IconAccount />
-      <div className="flex items-center justify-center text-black uppercase border-b-2 border-black w-fit gap-x-2 hover:opacity-80">
-        Login
+      {/* Kate */}
+      <div className="absolute top-[11%] right-[96%] rtl:left-[-2%] rtl:xl:left-[16%] rtl:top-[12%] rtl:right-auto">
+        <IconAccount />
+      </div>
+
+      <div className="flex items-center justify-center text-black uppercase border-b-2 border-black t w-fit gap-x-2 hover:opacity-80">
+        {languageText}
       </div>
     </Link>
   ) : (
@@ -738,8 +747,8 @@ function Badge({
           className={`${
             dark
               ? 'bg-contrast text-primary dark:text-contrast dark:bg-primary'
-              : ' text-white bg-black border-[white]'
-          } absolute bottom-1 left-[10px] text-[0.625rem] font-medium subpixel-antialiased h-3 min-w-[0.75rem] flex items-center justify-center leading-none text-center rounded-full w-auto px-[0.125rem] pb-px border border-black`}
+              : ' bg-contrast text-primary'
+          } absolute bottom-1 left-[10px] rtl:right-[10px] rtl:left-0 text-[0.625rem] font-medium subpixel-antialiased h-3 min-w-[0.75rem] flex items-center justify-center leading-none text-center rounded-full w-auto px-[0.125rem] pb-px border border-black`}
         >
           <span>{count || 0}</span>
         </span>
@@ -797,11 +806,11 @@ export function Footer({
       divider={isHome ? 'none' : 'top'}
       as="footer"
       role="contentinfo"
-      className={`font-bebas uppercase !w-auto  md:gap-5  sm-maximum:px-4 sm-maximum-md:px-8 md-lg:px-10 
+      className={`font-bebas uppercase !w-auto  border-t-0	 sm-maximum:px-4 sm-maximum-md:px-8 md-lg:px-10  md:py-0 md:gap-0 md-lg:py-0  md-lg:gap-0
       bg-gradient-to-r from-white via-white to-white bg-no-repeat bg-cover dark:bg-primary dark:text-contrast text-primary  overflow-hidden`}
       style={{backgroundImage: `url(${footer})`}}
     >
-      <div className="flex items-center justify-between w-full border-b-[1px] border-b-[#E0E0E0] pb-[10px]">
+      <div className="flex items-center justify-between w-full border-b-[1px] border-b-[#E0E0E0] py-[50px] ">
         <Link to="/">
           <div className="">
             <img
@@ -902,7 +911,7 @@ export function Footer({
         </div>
       </div>
 
-      <div className="flex items-center  flex-row-reverse gap-x-72">
+      <div className="flex items-center  flex-row-reverse gap-0 py-5 ">
         <div
           className={`text-sm self-end opacity-50 md:col-span-2 lg:col-span-${itemsCount}`}
         >
@@ -1002,7 +1011,7 @@ function FooterMob({
       divider={isHome ? 'none' : 'top'}
       as="footer"
       role="contentinfo"
-      className={`font-bebas uppercase min-h-[15px] grid items-start grid-flow-row w-full py-8 sm-maximum:px-4 sm-maximum-md:px-8 md-lg:px-10  lg:gap-12 grid-cols-1  lg:grid-cols-${itemsCount}
+      className={`font-bebas uppercase border-t-0 min-h-[15px] grid items-start grid-flow-row w-full pt-8  sm-maximum:px-4 sm-maximum-md:px-8 md-lg:px-10  lg:gap-12 grid-cols-1  lg:grid-cols-${itemsCount}
 
       bg-gradient-to-r from-white via-white to-white bg-no-repeat bg-cover dark:bg-primary dark:text-contrast text-primary overflow-hidden`}
       style={{backgroundImage: `url(${footer})`}}
@@ -1101,7 +1110,7 @@ function FooterMob({
 
       <div className="">
         <div
-          className={`pb-2 text-sm self-end opacity-50 md:col-span-2 lg:col-span-${itemsCount}`}
+          className={` text-sm self-end opacity-50 md:col-span-2  lg:col-span-${itemsCount}`}
         >
           &copy; {new Date().getFullYear()} / Shopify, Inc. Hydrogen is an MIT
           Licensed Open Source project.

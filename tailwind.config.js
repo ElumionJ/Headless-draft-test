@@ -81,6 +81,7 @@ export default {
       },
       gridTemplateColumns: {
         header: '1fr 1fr 1fr',
+        navigation: '1fr 1fr 1fr 1fr 1fr',
       },
     },
   },
