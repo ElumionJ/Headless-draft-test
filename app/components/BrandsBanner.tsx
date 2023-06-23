@@ -36,10 +36,7 @@ export function BrandsBanner({data}: Props) {
             opacity: `0.6`,
           }}
         ></div>
-        <Link
-          to={'/products'}
-          className="absolute ltr:left-[32px] rtl:right-[32px] bottom-[32px] font-normal text-[#fff] text-[30px] flex justify-center font-bebas tracking-wider leading-[120%]"
-        >
+        <span className="absolute ltr:left-[32px] rtl:right-[32px] bottom-[32px] font-normal text-[#fff] text-[30px] flex justify-center font-bebas tracking-wider leading-[120%]">
           {data.title_1.value}
           <span className="ltr:ml-[8px] rtl:mr-[8px] rtl:scale-x-[-1]">
             <svg
@@ -65,7 +62,7 @@ export function BrandsBanner({data}: Props) {
               />
             </svg>
           </span>
-        </Link>
+        </span>
       </Link>
 
       <Link
@@ -86,10 +83,7 @@ export function BrandsBanner({data}: Props) {
             opacity: `0.6`,
           }}
         ></div>
-        <Link
-          to={'/products'}
-          className="absolute ltr:left-[32px] rtl:right-[32px] bottom-[32px] font-normal text-[#fff] text-[30px] flex justify-center font-bebas tracking-wider leading-[120%]"
-        >
+        <span className="absolute ltr:left-[32px] rtl:right-[32px] bottom-[32px] font-normal text-[#fff] text-[30px] flex justify-center font-bebas tracking-wider leading-[120%]">
           {data.title_2.value}
           <span className="ltr:ml-[8px] rtl:mr-[8px] rtl:scale-x-[-1]">
             <svg
@@ -115,7 +109,7 @@ export function BrandsBanner({data}: Props) {
               />
             </svg>
           </span>
-        </Link>
+        </span>
       </Link>
     </div>
   );

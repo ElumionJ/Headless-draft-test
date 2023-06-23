@@ -321,7 +321,6 @@ async function getLayoutData({storefront}: AppLoadContext) {
 
   const megaMenu = data?.megaMenu;
 
-  console.log(megaMenu);
   const headerMenu = data?.headerMenu
     ? parseMenu(data.headerMenu, customPrefixes)
     : undefined;

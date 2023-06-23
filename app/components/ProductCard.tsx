@@ -140,7 +140,7 @@ export function ProductCard({
         >
           Add to Bag
         </Text>
-        <IconAddToCartBag />
+        <IconAddToCartBag className="mt-[-4px] ml-[-4px]" />
       </AddToCartButton>
     </div>
   );

@@ -228,6 +228,25 @@ shop-pay-button {
   box-shadow: 0px 0px 0px;
 }
 
+.banner-shadow{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: block;
+}
+
+.banner-shadow::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  position: absolute;
+  /* background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%); */
+  background-color: #5a31f4;
+  /* opacity: 0.7; */
+}
 .image-zoom img{
   height: 100% ;
   width: 100%;
