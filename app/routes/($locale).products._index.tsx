@@ -11,6 +11,8 @@ import type {
 import invariant from 'tiny-invariant';
 import {Pagination__unstable as Pagination} from '@shopify/hydrogen';
 import {useEffect, useState} from 'react';
+import {HiArrowLongDown} from 'react-icons/hi2';
+import {HiArrowNarrowUp} from 'react-icons/hi';
 
 import {Section, ProductCard, Grid, SortBy, VendorsFilter} from '~/components';
 import {PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
@@ -140,6 +142,7 @@ export default function AllProducts() {
 
   const [timer, setTimer] = useState<number | null>(null);
   const navigate = useNavigate();
+  const [rotate, setRotate] = useState<'180deg' | '0deg'>('0deg');
 
   const [brands, setBrands] = useState({});
   const [vendorsQuery, setVendorsQuery] = useState<string>(
@@ -176,6 +179,9 @@ export default function AllProducts() {
     }
     setVendorsQuery(newVendors);
   };
+  useEffect(() => {
+    setRotate((prev) => (prev === '0deg' ? '180deg' : '0deg'));
+  }, [varParams.reverse]);
 
   const handleRemoveVendorOnChip = (e: React.MouseEvent<HTMLButtonElement>) => {
     const splittedVendors = vendorsQuery.split(',');
@@ -271,9 +277,13 @@ export default function AllProducts() {
                 varParams.sortKey
               }&reverse=${!varParams.reverse}&query=${vendorsQuery}`}
               preventScrollReset
-              className="gt-sm:hidden"
+              className="gt-sm:hidden flex gap-0"
+              style={{
+                rotate,
+              }}
             >
-              <LuArrowDownUp />
+              <HiArrowLongDown className="ltr:mr-[-4px] rtl:ml-[-4px]" />
+              <HiArrowNarrowUp className="ltr:ml-[-4px] rtl:mr-[-4px]" />
             </Link>
 
             <div data-filter className="gt-sm:w-full">

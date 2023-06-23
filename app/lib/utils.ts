@@ -128,7 +128,7 @@ function resolveToFromType(
       return `/${routePrefix.CATALOG}`;
 
     case type === 'PAGE':
-      return `/${handle}`;
+      return `/${routePrefix.PAGE}/${handle}`;
 
     // common cases: BLOG, PAGE, COLLECTION, PRODUCT, SHOP_POLICY, HTTP
     default:

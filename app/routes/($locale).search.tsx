@@ -11,7 +11,7 @@ import type {
   Product,
   ProductConnection,
 } from '@shopify/hydrogen/storefront-api-types';
-import {Suspense} from 'react';
+import {Suspense, useEffect, useState} from 'react';
 import {
   Pagination__unstable as Pagination,
   getPaginationVariables__unstable as getPaginationVariables,
@@ -84,13 +84,22 @@ export default function Search() {
   const {searchTerm, products, noResultRecommendations} =
     useLoaderData<typeof loader>();
   const noResults = products?.nodes?.length === 0;
+  const [searchTermDefault, setSearchTermDefault] = useState(
+    noResults ? searchTerm : '',
+  );
+  useEffect(() => {
+    setSearchTermDefault(noResults ? searchTermDefault : '');
+  }, [searchTerm]);
 
   return (
     <>
       <div className="m-[40px] sm-maximum:m-[16px] sm-maximum-md:m-[32px]">
         <Form method="get" className="relative flex w-full text-heading">
           <Input
-            defaultValue={searchTerm}
+            onChange={(e) => {
+              setSearchTermDefault(e.target.value);
+            }}
+            value={searchTermDefault}
             name="q"
             placeholder="Search..."
             type="search"

@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
 /* Tokens */
 :root {
   --color-primary: 20 20 20; /* Text, buttons, etc. */
@@ -135,6 +141,9 @@ shop-pay-button {
     @apply grid w-full snap-x snap-mandatory scroll-px-6 grid-flow-col justify-start gap-4 overflow-x-scroll px-6 pb-4;
   }
 }
+.article {
+  @apply font-noto;
+}
 
 @layer utilities {
   .fadeIn {
@@ -225,7 +234,7 @@ shop-pay-button {
   box-shadow: 0px 0px 0px;
 }
 
-.banner-shadow{
+.banner-shadow {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -233,7 +242,7 @@ shop-pay-button {
 }
 
 .banner-shadow::after {
-  content: "";
+  content: '';
   width: 100%;
   height: 100%;
   left: 0;
@@ -243,4 +252,20 @@ shop-pay-button {
   /* background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%); */
   background-color: #5a31f4;
   /* opacity: 0.7; */
+}
+.image-zoom img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  aspect-ratio: 3/4;
+}
+/* .image-zoom img::after {
+  opacity: 0 !important;
+} */
+.bg-inherit {
+  background-image: inherit !important;
+}
+
+details summary::-webkit-details-marker {
+  display: none;
 }
