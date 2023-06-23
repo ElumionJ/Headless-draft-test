@@ -265,3 +265,7 @@ shop-pay-button {
 .bg-inherit {
   background-image: inherit !important;
 }
+
+details summary::-webkit-details-marker {
+  display: none;
+}
