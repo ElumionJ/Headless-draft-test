@@ -211,7 +211,7 @@ export default function Product() {
   return (
     <>
       <Section className="!px-0 !py-0">
-        <div className=" sm-maximum:px-[16px] justify-center !gap-[63px] gt-l:!gap-[24px] !grid grid-cols-3 px-0 md:px-8 lg:px-10 gt-l:flex-col gt-l:!flex  gt-l:items-center bg-c-gray pt-[60px]">
+        <div className=" sm-maximum:px-[16px] justify-center !gap-[63px] gt-l:!gap-[24px] !grid grid-cols-3 px-0  lg:px-10 gt-l:flex-col gt-l:!flex  gt-l:items-center bg-c-gray pt-[60px] sm-maximum:pt-[30px] sm-maximum-md:pt-[30px]">
           <div className=" gt-l:hidden  px-[4px] ">
             <Heading
               as="h1"
@@ -230,23 +230,25 @@ export default function Product() {
           <div className="max-h-[468px] max-w-[368px] w-full gt-ssm:w-[280px]">
             <SwiperImages media={media.nodes} />
           </div>
-          <div className=" gt-l:flex flex-col hidden  px-[4px] max-w-[325px]">
-            <Heading as="h1" className="text-5xl  mb-8">
+          <div className=" gt-l:flex flex-col hidden max-w-[368px] w-full ">
+            <Heading as="h1" className="text-5xl">
               {title}
             </Heading>
           </div>
 
-          <div className="sticky md:-mb-nav md:top-nav md:-translate-y-nav md:pt-nav hiddenScroll md:overflow-y-scroll ">
-            <section className="flex flex-col w-full max-w-xl gap-8 p-6 md:mx-auto md:max-w-sm md:px-0 gt-ssm:p-1">
+          <div className=" md-lg:px-[40px] sm-maximum-md:px-[32px]  w-full hiddenScroll md:overflow-y-scroll ">
+            <section className="flex flex-col w-full gap-8  md:mx-auto md:px-0 ">
               {vendor && (
                 <div className="gt-l:hidden flex gap-[8px] items-center tracking-wider leading-[22px]">
-                  <span className="text-xl text-[#000] uppercase font-bebas ">
+                  <span className="text-xl text-[#000] uppercase font-bebas">
                     Brand:
                   </span>
                   <span className="text-[#333]">{vendor}</span>
                 </div>
               )}
-              <ProductForm />
+              <div className="max-w-[325px]">
+                <ProductForm />
+              </div>
               {descriptionHtml && (
                 <div
                   dangerouslySetInnerHTML={{__html: purifiedDescription}}
@@ -255,7 +257,7 @@ export default function Product() {
                 ></div>
               )}
               {vendor && (
-                <div className="gt-l:flex hidden gap-[8px] items-end">
+                <div className="gt-l:flex hidden gap-[8px] items-center">
                   <span className="text-xl text-[#000] uppercase font-bebas tracking-wider">
                     Brand:
                   </span>
@@ -264,7 +266,7 @@ export default function Product() {
                   </span>
                 </div>
               )}
-              <div className="grid gap-4 py-4">
+              {/* <div className="grid gap-4 py-4">
                 {shippingPolicy?.body && (
                   <ProductDetail
                     title="Shipping"
@@ -279,11 +281,11 @@ export default function Product() {
                     learnMore={`/policies/${refundPolicy.handle}`}
                   />
                 )}
-              </div>
+              </div> */}
             </section>
           </div>
         </div>
-        <div className="mt-24 px-[40px] mb-24 sm-maximum-md:px-[32px] sm-maximum:px-[16px]">
+        <div className="mt-24 sm-maximum:mt-0 sm-maximum-md:mt-0 sm-maximum:mb-[16px] sm-maximum-md:mb-[20px] px-[40px] mb-24  sm-maximum-md:px-[32px] sm-maximum:px-[16px]">
           <ProductTabs
             shippingInfoText={shippingInfoText}
             attributesTitle={attributesTitleString}
@@ -431,7 +433,7 @@ export function ProductForm() {
                   <AddToCartButton
                     lines={[
                       {
-                        merchandiseId: selectedVariant.id,
+                        merchandiseId: firstVariant.id,
                         quantity,
                       },
                     ]}
@@ -485,16 +487,16 @@ function ProductOptions({
         .map((option) => (
           <div
             key={option.name}
-            className="flex gap-[2px] flex-wrap mb-4 gap-y-2 last:mb-0"
+            className="flex gap-[8px] flex-wrap mb-4 gap-y-2 last:mb-0"
           >
             <Heading
               as="legend"
               size="lead"
-              className="min-w-[4rem] font-bebas text-[20px] tracking-wider text-[#000]"
+              className=" font-bebas text-[20px] tracking-wider text-[#000]"
             >
               {option.name}:
             </Heading>
-            <div className="flex flex-wrap items-baseline gap-4">
+            <div className="flex flex-wrap items-baseline gap-[6px]">
               {/**
                * First, we render a bunch of <Link> elements for each option value.
                * When the user clicks one of these buttons, it will hit the loader

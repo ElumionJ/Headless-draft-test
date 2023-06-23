@@ -26,7 +26,7 @@ export const SwiperImages = ({media}: Props) => {
       swiper.destroy(true);
     };
   }, [media]);
-  console.log(media[0]?.image);
+  
   return (
     <>
       <div className="min-h-[300px]">
@@ -37,7 +37,7 @@ export const SwiperImages = ({media}: Props) => {
                 <div
                   className="object-cover h-full relative"
                   style={{
-                    backgroundColor: `#000000`,
+                    backgroundColor: `#a5a5a5`,
                     width: '100%',
                     height: '100%',
                     backgroundImage: `url(${el?.image?.url})`,
@@ -52,7 +52,7 @@ export const SwiperImages = ({media}: Props) => {
                     zoom="250"
                     scale="1"
                     preload
-                    className={`object-cover image-zoom !w-full scale-[1]  bg-inherit after:!opacity-0`}
+                    className={`object-cover image-zoom !w-full scale-[1] z-50 after:!opacity-0`}
                   />
                   {/* <Image
                     aspectRatio="3/4"
