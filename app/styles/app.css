@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
 /* Tokens */
 :root {
   --color-primary: 20 20 20; /* Text, buttons, etc. */
@@ -253,7 +259,9 @@ shop-pay-button {
   object-fit: cover;
   aspect-ratio: 3/4;
 }
-
+/* .image-zoom img::after {
+  opacity: 0 !important;
+} */
 .bg-inherit {
   background-image: inherit !important;
 }

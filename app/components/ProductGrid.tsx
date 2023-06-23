@@ -58,9 +58,11 @@ export function ProductGrid({
   if (!haveProducts) {
     return (
       <>
-        <p>No products found on this collection</p>
+        <p className="font-bebas text-[20px]">
+          No products found on this collection
+        </p>
         <Link to="/products">
-          <p className="underline">Browse catalog</p>
+          <p className="underline font-noto text-[16px]">Browse catalog</p>
         </Link>
       </>
     );
