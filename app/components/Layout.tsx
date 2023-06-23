@@ -496,7 +496,7 @@ function DesktopHeader({
                       prefetch="intent"
                       className={({isActive}) => {
                         const mainStyles =
-                          ' py-8 rtl:py-6  flex justify-center items-center';
+                          ' py-8  flex justify-center items-center';
                         const activeStyle = '';
 
                         return isActive
@@ -629,7 +629,7 @@ function DesktopHeader({
             <CountrySelector />
           </div>
 
-          <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5 rtl:w-1/3" />
+          <AccountLink className="relative flex items-center justify-between w-8 h-8 focus:ring-primary/5 rtl:w-1/4" />
 
           <CartCount isHome={isHome} openCart={openCart} />
         </div>
@@ -652,7 +652,7 @@ function AccountLink({className}: {className?: string}) {
   return isLoggedIn ? (
     <Link to="/account" className={className}>
       {/* Kate */}
-      <div className="absolute top-[11%] right-[96%] rtl:left-[-2%] rtl:xl:left-[16%] rtl:top-[12%] rtl:right-auto">
+      <div className="absolute top-[11%] right-[102%] rtl:left-[-2%] rtl:xl:left-[16%] rtl:top-[12%] rtl:right-auto">
         <IconAccount />
       </div>
 
