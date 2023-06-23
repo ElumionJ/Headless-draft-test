@@ -109,17 +109,18 @@ export async function loader({params, request, context}: LoaderArgs) {
     },
   });
 
-  const customizeObject = await parseMetaobject(metaobject, context.storefront);
   if (!collection) {
     throw new Response('collection', {status: 404});
   }
 
   const collectionNodes = flattenConnection(collections);
-  const bannerImg = await context.storefront.query(BANNER_IMAGE_QUERY, {
-    variables: {
-      id: collection.metafield?.value,
-    },
-  });
+  const bannerImg =
+    collection.metafield?.value &&
+    (await context.storefront.query(BANNER_IMAGE_QUERY, {
+      variables: {
+        id: collection.metafield?.value,
+      },
+    }));
   // console.log(await bannerImg);
   const seo = seoPayload.collection({collection, url: request.url});
 
@@ -150,10 +151,12 @@ export default function Collection() {
   return (
     <>
       <div className="relative pt-[20px] h-[200px] flex items-center">
-        <ImageComponent
-          className=" z-[-1] w-full h-full object-cover banner-shadow"
-          data={bannerImg.node.previewImage}
-        />
+        {bannerImg && bannerImg.node.previewImage && (
+          <ImageComponent
+            className=" z-[-1] w-full h-full object-cover banner-shadow"
+            data={bannerImg.node.previewImage}
+          />
+        )}
         <h1 className=" px-[48px] z-3 text-[#fff] font-bebas text-[32px] leading-[120%] tracking-wider uppercase ">
           {collection.title}
         </h1>

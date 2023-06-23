@@ -44,7 +44,7 @@ export const ProductTabs = ({
             activeTab === 'description'
               ? 'block bg-c-red text-[#f2f2f2]'
               : 'none'
-          } w-[280px] text-center py-3 inline-block text-[20px] uppercase gt-l:w-full gt-l:text-center gt-l:border-y-[1px] gt-l:border-y-[#00000063]`}
+          } w-[280px] text-center py-3 inline-block text-[20px] uppercase gt-l:w-full gt-l:text-center gt-l:border-y-[1px] gt-l:border-y-[#00000063] font-bebas tracking-wider leading-[22px]`}
         >
           DESCRIPTION
         </button>
@@ -53,7 +53,7 @@ export const ProductTabs = ({
           onClick={handleClick}
           className={`${
             activeTab === 'shipping' ? 'block bg-c-red text-[#f2f2f2]' : 'none'
-          } w-[280px] text-center py-3 inline-block text-[20px] uppercase gt-l:w-full gt-l:text-center gt-l:border-y-[1px] gt-l:border-y-[#00000063]`}
+          } w-[280px] text-center py-3 inline-block text-[20px] uppercase gt-l:w-full gt-l:text-center gt-l:border-y-[1px] gt-l:border-y-[#00000063] font-bebas tracking-wider leading-[22px]`}
         >
           SHIPPING INFORMATION
         </button>
@@ -62,7 +62,7 @@ export const ProductTabs = ({
           onClick={handleClick}
           className={`${
             activeTab === 'payments' ? 'block bg-c-red text-[#f2f2f2]' : 'none'
-          } w-[280px] text-center py-3 inline-block text-[20px] uppercase gt-l:w-full gt-l:text-center gt-l:border-y-[1px] gt-l:border-y-[#00000063]`}
+          } w-[280px] text-center py-3 inline-block text-[20px] uppercase gt-l:w-full gt-l:text-center gt-l:border-y-[1px] gt-l:border-y-[#00000063] font-bebas tracking-wider leading-[22px]`}
         >
           Payments
         </button>
@@ -98,7 +98,7 @@ function Description({
     <div className="flex  gap-[170px] gt-l:flex-col gt-l:gap-[40px]">
       {attributes?.length > 0 && (
         <div className="min-w-[500px] gt-l:w-full gt-l:min-w-0">
-          <h3 className=" text-[24px] uppercase mb-[24px]">
+          <h3 className=" text-[24px] uppercase mb-[24px] font-bebas">
             {attributesTitle}
           </h3>
           <ul className="w-full">
@@ -107,10 +107,10 @@ function Description({
                 key={el.key.value}
                 className="flex gap-[30px] w-full border-b-[#D0D0D0] border-b-[1px] py-[24px] last:border-b-0 gt-m:grid gt-m:grid-cols-2"
               >
-                <h4 className="min-w-[180px] gt-l:w-full gt-l:text-[14px] gt-l:min-w-0 text-[16px] font-bold leading-[150%]">
+                <h4 className="min-w-[180px] gt-l:w-full gt-l:text-[14px] gt-l:min-w-0 text-[16px] font-bold leading-[150%] font-noto">
                   {el.title.value}
                 </h4>
-                <p className=" w-full text-[16px] gt-l:text-[14px] leading-[150%]">
+                <p className=" w-full text-[16px] gt-l:text-[14px] leading-[150%] font-noto">
                   {el.meaning.value}
                 </p>
               </li>
@@ -119,8 +119,10 @@ function Description({
         </div>
       )}
       <div className="">
-        <h3 className="text-[24px] pb-[24px] uppercase">About {title}</h3>
-        <p className="text-[16px] leading-[150%]">{description}</p>
+        <h3 className="text-[24px] pb-[24px] uppercase font-bebas">
+          About {title}
+        </h3>
+        <p className="text-[16px] leading-[150%] font-noto">{description}</p>
       </div>
     </div>
   );
@@ -129,15 +131,19 @@ function Description({
 function ShippingInfo({text}: {text: string}) {
   return (
     <div className=" gt-l:w-full">
-      <h3 className="text-[24px] uppercase mb-[24px]">Shipping Info</h3>
-      <p className=" text-[16px] leading-[150%] gt-l:text-[14px]">{text}</p>
+      <h3 className="text-[24px] uppercase mb-[24px] font-bebas">
+        Shipping Info
+      </h3>
+      <p className=" text-[16px] leading-[150%] gt-l:text-[14px] font-noto">
+        {text}
+      </p>
     </div>
   );
 }
 function Payments() {
   return (
     <div>
-      <h3 className="text-[24px] uppercase mb-[24px]">Payments</h3>
+      <h3 className="text-[24px] uppercase mb-[24px] font-bebas">Payments</h3>
     </div>
   );
 }
