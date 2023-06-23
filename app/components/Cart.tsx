@@ -165,7 +165,7 @@ function CartLines({
     price:
       layout === 'page'
         ? 'item flex  flex-row-reverse gap-x-8 font-bebas text-[20px]'
-        : 'item ajax-styles flex flex-col gap-y-16 font-bebas text-[20px] max-w-[65px] w-full',
+        : 'item ajax-styles flex flex-col  gap-y-16 font-bebas text-[20px] max-w-[65px] w-full',
   };
 
   const className = clsx([
@@ -440,7 +440,7 @@ function CartLineItem({
       </div>
 
       {/*  className="flex items-center justify-between flex-grow gap-6" */}
-      <div className="flex flex-col md:flex-row justify-between flex-grow">
+      <div className="flex flex-col sm:flex-row justify-between flex-grow">
         <div className={additionalClasses.cartItem}>
           {/* max-w-[200px] */}
           <div className="font-bebas text-base flex flex-col h-full justify-between">
