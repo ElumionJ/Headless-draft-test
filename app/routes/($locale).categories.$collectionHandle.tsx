@@ -20,7 +20,7 @@ import parseMetaobject from '~/helpers/parseMetaobject';
 
 export const headers = routeHeaders;
 
-const PAGINATION_SIZE = 48;
+const PAGINATION_SIZE = 250;
 
 type VariantFilterParam = Record<string, string | boolean>;
 type PriceFiltersQueryParam = Record<'price', {max?: number; min?: number}>;

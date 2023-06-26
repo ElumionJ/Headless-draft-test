@@ -1,5 +1,5 @@
 import type {SyntheticEvent} from 'react';
-import {useContext, useMemo, useState} from 'react';
+import {useContext, useMemo, useRef, useState} from 'react';
 import {Menu} from '@headlessui/react';
 import type {Location} from '@remix-run/react';
 import {
@@ -26,6 +26,7 @@ import {
 } from '~/components';
 import {HiArrowSmDown} from 'react-icons/hi';
 import {TfiClose} from 'react-icons/tfi';
+import useOutsideClick from '~/hooks/useOutsideClick';
 
 export type AppliedFilter = {
   label: string;
@@ -57,40 +58,42 @@ export function SortFilter({
 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const itemsCount = children.props.collection.products.nodes.length;
+  const sortByRef = useRef(null);
+  useOutsideClick(sortByRef, setIsOpen);
   return (
     <>
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center sm:gap-[40px]">
-          <button
-            className={`${
-              isOpen ? 'bg-c-red text-[#fff]' : 'bg-c-gray'
-            } py-[13px] px-[24px] rounded-[100px] flex justify-between font-bebas items-center gap-1 w-[180px] gt-sm:w-full uppercase text-[20px]`}
-            onClick={() => {
-              setIsOpen((prev) => !prev);
-            }}
-          >
-            Sort By
-            <HiArrowSmDown className={`${isOpen && 'rotate-180'} `} />
-          </button>
+          <div className="relative" ref={sortByRef}>
+            <button
+              className={`${
+                isOpen ? 'bg-c-red text-[#fff]' : 'bg-c-gray'
+              } py-[13px] px-[24px] rounded-[100px] flex justify-between font-bebas items-center gap-1 w-[180px] gt-sm:w-full uppercase text-[20px]`}
+              onClick={() => {
+                setIsOpen((prev) => !prev);
+              }}
+            >
+              Sort By
+              <HiArrowSmDown className={`${isOpen && 'rotate-180'} `} />
+            </button>
+            <div
+              className={`${
+                isOpen ? 'block' : 'hidden'
+              } absolute top-full rtl:right-0 left-0 bg-[#fff] w-full p-[24px] font-noto shadow-darkPopUp mt-[13px] z-30 gt-l:hidden`}
+            >
+              <FiltersDrawer
+                collections={collections}
+                filters={filters}
+                appliedFilters={appliedFilters}
+              />
+            </div>
+          </div>
 
           <AppliedFilters filters={appliedFilters} />
         </div>
         <SortMenu itemsCount={itemsCount} />
       </div>
       <div className="flex flex-col flex-wrap md:flex-row">
-        <div
-          className={`transition-all duration-200 ${
-            isOpen
-              ? 'opacity-100 min-w-full md:min-w-[240px] md:w-[240px] md:pr-8 max-h-full'
-              : 'opacity-0 md:min-w-[0px] md:w-[0px] pr-0 max-h-0 md:max-h-full'
-          }`}
-        >
-          <FiltersDrawer
-            collections={collections}
-            filters={filters}
-            appliedFilters={appliedFilters}
-          />
-        </div>
         <div className="flex-1">{children}</div>
       </div>
     </>
@@ -160,41 +163,30 @@ export function FiltersDrawer({
 
   return (
     <>
-      <nav className="py-8">
-        {/*  {appliedFilters.length > 0 ? (
-          <div className="pb-8">
-            <AppliedFilters filters={appliedFilters} />
-          </div>
-        ) : null} */}
-
-        <Heading as="h4" size="lead" className="pb-4">
-          Filter By
-        </Heading>
-        <div className="divide-y">
+      <nav className="">
+        <div className="">
           {filters.map(
             (filter: Filter) =>
               filter.values.length > 1 && (
-                <Disclosure as="div" key={filter.id} className="w-full">
-                  {({open}) => (
-                    <>
-                      <Disclosure.Button className="flex justify-between w-full py-4">
-                        <Text size="lead">{filter.label}</Text>
-                        <IconCaret direction={open ? 'up' : 'down'} />
-                      </Disclosure.Button>
-                      <Disclosure.Panel key={filter.id}>
-                        <ul key={filter.id} className="py-2">
-                          {filter.values?.map((option) => {
-                            return (
-                              <li key={option.id} className="pb-4">
-                                {filterMarkup(filter, option)}
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </Disclosure.Panel>
-                    </>
-                  )}
-                </Disclosure>
+                <div key={filter.id} className="w-full">
+                  <div className="flex justify-between w-full ">
+                    <Text
+                      size="lead"
+                      className="font-bebas uppercase tracking-wider"
+                    >
+                      {filter.label}
+                    </Text>
+                  </div>
+                  <ul key={filter.id} className=" pl-[8px]">
+                    {filter.values?.map((option) => {
+                      return (
+                        <li key={option.id} className="h-fit w-full">
+                          {filterMarkup(filter, option)}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
               ),
           )}
         </div>
@@ -223,7 +215,7 @@ function AppliedFilters({filters = []}: {filters: AppliedFilter[]}) {
                 {filter.label}
               </span>
               <span className="text-[11px]">
-                <IconXMark />
+                <TfiClose />
               </span>
             </Link>
           );
