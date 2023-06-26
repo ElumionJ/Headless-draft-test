@@ -207,9 +207,6 @@ function MenuMobileNav({
   openCart: () => void;
 }) {
   const params = useParams();
-
-  //Kate
-
   const arText = 'تسجيلدخول';
   const enText = 'Login';
 
@@ -222,7 +219,7 @@ function MenuMobileNav({
             <TfiClose />
           </button>
           <Link to={'/'} onClick={onClose}>
-            <img src={logo} className="w-[110px]" alt="mobile logo" />
+            <img src={logo} className="w-[110px] h-[30px]" alt="mobile logo" />
           </Link>
           <CartCount
             variant={'white'}

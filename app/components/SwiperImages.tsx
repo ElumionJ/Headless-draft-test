@@ -1,5 +1,4 @@
 import {useEffect} from 'react';
-import Swiper from 'swiper';
 import {Image} from '@shopify/hydrogen';
 import React from 'react';
 import ImageZoom from 'react-image-zooom';
@@ -9,31 +8,13 @@ interface Props {
 }
 
 export const SwiperImages = ({media}: Props) => {
-  useEffect(() => {
-    const swiper = new Swiper('.swiper', {
-      slidesPerView: 1, // Number of slides per view
-      loop: true,
-      autoHeight: true,
-
-      pagination: {
-        el: '.swiper-pagination', // Pagination dots selector
-        clickable: true, // Enable navigation through pagination dots
-        enabled: true,
-      },
-    });
-    // swiper.destroy(true);
-    return () => {
-      swiper.destroy(true);
-    };
-  }, [media]);
-  
   return (
     <>
-      <div className="min-h-[300px]">
-        <div className="swiper w-full">
-          <div className="swiper-wrapper">
+      <div className="min-h-[300px] m-auto">
+        <div className="w-full">
+          <div>
             {media.map((el) => (
-              <div key={el.id} className="swiper-slide aspect-[3/4]">
+              <div key={el.id} className="aspect-[3/4]">
                 <div
                   className="object-cover h-full relative"
                   style={{
@@ -63,11 +44,6 @@ export const SwiperImages = ({media}: Props) => {
                 </div>
               </div>
             ))}
-          </div>
-          <div className="swiper-pagination">
-            <span>.</span>
-            <span>.</span>
-            <span>.</span>
           </div>
         </div>
       </div>
