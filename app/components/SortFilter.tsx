@@ -24,6 +24,8 @@ import {
   Text,
   SortBy,
 } from '~/components';
+import {HiArrowSmDown} from 'react-icons/hi';
+import {TfiClose} from 'react-icons/tfi';
 
 export type AppliedFilter = {
   label: string;
@@ -57,7 +59,22 @@ export function SortFilter({
   const itemsCount = children.props.collection.products.nodes.length;
   return (
     <>
-      <div className="flex items-center justify-end w-full">
+      <div className="flex items-center justify-between w-full">
+        <div className="flex items-center sm:gap-[40px]">
+          <button
+            className={`${
+              isOpen ? 'bg-c-red text-[#fff]' : 'bg-c-gray'
+            } py-[13px] px-[24px] rounded-[100px] flex justify-between font-bebas items-center gap-1 w-[180px] gt-sm:w-full uppercase text-[20px]`}
+            onClick={() => {
+              setIsOpen((prev) => !prev);
+            }}
+          >
+            Sort By
+            <HiArrowSmDown className={`${isOpen && 'rotate-180'} `} />
+          </button>
+
+          <AppliedFilters filters={appliedFilters} />
+        </div>
         <SortMenu itemsCount={itemsCount} />
       </div>
       <div className="flex flex-col flex-wrap md:flex-row">
@@ -144,11 +161,11 @@ export function FiltersDrawer({
   return (
     <>
       <nav className="py-8">
-        {appliedFilters.length > 0 ? (
+        {/*  {appliedFilters.length > 0 ? (
           <div className="pb-8">
             <AppliedFilters filters={appliedFilters} />
           </div>
-        ) : null}
+        ) : null} */}
 
         <Heading as="h4" size="lead" className="pb-4">
           Filter By
@@ -191,19 +208,21 @@ function AppliedFilters({filters = []}: {filters: AppliedFilter[]}) {
   const location = useLocation();
   return (
     <>
-      <Heading as="h4" size="lead" className="pb-4">
+      {/* <Heading as="h4" size="lead" className="pb-4">
         Applied filters
-      </Heading>
+      </Heading> */}
       <div className="flex flex-wrap gap-2">
         {filters.map((filter: AppliedFilter) => {
           return (
             <Link
               to={getAppliedFilterLink(filter, params, location)}
-              className="flex px-2 border rounded-full gap"
+              className="flex p-[8px] gap-[8px]  items-center bg-black text-[#fff] rounded-[2px]"
               key={`${filter.label}-${filter.urlParam}`}
             >
-              <span className="flex-grow">{filter.label}</span>
-              <span>
+              <span className="font-noto font-bold text-[12px] leading-[150%]">
+                {filter.label}
+              </span>
+              <span className="text-[11px]">
                 <IconXMark />
               </span>
             </Link>
