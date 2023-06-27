@@ -544,7 +544,7 @@ function DesktopHeader({
                                   submenu?.items.map((el) => (
                                     <li key={el.id}>
                                       <Link
-                                        className="text-[#333] font-noto leading-[150%] text-[16px]  py-3 inline-block"
+                                        className="text-[#333] font-noto leading-[150%] text-[16px]  py-3 block"
                                         key={`${item.id}-${submenu.id}-${el.id}`}
                                         to={el.to}
                                         target={el.target}
