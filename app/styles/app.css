@@ -266,9 +266,7 @@ shop-pay-button {
   top: 0;
   z-index: 2;
   position: absolute;
-  /* background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%); */
   background-color: #5a31f4;
-  /* opacity: 0.7; */
 }
 .image-zoom img {
   height: 100%;
@@ -276,13 +274,9 @@ shop-pay-button {
   object-fit: cover;
   aspect-ratio: 3/4;
 }
-/* .image-zoom img::after {
-  opacity: 0 !important;
-} */
 .bg-inherit {
   background-image: inherit !important;
 }
-
 details summary::-webkit-details-marker {
   display: none;
 }

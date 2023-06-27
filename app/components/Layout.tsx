@@ -474,9 +474,15 @@ function DesktopHeader({
                     <Link
                       to="/"
                       key={item.id}
-                      className="w-[140px]   flex justify-center items-center"
+                      className="w-[140px] flex justify-center items-center"
                     >
-                      <img src={logo} alt="Logo" loading="lazy" />
+                      <img
+                        src={logo}
+                        alt="Logo"
+                        width={140}
+                        className="w-[140px]"
+                        loading="lazy"
+                      />
                     </Link>
                   </div>
                 );
