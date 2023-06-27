@@ -80,7 +80,7 @@ export function SortFilter({
                   setIsOpen((prev) => !prev);
                 }}
               >
-                Sort By
+                Filter by
                 <HiArrowSmDown className={`${isOpen && 'rotate-180'} `} />
               </button>
               <div

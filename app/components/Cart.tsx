@@ -227,7 +227,7 @@ function CartCheckoutActions({
         <Button
           as="span"
           width="full"
-          className="font-bold text-white mb-4 uppercase text-xs font-noto flex items-center justify-center gap-x-2 px-3 py-4  bg-[#D80F16] rounded-[100px] w-full hover:opacity-80"
+          className="font-bold text-white mb-4 uppercase text-xs font-noto flex items-center justify-center gap-x-2 px-3 py-4  bg-c-red rounded-[100px] w-full hover:opacity-80"
         >
           {languageText}
           <svg
@@ -634,7 +634,7 @@ export function CartEmpty({
     <div ref={scrollRef} className={container[layout]} hidden={hidden}>
       <section className="grid gap-8 pt-12 ">
         <div className="flex flex-col items-center justify-center ">
-          <span className="text-[#D80F16] mb-2 font-bebas font-normal text-[32px]">
+          <span className="text-feature-link-color mb-2 font-bebas font-normal text-[32px]">
             OOOOPS...
           </span>
           <span className="text-black font-bebas font-normal text-[24px]">
@@ -645,7 +645,7 @@ export function CartEmpty({
           <Link to="/products">
             <Button
               onClick={onClose}
-              className="flex items-center justify-center gap-x-5 px-3 py-4 w-[200px] bg-[#D80F16] rounded-[100px] m-auto hover:opacity-80 text-white font-noto uppercase text-xs font-bold	"
+              className="flex items-center justify-center gap-x-5 px-3 py-4 w-[200px] bg-c-red rounded-[100px] m-auto hover:opacity-80 text-white font-noto uppercase text-xs font-bold	"
             >
               {languageTextStart}
               <svg

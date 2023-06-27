@@ -307,7 +307,7 @@ export function IconAddToCartBag(props: IconProps) {
       />
       <path
         d="M9.9502 14.7064C9.9502 14.7064 11.3735 16.4711 12.5002 16.4711C13.6269 16.4711 15.0502 14.7064 15.0502 14.7064"
-        stroke="#D80F16"
+        stroke="#000"
         strokeLinecap="round"
       />
     </Icon>

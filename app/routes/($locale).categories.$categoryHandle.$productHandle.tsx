@@ -398,7 +398,7 @@ export function ProductForm() {
           <span className="font-bebas text-[20px] leading-[110%] uppercase tracking-wider text-[#000]">
             Price:
           </span>
-          <span className="font-bebas text-[32px] md-only:text-[20px] leading-[120%] tracking-wider text-[#D80F16]">
+          <span className="font-bebas text-[32px] md-only:text-[20px] leading-[120%] tracking-wider text-feature-link-color">
             {firstVariant.price.currencyCode}
             {firstVariant.price.amount}
           </span>
@@ -414,7 +414,7 @@ export function ProductForm() {
               <span className="font-bebas text-[20px] leading-[110%] uppercase tracking-wider text-[#000]">
                 Price:
               </span>
-              <span className="font-bebas text-[32px] md-only:text-[20px] leading-[120%] tracking-wider text-[#D80F16]">
+              <span className="font-bebas text-[32px] md-only:text-[20px] leading-[120%] tracking-wider text-feature-link-color">
                 {firstVariant.price.currencyCode}
                 {firstVariant.price.amount}
               </span>
