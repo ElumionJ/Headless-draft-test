@@ -180,7 +180,7 @@ export default function AllProducts() {
     setVendorsQuery(newVendors);
   };
   useEffect(() => {
-    setRotate((prev) => (prev === '0deg' ? '180deg' : '0deg'));
+    setRotate(varParams.reverse ? '0deg' : '180deg');
   }, [varParams.reverse]);
 
   const handleRemoveVendorOnChip = (e: React.MouseEvent<HTMLButtonElement>) => {
