@@ -20,7 +20,7 @@ import parseMetaobject from '~/helpers/parseMetaobject';
 
 export const headers = routeHeaders;
 
-const PAGINATION_SIZE = 48;
+const PAGINATION_SIZE = 250;
 
 type VariantFilterParam = Record<string, string | boolean>;
 type PriceFiltersQueryParam = Record<'price', {max?: number; min?: number}>;
@@ -41,9 +41,10 @@ export async function loader({params, request, context}: LoaderArgs) {
   const knownFilters = ['productVendor', 'productType'];
   const available = 'available';
   const variantOption = 'variantOption';
-  const {sortKey, reverse} = getSortValuesFromParam(
+  const {sortKey} = getSortValuesFromParam(
     searchParams.get('sort') as SortParam,
   );
+  const reverse = searchParams.get('reverse') === 'true';
   const cursor = searchParams.get('cursor');
   const filters: FiltersQueryParams = [];
   const appliedFilters: AppliedFilter[] = [];
@@ -284,35 +285,25 @@ query GetBannerImage($id:ID!) {
 
 function getSortValuesFromParam(sortParam: SortParam | null) {
   switch (sortParam) {
-    case 'price-high-low':
+    case 'price':
       return {
         sortKey: 'PRICE',
-        reverse: true,
-      };
-    case 'price-low-high':
-      return {
-        sortKey: 'PRICE',
-        reverse: false,
       };
     case 'best-selling':
       return {
         sortKey: 'BEST_SELLING',
-        reverse: false,
       };
     case 'newest':
       return {
         sortKey: 'CREATED',
-        reverse: true,
       };
     case 'featured':
       return {
         sortKey: 'MANUAL',
-        reverse: false,
       };
     default:
       return {
         sortKey: 'RELEVANCE',
-        reverse: false,
       };
   }
 }

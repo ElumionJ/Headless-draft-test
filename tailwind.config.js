@@ -18,6 +18,7 @@ export default {
         lg: '64em',
         xl: '80em',
         'sm-maximum': {max: '37.5em'}, //600px
+        'sm-minimum': {min: '37.51em'}, //600px and higher
         'sm-maximum-md': {min: '37.5em', max: '56.3em'}, //600 - 900
         'md-lg': {min: '56.3em'}, //900 and higher
         '2xl': '96em',

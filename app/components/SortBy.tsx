@@ -23,7 +23,7 @@ export const SortBy = ({
   return (
     <div
       ref={filterRef}
-      className="relative  z-20 font-bebas tracking-wider gt-sm:w-full"
+      className="relative  z-30 font-bebas tracking-wider gt-sm:w-full"
     >
       <button
         className={`${
@@ -42,10 +42,11 @@ export const SortBy = ({
         {dataLinks.map((el, i) => (
           <li key={el.value}>
             <Link
-              className="w-full block py-[13px] px-[24px] bg-c-gray hover:bg-slate-200"
+              className="w-full block py-[13px] px-[24px] bg-c-gray  hover:bg-slate-200"
               onClick={() => {
                 setOpen(false);
               }}
+              prefetch="intent"
               to={`${linkStr}${isCategoriesPage ? '?sort' : '&sortKey'}=${
                 el.value
               }`}
