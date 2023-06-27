@@ -227,7 +227,7 @@ export default function Product() {
               ></div>
             )}
           </div>
-          <div className="max-h-[468px] max-w-[368px] w-full gt-ssm:w-[280px]">
+          <div className="max-h-[468px] max-w-[368px] w-full gt-ssm:w-[280px] m-auto">
             <SwiperImages media={media.nodes} />
           </div>
           <div className=" gt-l:flex flex-col hidden max-w-[368px] w-full ">
