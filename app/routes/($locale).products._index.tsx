@@ -231,7 +231,7 @@ export default function AllProducts() {
     <>
       <header data-header className="relative w-full">
         <ImageComponent
-          loading={'eager'}
+          loading={'lazy'}
           data={customize.title_image.value}
           className="object-cover  h-full fadeIn relative title-bg-shadow max-h-[200px] "
         />

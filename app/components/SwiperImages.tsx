@@ -1,6 +1,4 @@
-import {useEffect} from 'react';
 import {Image} from '@shopify/hydrogen';
-import React from 'react';
 import ImageZoom from 'react-image-zooom';
 
 interface Props {
