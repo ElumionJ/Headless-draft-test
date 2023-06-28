@@ -38,7 +38,7 @@ export function HomePageBanner({data}: Props) {
 
           <Link
             to={'/products'}
-            className="text-white w-[158px] h-[48px] mb-4 uppercase flex items-center justify-center gap-x-2 px-3 py-4  bg-[#D80F16] rounded-[100px] hover:opacity-80 font-noto tracking-widest font-bold  text-[12px] rtl:tracking-normal"
+            className="text-white w-[158px] h-[48px] mb-4 uppercase flex items-center justify-center gap-x-2 px-3 py-4  bg-c-red rounded-[100px] hover:opacity-80 font-noto tracking-widest font-bold  text-[12px] rtl:tracking-normal"
           >
             {data.button.value}
             <span className="rtl:scale-x-[-1]">

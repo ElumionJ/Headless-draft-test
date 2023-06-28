@@ -80,7 +80,7 @@ export function SortFilter({
                   setIsOpen((prev) => !prev);
                 }}
               >
-                Sort By
+                Filter by
                 <HiArrowSmDown className={`${isOpen && 'rotate-180'} `} />
               </button>
               <div
@@ -199,7 +199,6 @@ export function FiltersDrawer({
             <TfiClose />
           </button>
         </div>
-        <Link></Link>
         <div className="sm-maximum:px-[15px] sm-maximum:py-6">
           {filters.map(
             (filter: Filter) =>
@@ -250,6 +249,7 @@ export function FiltersDrawer({
 function AppliedFilters({filters = []}: {filters: AppliedFilter[]}) {
   const [params] = useSearchParams();
   const location = useLocation();
+
   return (
     <>
       {/* <Heading as="h4" size="lead" className="pb-4">

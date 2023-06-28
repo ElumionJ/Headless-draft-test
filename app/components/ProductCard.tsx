@@ -141,9 +141,9 @@ export function ProductCard({
         >
           {availableForSale ? 'Add to Bag' : 'Out of stock'}
         </Text>
-        {availableForSale && (
+        {/* {availableForSale && (
           <IconAddToCartBag className="mt-[-4px] ml-[-4px]" />
-        )}
+        )} */}
       </AddToCartButton>
     </div>
   );
