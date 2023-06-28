@@ -215,7 +215,7 @@ function MenuMobileNav({
     <>
       <nav className="font-bebas grid gap-4 p-[17px]  sm:gap-6 sm:pb-8  text-white">
         <div className="flex justify-between items-center border-b-[1px] border-[#A8272D] pb-3">
-          <button className="text-[20px]" onClick={onClose}>
+          <button className="text-[20px]" aria-label="Close" onClick={onClose}>
             <TfiClose />
           </button>
           <Link to={'/'} onClick={onClose}>
@@ -229,56 +229,59 @@ function MenuMobileNav({
         </div>
 
         <ul className="overflow-y-scroll gap-y-4 flex flex-col justify-center">
-          <Form
-            method="get"
-            action={params.locale ? `/${params.locale}/search` : '/search'}
-            onSubmit={onClose}
-            className=" font-noto items-center flex gap-2  sm:flex bg-white rounded-[100px] mt-[14px] mb-[14px] rtl:px-4"
-          >
-            <button
-              type="submit"
-              className="relative flex items-center justify-center w-8 h-8 text-[#A0A0A0] pl-4"
+          <li key={'search'} className="block">
+            <Form
+              method="get"
+              action={params.locale ? `/${params.locale}/search` : '/search'}
+              onSubmit={onClose}
+              className="font-noto items-center flex gap-2 sm:flex bg-white rounded-[100px] mt-[14px] mb-[14px] rtl:px-4"
             >
-              <div>
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 18 18"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <circle
-                    cx="6.74142"
-                    cy="6.74142"
-                    r="6.74142"
-                    transform="matrix(-1 0 0 1 15.918 2.08398)"
-                    stroke="#A0A0A0"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M4.48828 13.8652L1.84526 16.5014"
-                    stroke="#A0A0A0"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-            </button>
-            <Input
-              className={`${
-                isHome
-                  ? 'focus:border-contrast/20 dark:focus:border-primary/20 text-black w-full '
-                  : 'focus:border-primary/20 text-black w-full'
-              } block `}
-              type="search"
-              variant="minisearch"
-              placeholder="Tabasco, Cholula, Very Hot"
-              name="q"
-            />
-          </Form>
+              <button
+                aria-label="Submit"
+                type="submit"
+                className="relative flex items-center justify-center w-8 h-8 text-[#A0A0A0] pl-4"
+              >
+                <div>
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle
+                      cx="6.74142"
+                      cy="6.74142"
+                      r="6.74142"
+                      transform="matrix(-1 0 0 1 15.918 2.08398)"
+                      stroke="#A0A0A0"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M4.48828 13.8652L1.84526 16.5014"
+                      stroke="#A0A0A0"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              </button>
+              <Input
+                className={`${
+                  isHome
+                    ? 'focus:border-contrast/20 dark:focus:border-primary/20 text-black w-full '
+                    : 'focus:border-primary/20 text-black w-full'
+                } block `}
+                type="search"
+                variant="minisearch"
+                placeholder="Tabasco, Cholula, Very Hot"
+                name="q"
+              />
+            </Form>
+          </li>
 
           {(menu?.items || []).map((item) => {
             // if (item.to === '/products') {
@@ -347,6 +350,7 @@ function MenuMobileNav({
 
       <Link to="/account/login" onClick={onClose} className="mt-[80px] mx-3">
         <Button
+          aria-label="Button"
           as="span"
           width="full"
           className=" border-white border-2 text-white mb-4  flex items-center justify-center  px-3 py-4  bg-c-red rounded-[100px] w-full hover:opacity-80"
@@ -387,6 +391,7 @@ function MobileHeader({
     >
       <div className="flex items-center justify-start w-full gap-4 ">
         <button
+          aria-label="Icon menu"
           onClick={openMenu}
           className="relative flex items-center justify-center w-5 h-8 text-black"
         >
@@ -456,6 +461,7 @@ function DesktopHeader({
           className="flex items-center gap-2 "
         >
           <button
+            aria-label="Icon search"
             type="submit"
             className="relative flex items-center justify-center w-5 h-8 focus:ring-primary/5"
           >
@@ -550,7 +556,7 @@ function DesktopHeader({
                                   submenu?.items.map((el) => (
                                     <li key={el.id}>
                                       <Link
-                                        className="text-[#333] font-noto leading-[150%] text-[16px]  py-3 inline-block"
+                                        className="text-[#333] font-noto leading-[150%] text-[16px]  py-3 block"
                                         key={`${item.id}-${submenu.id}-${el.id}`}
                                         to={el.to}
                                         target={el.target}
@@ -761,6 +767,7 @@ function Badge({
 
   return (
     <button
+      aria-label="Counter"
       onClick={openCart}
       className="relative flex items-center justify-center w-5 h-8 focus:ring-primary/5"
     >
@@ -834,7 +841,7 @@ export function Footer({
         <div className="flex items-center justify-end gap-x-6 rtl:justify-start">
           {/* instagram */}
 
-          <Link to="/" className="cursor-pointer ">
+          <Link to="/" className="cursor-pointer" aria-label="Instagram">
             <svg
               width="24"
               height="25"
@@ -864,7 +871,7 @@ export function Footer({
           </Link>
 
           {/* facebook */}
-          <Link to="/" className="cursor-pointer">
+          <Link to="/" className="cursor-pointer" aria-label="Facebook">
             <svg
               width="24"
               height="24"
@@ -890,7 +897,7 @@ export function Footer({
           </Link>
 
           {/* youtube */}
-          <Link to="/" className=" cursor-pointer">
+          <Link to="/" className="cursor-pointer" aria-label="Youtube">
             <svg
               width="32"
               height="24"

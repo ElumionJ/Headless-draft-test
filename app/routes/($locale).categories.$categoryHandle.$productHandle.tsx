@@ -420,7 +420,7 @@ export function ProductForm() {
               </span>
             </div>
             {isOutOfStock ? (
-              <Button variant="secondary" disabled>
+              <Button aria-label="Sold out" variant="secondary" disabled>
                 <Text>Sold out</Text>
               </Button>
             ) : (

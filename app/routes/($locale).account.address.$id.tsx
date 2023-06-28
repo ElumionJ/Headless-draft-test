@@ -323,6 +323,7 @@ export default function EditAddress() {
           </div>
           <div className="mt-8">
             <Button
+              aria-label="Save"
               className="w-full rounded focus:shadow-outline"
               type="submit"
               variant="primary"
@@ -333,6 +334,7 @@ export default function EditAddress() {
           </div>
           <div>
             <Button
+              aria-label="Cancel"
               to=".."
               className="w-full mt-2 rounded focus:shadow-outline"
               variant="secondary"
