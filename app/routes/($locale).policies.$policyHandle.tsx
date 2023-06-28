@@ -64,6 +64,7 @@ export default function Policies() {
           className="grid items-start flex-grow gap-4 md:sticky top-36 md:w-5/12"
         >
           <Button
+            aria-label="Back to Policies"
             className="justify-self-start"
             variant="inline"
             to={'/policies'}

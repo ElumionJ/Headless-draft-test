@@ -12,7 +12,12 @@ export function NotFound({type = 'page'}: {type?: string}) {
         <Text width="narrow" as="p">
           {description}
         </Text>
-        <Button width="auto" variant="secondary" to={'/'}>
+        <Button
+          aria-label="Take me to the home page"
+          width="auto"
+          variant="secondary"
+          to={'/'}
+        >
           Take me to the home page
         </Button>
       </PageHeader>

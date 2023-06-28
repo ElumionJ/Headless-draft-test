@@ -107,6 +107,7 @@ export default function Search() {
             className="font-bebas font-[10px]"
           />
           <button
+            aria-label="Go"
             className="absolute right-0 py-2 rtl:right-auto rtl:left-0 font-bebas"
             type="submit"
           >

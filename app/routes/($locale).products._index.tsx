@@ -260,6 +260,7 @@ export default function AllProducts() {
                       {el.replaceAll("'", '')}
                     </span>
                     <button
+                      aria-label="button"
                       data-value={el}
                       value={el}
                       className="text-[11px]"
@@ -308,6 +309,7 @@ export default function AllProducts() {
                   {el.replaceAll("'", '')}
                 </span>
                 <button
+                  aria-label="button"
                   data-value={el}
                   value={el}
                   className="text-[11px]"

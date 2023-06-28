@@ -38,6 +38,7 @@ export const ProductTabs = ({
         className=" border-t-[1px] border-[#000] border-solid gt-l:flex-col gt-l:flex"
       >
         <button
+          aria-label="Description"
           data-name="description"
           onClick={handleClick}
           className={`${
@@ -49,6 +50,7 @@ export const ProductTabs = ({
           DESCRIPTION
         </button>
         <button
+          aria-label="Shipping information"
           data-name="shipping"
           onClick={handleClick}
           className={`${
@@ -58,6 +60,7 @@ export const ProductTabs = ({
           SHIPPING INFORMATION
         </button>
         <button
+          aria-label="Payments"
           data-name="payments"
           onClick={handleClick}
           className={`${
