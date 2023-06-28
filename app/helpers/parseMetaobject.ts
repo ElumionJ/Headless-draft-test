@@ -14,16 +14,11 @@ export default async function parseMetaobject(
     };
   } = {};
   const references: any[] = [];
-  const nodesIDs: string[] = [];
 
   await Promise.all(
     metaobject.fields.map(async (el) => {
       if (el.type === 'file_reference') {
-        // const imgUrl = await storefront.query(IMAGE_QUERY, {
-        //   variables: {id: el.value},
-        // });
         parsedMetaobject[el.key] = {...el};
-        nodesIDs.push(el.value!);
         references.push(parsedMetaobject[el.key]);
         return;
       } else if (el.type === 'number_integer') {
@@ -36,10 +31,14 @@ export default async function parseMetaobject(
       parsedMetaobject[el.key] = {...el};
     }),
   );
+
   const res = await storefront.query(IMAGE_QUERY, {
-    variables: {id: [references[0].value]},
+    variables: {id: references.map((el) => el.value)},
   });
-  console.log(res.nodes);
+  res.nodes.forEach((el, i) => {
+    references[i].value = el.image;
+  });
+
   return parsedMetaobject;
 }
 
