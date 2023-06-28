@@ -141,7 +141,11 @@ function Account({
     <>
       <PageHeader heading={heading}>
         <Form method="post" action={usePrefixPathWithLocale('/account/logout')}>
-          <button type="submit" className="text-primary/50">
+          <button
+            aria-label="Sign out"
+            type="submit"
+            className="text-primary/50"
+          >
             Sign out
           </button>
         </Form>
@@ -193,6 +197,7 @@ function EmptyOrders() {
       </Text>
       <div className="w-48">
         <Button
+          aria-label="Start Shopping"
           className="w-full mt-2 text-sm"
           variant="secondary"
           to={usePrefixPathWithLocale('/')}

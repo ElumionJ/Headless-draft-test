@@ -363,7 +363,7 @@ export function ProductForm() {
         {selectedVariant && (
           <div className="grid items-stretch gap-4">
             {isOutOfStock ? (
-              <Button variant="secondary" disabled>
+              <Button aria-label="Sold out" variant="secondary" disabled>
                 <Text>Sold out</Text>
               </Button>
             ) : (

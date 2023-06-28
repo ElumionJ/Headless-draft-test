@@ -93,6 +93,7 @@ export function Drawer({
 
                     <button
                       type="button"
+                      aria-label="Button"
                       className="p-4 -m-4 text-black transition hover:text-primary/30 "
                       onClick={onClose}
                       data-test="close-cart"

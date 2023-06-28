@@ -35,6 +35,7 @@ export function AddToCartButton({
       <input type="hidden" name="lines" value={JSON.stringify(lines)} />
       <input type="hidden" name="analytics" value={JSON.stringify(analytics)} />
       <Button
+        aria-label="submit"
         as="button"
         type="submit"
         width={width}

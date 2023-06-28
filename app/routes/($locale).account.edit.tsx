@@ -238,6 +238,7 @@ export default function AccountDetailsEdit() {
         )}
         <div className="mt-6">
           <Button
+            aria-label="Save"
             className="text-sm mb-2"
             variant="primary"
             width="full"
@@ -248,7 +249,13 @@ export default function AccountDetailsEdit() {
           </Button>
         </div>
         <div className="mb-4">
-          <Button to=".." className="text-sm" variant="secondary" width="full">
+          <Button
+            aria-label="Cancel"
+            to=".."
+            className="text-sm"
+            variant="secondary"
+            width="full"
+          >
             Cancel
           </Button>
         </div>

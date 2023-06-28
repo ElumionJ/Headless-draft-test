@@ -25,6 +25,7 @@ export function AccountAddressBook({
           )}
           <div className="w-48">
             <Button
+              aria-label="Add an Addressutton"
               to="address/add"
               className="mt-2 text-sm w-full mb-6"
               variant="secondary"
@@ -88,7 +89,10 @@ function Address({
         </Link>
         <Form action="address/delete" method="delete">
           <input type="hidden" name="addressId" value={address.id} />
-          <button className="text-left text-primary/50 ml-6 text-sm">
+          <button
+            className="text-left text-primary/50 ml-6 text-sm"
+            aria-label="Remove"
+          >
             Remove
           </button>
         </Form>

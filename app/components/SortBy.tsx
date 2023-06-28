@@ -26,6 +26,7 @@ export const SortBy = ({
       className="relative  z-30 font-bebas tracking-wider gt-sm:w-full"
     >
       <button
+        aria-label="button"
         className={`${
           open ? 'bg-c-red text-[#fff]' : 'bg-c-gray'
         } py-[13px] px-[24px] rounded-[100px] flex justify-between items-center gap-1 w-[180px] gt-sm:w-full uppercase text-[20px]`}
