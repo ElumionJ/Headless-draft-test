@@ -73,6 +73,7 @@ export function SortFilter({
               ref={sortByRef}
             >
               <button
+                aria-label="button"
                 className={`${
                   isOpen ? 'bg-c-red text-[#fff]' : 'bg-c-gray'
                 } py-[13px] px-[24px] rounded-[100px] flex justify-between font-bebas items-center gap-1 w-[180px] gt-sm:w-full uppercase text-[20px] `}
@@ -192,6 +193,7 @@ export function FiltersDrawer({
         <div className="sm-minimum:hidden flex justify-between items-center py-[24px] px-[15px] text-[20px] font-bebas tracking-wider leading-[130%] border-b-[1px] border-[#E0E0E0]">
           <span>Filter</span>
           <button
+            aria-label="button"
             onClick={() => {
               setOpen!(false);
             }}
@@ -231,6 +233,7 @@ export function FiltersDrawer({
         </div>
         <div className="sm-minimum:hidden absolute w-full bottom-0 left-0 bg-[#fff] py-[24px] px-[15px] border-t-[1px] border-[#E0E0E0]">
           <button
+            aria-label="button"
             onClick={() => {
               setOpen!(false);
             }}

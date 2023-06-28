@@ -29,6 +29,7 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
     <>
       <div ref={brandsFilterRef} className="relative z-30 gt-sm:w-full">
         <button
+          aria-label="Brands"
           className={`${
             open ? 'bg-c-red text-[#fff]' : 'bg-c-gray text-[#000]'
           } uppercase px-[24px] py-[13px] rounded-[100px] flex justify-between font-bebas text-[20px] leading-[110%] tracking-wider gap-1 w-[180px] gt-sm:w-full`}
@@ -82,6 +83,7 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
           <div className="flex justify-between items-center py-[24px] px-[15px] text-[20px] font-bebas tracking-wider leading-[130%] border-b-[1px] border-[#E0E0E0]">
             <span>Filter</span>
             <button
+              aria-label="button"
               onClick={() => {
                 setMobileOpen(false);
               }}
@@ -122,6 +124,7 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
 
           <div className="absolute w-full bottom-0 left-0 bg-[#fff] py-[24px] px-[15px] border-t-[1px] border-[#E0E0E0]">
             <button
+              aria-label="button"
               onClick={() => {
                 setMobileOpen(false);
               }}

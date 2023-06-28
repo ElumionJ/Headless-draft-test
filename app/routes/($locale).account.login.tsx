@@ -180,6 +180,7 @@ export default function Login() {
           </div>
           <div className="flex items-center justify-between">
             <button
+              aria-label="Sign in"
               className="bg-primary text-contrast rounded py-3 px-4 focus:shadow-outline block w-full font-noto uppercase text-xs"
               type="submit"
               disabled={!!(nativePasswordError || nativeEmailError)}

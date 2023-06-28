@@ -83,6 +83,7 @@ export function ProductGrid({
       {nextPage && (
         <div className="flex items-center justify-center mt-6">
           <Button
+            aria-label="Load"
             disabled={fetcher.state !== 'idle'}
             variant="secondary"
             onClick={fetchMoreProducts}

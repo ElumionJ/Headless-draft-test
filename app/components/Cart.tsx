@@ -117,7 +117,7 @@ function CartDiscounts({
           <Text as="dt">Discount(s)</Text>
           <div className="flex items-center justify-between">
             <UpdateDiscountForm>
-              <button>
+              <button aria-label="Button">
                 <IconRemove
                   aria-hidden="true"
                   style={{height: 18, marginRight: 4}}
@@ -206,8 +206,6 @@ function CartCheckoutActions({
 }) {
   if (!checkoutUrl) return null;
 
-  //Kate
-
   const arText = 'الخروج الآمن';
   const enText = 'Secure Checkout';
 
@@ -225,6 +223,7 @@ function CartCheckoutActions({
     <div className="flex flex-col items-center justify-center mt-2">
       <Link to={checkoutUrl} target="_self" className="w-full">
         <Button
+          aria-label="Language"
           as="span"
           width="full"
           className="font-bold text-white mb-4 uppercase text-xs font-noto flex items-center justify-center gap-x-2 px-3 py-4  bg-[#D80F16] rounded-[100px] w-full hover:opacity-80"
@@ -498,6 +497,7 @@ function ItemRemoveButton({lineIds}: {lineIds: CartLine['id'][]}) {
       <button
         className="flex items-center justify-center w-6 h-6 rounded-[50%] bg-[#F2F2F2] text-black"
         type="submit"
+        aria-label="Submit"
       >
         <span className="sr-only">Remove</span>
         <IconClose aria-label="Close panel" />
@@ -690,6 +690,7 @@ export function CartEmpty({
         <div>
           <Link to="/products">
             <Button
+              aria-label="Language"
               onClick={onClose}
               className="flex items-center justify-center gap-x-5 px-3 py-4 w-[200px] bg-[#D80F16] rounded-[100px] m-auto hover:opacity-80 text-white font-noto uppercase text-xs font-bold	"
             >
