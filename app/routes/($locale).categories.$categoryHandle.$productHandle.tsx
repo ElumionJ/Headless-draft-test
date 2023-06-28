@@ -437,7 +437,7 @@ export function ProductForm() {
                         quantity,
                       },
                     ]}
-                    className="mt-2 flex justify-center items-center bg-c-red hover:bg-[#cc4343] transition-colors w-full gap-[12px] py-4 px-[16px] rounded-[100px] text-[#fff]"
+                    className="mt-2 flex justify-center items-center bg-c-red hover:bg-[#353535] transition-colors w-full gap-[12px] py-4 px-[16px] rounded-[100px] text-[#fff]"
                     variant="primary"
                     data-test="add-to-cart"
                     analytics={{

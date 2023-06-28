@@ -93,6 +93,7 @@ export async function loader({params, request, context}: LoaderArgs) {
     });
   }
 
+  console.log(filters);
   const {collection, collections, metaobject} = await context.storefront.query<{
     collection: CollectionType;
     collections: CollectionConnection;

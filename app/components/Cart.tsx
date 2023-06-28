@@ -356,7 +356,7 @@ function CartSummary({
                   {languageTextTotal}
                 </span>
                 <span
-                  className="text-[red] font-bebas text-2xl"
+                  className="text-feature-link-color font-bebas text-2xl"
                   data-test="subtotal"
                 >
                   {cost?.subtotalAmount?.amount ? (
@@ -381,7 +381,7 @@ function CartSummary({
                   {languageTextSubtotal}
                 </span>
                 <span
-                  className="text-[red] font-bebas font-normal text-2xl"
+                  className="text-feature-link-color font-bebas font-normal text-2xl"
                   data-test="subtotal"
                 >
                   {cost?.subtotalAmount?.amount ? (
