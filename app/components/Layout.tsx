@@ -349,7 +349,7 @@ function MenuMobileNav({
         <Button
           as="span"
           width="full"
-          className=" border-white border-2 text-white mb-4  flex items-center justify-center  px-3 py-4  bg-[#D80F16] rounded-[100px] w-full hover:opacity-80"
+          className=" border-white border-2 text-white mb-4  flex items-center justify-center  px-3 py-4  bg-c-red rounded-[100px] w-full hover:opacity-80"
         >
           {languageText}
         </Button>
@@ -897,7 +897,7 @@ export function Footer({
               viewBox="0 0 32 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="hover:fill-[#D80F16] transition-colors duration-200"
+              className="hover:fill-[#000] transition-colors duration-200"
             >
               <path
                 d="M30.3778 4.73562C30.1722 3.98918 29.7711 3.31128 29.2152 2.77481L29.2144 2.77397C28.6546 2.23298 27.9671 1.84436 27.216 1.64647C26.5642 1.47206 25.5162 1.35792 24.3944 1.27595C23.243 1.19183 21.9245 1.13623 20.6838 1.09931C19.4416 1.06234 18.2693 1.04388 17.4082 1.03466C16.9774 1.03004 16.6239 1.02773 16.3779 1.02658C16.2549 1.026 16.1587 1.02571 16.0932 1.02556L16.0182 1.02544L15.9987 1.02542L15.9978 1.02542C12.299 0.982833 8.60123 1.17129 4.92521 1.58972L4.84466 1.59889L4.76663 1.62092C4.02012 1.83165 3.33807 2.22639 2.78051 2.76835L2.78051 2.76835L2.77794 2.77087C2.22506 3.31217 1.82055 3.98379 1.60853 4.72501L1.59503 4.77224L1.58621 4.82056C1.1831 7.03031 0.987061 9.27394 1.0007 11.5213C0.98671 13.7667 1.18228 16.0097 1.58624 18.2223L1.59463 18.2683L1.60728 18.3133C1.816 19.0559 2.22139 19.7281 2.77843 20.2674C3.33648 20.8077 4.02625 21.1932 4.77727 21.3963L4.78292 21.3978C5.43964 21.5712 6.48928 21.6853 7.61359 21.7673C8.76486 21.8512 10.0806 21.9067 11.3178 21.9436C12.5564 21.9805 13.7242 21.9989 14.5818 22.0081C15.0108 22.0127 15.3626 22.015 15.6075 22.0162C15.73 22.0167 15.8257 22.017 15.891 22.0172L15.9656 22.0173L15.985 22.0173H15.9859C19.6893 22.0599 23.3917 21.8715 27.0723 21.453L27.1439 21.4449L27.2136 21.4266C27.966 21.2288 28.6547 20.8396 29.2153 20.2976L29.2167 20.2962C29.7758 19.7534 30.1762 19.0754 30.3776 18.3331L30.3881 18.2945L30.3954 18.2552C30.8091 16.046 31.0106 13.8012 30.997 11.5524C31.0275 9.28973 30.8259 7.02993 30.3954 4.80969L29.9556 4.85193L30.3778 4.73562Z"
@@ -955,7 +955,7 @@ function FooterMenu({menu}: {menu?: EnhancedMenu}) {
           <Disclosure>
             {({open}) => (
               <>
-                <Disclosure.Button className="text-center md:cursor-default hover:text-[#D80F16] ">
+                <Disclosure.Button className="text-center md:cursor-default hover:text-feature-link-color ">
                   <Heading className=" cursor-pointer" size="footer" as="h3">
                     <Link to={item.to}>
                       {item.title}
