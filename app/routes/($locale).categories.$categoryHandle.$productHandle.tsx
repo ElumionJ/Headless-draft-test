@@ -398,7 +398,7 @@ export function ProductForm() {
           <span className="font-bebas text-[20px] leading-[110%] uppercase tracking-wider text-[#000]">
             Price:
           </span>
-          <span className="font-bebas text-[32px] md-only:text-[20px] leading-[120%] tracking-wider text-[#D80F16]">
+          <span className="font-bebas text-[32px] md-only:text-[20px] leading-[120%] tracking-wider text-feature-link-color">
             {firstVariant.price.currencyCode}
             {firstVariant.price.amount}
           </span>
@@ -414,7 +414,7 @@ export function ProductForm() {
               <span className="font-bebas text-[20px] leading-[110%] uppercase tracking-wider text-[#000]">
                 Price:
               </span>
-              <span className="font-bebas text-[32px] md-only:text-[20px] leading-[120%] tracking-wider text-[#D80F16]">
+              <span className="font-bebas text-[32px] md-only:text-[20px] leading-[120%] tracking-wider text-feature-link-color">
                 {firstVariant.price.currencyCode}
                 {firstVariant.price.amount}
               </span>
@@ -437,7 +437,7 @@ export function ProductForm() {
                         quantity,
                       },
                     ]}
-                    className="mt-2 flex justify-center items-center bg-c-red hover:bg-[#cc4343] transition-colors w-full gap-[12px] py-4 px-[16px] rounded-[100px] text-[#fff]"
+                    className="mt-2 flex justify-center items-center bg-c-red hover:bg-[#353535] transition-colors w-full gap-[12px] py-4 px-[16px] rounded-[100px] text-[#fff]"
                     variant="primary"
                     data-test="add-to-cart"
                     analytics={{

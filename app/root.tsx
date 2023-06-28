@@ -41,6 +41,7 @@ import {useAnalytics} from './hooks/useAnalytics';
 
 export const links: LinksFunction = () => {
   return [
+    {rel: 'preload', href: styles, as: 'style'},
     {rel: 'stylesheet', href: styles},
     {
       rel: 'preconnect',

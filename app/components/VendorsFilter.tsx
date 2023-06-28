@@ -61,7 +61,7 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
                       click(e.target.value, e.target.checked);
                     }}
                     checked={url.includes(el[0])}
-                    className="text-[#D80F16]"
+                    className="text-feature-link-color"
                     type="checkbox"
                     value={el[0]}
                     id={`${el[1].title}-desktop`}
@@ -111,7 +111,7 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
                           click(e.target.value, e.target.checked);
                         }}
                         checked={url.includes(el[0])}
-                        className="text-[#D80F16]"
+                        className="text-feature-link-color"
                         type="checkbox"
                         value={el[0]}
                         id={`${el[1].title}-mobile`}

@@ -12,6 +12,9 @@ export default {
         notice: 'rgb(var(--color-accent) / <alpha-value>)',
         shopPay: 'rgb(var(--color-shop-pay) / <alpha-value>)',
       },
+      textColor: {
+        'feature-link-color': '#000',
+      },
       screens: {
         sm: '32em',
         md: '48em',
@@ -65,7 +68,7 @@ export default {
       },
       backgroundColor: {
         'c-gray': '#F2F2F2',
-        'c-red': '#D80F16',
+        'c-red': '#000000',
       },
       maxWidth: {
         'prose-narrow': '45ch',
