@@ -97,7 +97,7 @@ export function ProductCard({
           <div className="grid gap-1">
             <Text
               className="w-full overflow-hidden whitespace-nowrap !text-[20px] leading-[110%] font-bebas tracking-wider"
-              as="h3"
+              as="h2"
             >
               {product.title}
             </Text>
