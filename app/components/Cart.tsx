@@ -226,7 +226,7 @@ function CartCheckoutActions({
           aria-label="Language"
           as="span"
           width="full"
-          className="font-bold text-white mb-4 uppercase text-xs font-noto flex items-center justify-center gap-x-2 px-3 py-4  bg-c-red rounded-[100px] w-full hover:opacity-80"
+          className="font-bold text-white mb-4 uppercase text-xs font-noto flex items-center justify-center gap-x-2 px-3 py-4  bg-c-red w-full hover:opacity-80"
         >
           {languageText}
           <svg
@@ -517,7 +517,7 @@ function CartLineQuantityAdjust({line}: {line: CartLine}) {
       <label htmlFor={`quantity-${lineId}`} className="sr-only">
         Quantity, {quantity}
       </label>
-      <div className="gt-m:h-[38px] flex border rounded-[100px] border-black font-bebas h-fit items-center">
+      <div className="gt-m:h-[38px] flex border border-black font-bebas h-fit items-center">
         <UpdateCartButton lines={[{id: lineId, quantity: prevQuantity}]}>
           <button
             name="decrease-quantity"
@@ -646,7 +646,7 @@ export function CartEmpty({
             <Button
               aria-label="Language"
               onClick={onClose}
-              className="flex items-center justify-center gap-x-5 px-3 py-4 w-[200px] bg-c-red rounded-[100px] m-auto hover:opacity-80 text-white font-noto uppercase text-xs font-bold	"
+              className="flex items-center justify-center gap-x-5 px-3 py-4 w-[200px] bg-c-red m-auto hover:opacity-80 text-white font-noto uppercase text-xs font-bold	"
             >
               {languageTextStart}
               <svg

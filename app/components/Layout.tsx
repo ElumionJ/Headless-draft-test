@@ -234,7 +234,7 @@ function MenuMobileNav({
               method="get"
               action={params.locale ? `/${params.locale}/search` : '/search'}
               onSubmit={onClose}
-              className="font-noto items-center flex gap-2 sm:flex bg-white rounded-[100px] mt-[14px] mb-[14px] rtl:px-4"
+              className="font-noto items-center flex gap-2 sm:flex bg-white mt-[14px] mb-[14px] rtl:px-4"
             >
               <button
                 aria-label="Submit"
@@ -353,7 +353,7 @@ function MenuMobileNav({
           aria-label="Button"
           as="span"
           width="full"
-          className=" border-white border-2 text-white mb-4  flex items-center justify-center  px-3 py-4  bg-c-red rounded-[100px] w-full hover:opacity-80"
+          className=" border-white border-2 text-white mb-4  flex items-center justify-center  px-3 py-4  bg-c-red w-full hover:opacity-80"
         >
           {languageText}
         </Button>

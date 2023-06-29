@@ -29,7 +29,7 @@ export const SortBy = ({
         aria-label="button"
         className={`${
           open ? 'bg-c-red text-[#fff]' : 'bg-c-gray'
-        } py-[13px] px-[24px] rounded-[100px] flex justify-between items-center gap-1 w-[180px] gt-sm:w-full uppercase text-[20px]`}
+        } py-[13px] px-[24px] flex justify-between items-center gap-1 w-[180px] gt-sm:w-full uppercase text-[20px]`}
         onClick={() => setOpen((prevState) => !prevState)}
       >
         {dataLinks.find((el) => el.value === activeSort)?.name || 'SORT BY'}
