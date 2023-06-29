@@ -633,12 +633,12 @@ function DesktopHeader({
           </nav>
         </div>
 
-        <div className="flex items-center gap-x-9 font-bebas  justify-end">
+        <div className="flex items-center gap-x-9 rtl:gap-x-0 rtl:lg:gap-x-6 font-bebas  justify-end">
           <div className="">
             <CountrySelector />
           </div>
 
-          <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5 rtl:w-1/3" />
+          <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5 rtl:w-1/4 rtl:ml-[10px]" />
 
           <CartCount isHome={isHome} openCart={openCart} />
         </div>
@@ -661,7 +661,7 @@ function AccountLink({className}: {className?: string}) {
   return isLoggedIn ? (
     <Link to="/account" className={className}>
       {/* Kate */}
-      <div className="absolute top-[11%] right-[96%] rtl:left-[-2%] rtl:xl:left-[16%] rtl:top-[12%] rtl:right-auto">
+      <div className="absolute top-[11%] right-[96%] rtl:lg-only:left-[-19%] rtl:xl:left-[3%] rtl:2xl-only:left-[11%] rtl:top-[12%] rtl:right-auto">
         <IconAccount />
       </div>
 
