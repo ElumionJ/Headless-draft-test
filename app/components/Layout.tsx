@@ -505,7 +505,7 @@ function DesktopHeader({
                       prefetch="intent"
                       className={({isActive}) => {
                         const mainStyles =
-                          ' py-8 rtl:py-6  flex justify-center items-center';
+                          ' py-8  flex justify-center items-center';
                         const activeStyle = '';
 
                         return isActive
