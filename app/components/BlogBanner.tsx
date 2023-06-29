@@ -47,7 +47,7 @@ export function BlogBanner({data}: Props) {
 
           <div className="relative w-[fit-content] gt-m:mb-[20px]">
             <Link
-              className="font-noto font-bold text-[12px] flex items-center tracking-widest text-[#D80F16] rtl:tracking-normal"
+              className="font-noto font-bold text-[12px] flex items-center tracking-widest text-feature-link-color rtl:tracking-normal"
               to={'/products'}
             >
               {data.button.value}
@@ -61,14 +61,14 @@ export function BlogBanner({data}: Props) {
                 >
                   <path
                     d="M7.07025 2.25054L2.12057 7.20022"
-                    stroke="#D80F16"
+                    stroke="#000"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
                   <path
                     d="M2.95279 2.12583L7.19526 2.12565L7.19543 6.36847"
-                    stroke="#D80F16"
+                    stroke="#000"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -76,7 +76,7 @@ export function BlogBanner({data}: Props) {
                 </svg>
               </span>
             </Link>
-            <div className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-[#D80F16]"></div>
+            <div className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-c-red"></div>
           </div>
         </div>
       </div>

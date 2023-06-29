@@ -32,7 +32,11 @@ export function ErrorBoundary() {
       className="text-red-600"
     >
       <div className="flex items-baseline justify-between w-full">
-        <Button as="button" onClick={() => window.location.reload()}>
+        <Button
+          aria-label="Try again"
+          as="button"
+          onClick={() => window.location.reload()}
+        >
           Try Again
         </Button>
       </div>

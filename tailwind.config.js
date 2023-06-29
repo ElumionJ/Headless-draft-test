@@ -12,12 +12,16 @@ export default {
         notice: 'rgb(var(--color-accent) / <alpha-value>)',
         shopPay: 'rgb(var(--color-shop-pay) / <alpha-value>)',
       },
+      textColor: {
+        'feature-link-color': '#000',
+      },
       screens: {
         sm: '32em',
         md: '48em',
         lg: '64em',
         xl: '80em',
         'sm-maximum': {max: '37.5em'}, //600px
+        'sm-minimum': {min: '37.51em'}, //600px and higher
         'sm-maximum-md': {min: '37.5em', max: '56.3em'}, //600 - 900
         'md-lg': {min: '56.3em'}, //900 and higher
         '2xl': '96em',
@@ -64,7 +68,7 @@ export default {
       },
       backgroundColor: {
         'c-gray': '#F2F2F2',
-        'c-red': '#D80F16',
+        'c-red': '#000000',
       },
       maxWidth: {
         'prose-narrow': '45ch',

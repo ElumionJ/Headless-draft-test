@@ -13,14 +13,13 @@ export default async function parseMetaobject(
       type: string;
     };
   } = {};
+  const references: any[] = [];
 
   await Promise.all(
     metaobject.fields.map(async (el) => {
       if (el.type === 'file_reference') {
-        const imgUrl = await storefront.query(IMAGE_QUERY, {
-          variables: {id: el.value},
-        });
-        parsedMetaobject[el.key] = {...el, value: imgUrl.node.image};
+        parsedMetaobject[el.key] = {...el};
+        references.push(parsedMetaobject[el.key]);
         return;
       } else if (el.type === 'number_integer') {
         parsedMetaobject[el.key] = {
@@ -32,12 +31,20 @@ export default async function parseMetaobject(
       parsedMetaobject[el.key] = {...el};
     }),
   );
+
+  const res = await storefront.query(IMAGE_QUERY, {
+    variables: {id: references.map((el) => el.value)},
+  });
+  res.nodes.forEach((el, i) => {
+    references[i].value = el.image;
+  });
+
   return parsedMetaobject;
 }
 
 const IMAGE_QUERY = `#graphql
-query GetImage($id:ID!){
-  node(id: $id) {
+query GetImage($id:[ID!]!){
+  nodes(ids: $id) {
     id
     ... on MediaImage {
       image {

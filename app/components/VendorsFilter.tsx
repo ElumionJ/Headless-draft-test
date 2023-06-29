@@ -29,6 +29,7 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
     <>
       <div ref={brandsFilterRef} className="relative z-30 gt-sm:w-full">
         <button
+          aria-label="Brands"
           className={`${
             open ? 'bg-c-red text-[#fff]' : 'bg-c-gray text-[#000]'
           } uppercase px-[24px] py-[13px] rounded-[100px] flex justify-between font-bebas text-[20px] leading-[110%] tracking-wider gap-1 w-[180px] gt-sm:w-full`}
@@ -60,7 +61,7 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
                       click(e.target.value, e.target.checked);
                     }}
                     checked={url.includes(el[0])}
-                    className="text-[#D80F16]"
+                    className="text-feature-link-color"
                     type="checkbox"
                     value={el[0]}
                     id={`${el[1].title}-desktop`}
@@ -82,6 +83,7 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
           <div className="flex justify-between items-center py-[24px] px-[15px] text-[20px] font-bebas tracking-wider leading-[130%] border-b-[1px] border-[#E0E0E0]">
             <span>Filter</span>
             <button
+              aria-label="button"
               onClick={() => {
                 setMobileOpen(false);
               }}
@@ -109,7 +111,7 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
                           click(e.target.value, e.target.checked);
                         }}
                         checked={url.includes(el[0])}
-                        className="text-[#D80F16]"
+                        className="text-feature-link-color"
                         type="checkbox"
                         value={el[0]}
                         id={`${el[1].title}-mobile`}
@@ -122,6 +124,7 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
 
           <div className="absolute w-full bottom-0 left-0 bg-[#fff] py-[24px] px-[15px] border-t-[1px] border-[#E0E0E0]">
             <button
+              aria-label="button"
               onClick={() => {
                 setMobileOpen(false);
               }}

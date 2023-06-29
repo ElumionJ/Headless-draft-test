@@ -89,7 +89,7 @@ export function ProductCard({
             <Text
               as="label"
               size="fine"
-              className="absolute top-0 ltr:left-0 rtl:right-0 m-4 text-right text-notice"
+              className="absolute top-0 ltr:left-0 rtl:right-0 m-4 text-right text-notice font-noto tracking-wider uppercase"
             >
               {cardLabel}
             </Text>
@@ -141,9 +141,9 @@ export function ProductCard({
         >
           {availableForSale ? 'Add to Bag' : 'Out of stock'}
         </Text>
-        {availableForSale && (
+        {/* {availableForSale && (
           <IconAddToCartBag className="mt-[-4px] ml-[-4px]" />
-        )}
+        )} */}
       </AddToCartButton>
     </div>
   );

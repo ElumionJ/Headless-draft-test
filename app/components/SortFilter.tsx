@@ -1,6 +1,5 @@
 import type {SyntheticEvent} from 'react';
-import {useContext, useMemo, useState} from 'react';
-import {Menu} from '@headlessui/react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import type {Location} from '@remix-run/react';
 import {
   Link,
@@ -9,21 +8,18 @@ import {
   useNavigate,
 } from '@remix-run/react';
 import {useDebounce} from 'react-use';
-import {Disclosure} from '@headlessui/react';
 import type {
   FilterType,
   Filter,
   Collection,
 } from '@shopify/hydrogen/storefront-api-types';
+import {HiArrowNarrowUp, HiArrowSmDown} from 'react-icons/hi';
+import {TfiClose} from 'react-icons/tfi';
+import {HiArrowLongDown} from 'react-icons/hi2';
+import {ImArrowUpRight2} from 'react-icons/im';
 
-import {
-  Heading,
-  IconFilters,
-  IconCaret,
-  IconXMark,
-  Text,
-  SortBy,
-} from '~/components';
+import {Text, SortBy} from '~/components';
+import useOutsideClick from '~/hooks/useOutsideClick';
 
 export type AppliedFilter = {
   label: string;
@@ -33,12 +29,7 @@ export type AppliedFilter = {
   };
 };
 
-export type SortParam =
-  | 'price-low-high'
-  | 'price-high-low'
-  | 'best-selling'
-  | 'newest'
-  | 'featured';
+export type SortParam = 'price' | 'best-selling' | 'newest' | 'featured';
 
 type Props = {
   filters: Filter[];
@@ -54,26 +45,83 @@ export function SortFilter({
   collections = [],
 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const itemsCount = children.props.collection.products.nodes.length;
+  const itemsCount = children?.props.collection.products.nodes.length;
+  const sortByRef = useRef(null);
+  useOutsideClick(sortByRef, setIsOpen);
+  const location = useLocation();
+  const [params] = useSearchParams();
+  const [rotate, setRotate] = useState<'180deg' | '0deg'>('0deg');
+
+  useEffect(() => {
+    setRotate(params.get('reverse') === 'true' ? '0deg' : '180deg');
+  }, [params]);
+
+  const getLinkReverseSort = (location: Location, params: URLSearchParams) => {
+    const clonedParams = new URLSearchParams(params);
+    const reverse = clonedParams.get('reverse') || 'false';
+    clonedParams.delete('reverse');
+    clonedParams.append('reverse', reverse === 'true' ? 'false' : 'true');
+    return `${location.pathname}?${clonedParams.toString()}`;
+  };
   return (
     <>
-      <div className="flex items-center justify-end w-full">
-        <SortMenu itemsCount={itemsCount} />
+      <div className="flex flex-col w-full gap-3">
+        <div className="sm-maximum:grid sm-maximum:grid-cols-2 flex items-center justify-between w-full">
+          <div className="flex items-center sm:gap-[40px]">
+            <div
+              className="relative sm-maximum:static sm-maximum:w-full"
+              ref={sortByRef}
+            >
+              <button
+                aria-label="button"
+                className={`${
+                  isOpen ? 'bg-c-red text-[#fff]' : 'bg-c-gray'
+                } py-[13px] px-[24px] rounded-[100px] flex justify-between font-bebas items-center gap-1 w-[180px] gt-sm:w-full uppercase text-[20px] `}
+                onClick={() => {
+                  setIsOpen((prev) => !prev);
+                }}
+              >
+                Filter by
+                <HiArrowSmDown className={`${isOpen && 'rotate-180'} `} />
+              </button>
+              <div
+                className={`${
+                  isOpen ? 'block' : 'hidden'
+                } absolute top-full rtl:right-0 left-0 bg-[#fff] w-full p-[24px] font-noto shadow-darkPopUp mt-[13px] z-30 sm-maximum:fixed sm-maximum:z-50 sm-maximum:w-[320px] sm-maximum:left-0 sm-maximum:h-full sm-maximum:mt-auto sm-maximum:top-0 sm-maximum:p-0`}
+              >
+                <FiltersDrawer
+                  collections={collections}
+                  filters={filters}
+                  appliedFilters={appliedFilters}
+                  setOpen={setIsOpen}
+                />
+              </div>
+            </div>
+            <div className="sm-maximum:hidden">
+              <AppliedFilters filters={appliedFilters} />
+            </div>
+          </div>
+          <div className="flex gap-[16px] items-center sm-maximum:w-full ">
+            <Link
+              to={getLinkReverseSort(location, params)}
+              prefetch="intent"
+              className="gt-sm:hidden flex gap-0"
+              style={{
+                rotate,
+              }}
+            >
+              <HiArrowLongDown className="ltr:mr-[-4px] rtl:ml-[-4px]" />
+              <HiArrowNarrowUp className="ltr:ml-[-4px] rtl:mr-[-4px]" />
+            </Link>
+            <SortMenu itemsCount={itemsCount} />
+          </div>
+        </div>
+
+        <div className="sm-maximum:block hidden ">
+          <AppliedFilters filters={appliedFilters} />
+        </div>
       </div>
       <div className="flex flex-col flex-wrap md:flex-row">
-        <div
-          className={`transition-all duration-200 ${
-            isOpen
-              ? 'opacity-100 min-w-full md:min-w-[240px] md:w-[240px] md:pr-8 max-h-full'
-              : 'opacity-0 md:min-w-[0px] md:w-[0px] pr-0 max-h-0 md:max-h-full'
-          }`}
-        >
-          <FiltersDrawer
-            collections={collections}
-            filters={filters}
-            appliedFilters={appliedFilters}
-          />
-        </div>
         <div className="flex-1">{children}</div>
       </div>
     </>
@@ -84,10 +132,12 @@ export function FiltersDrawer({
   filters = [],
   appliedFilters = [],
   collections = [],
+  setOpen,
 }: {
   filters: Filter[];
   appliedFilters: AppliedFilter[];
   collections: Collection[];
+  setOpen?: (state: boolean) => void;
 }) {
   const [params] = useSearchParams();
   const location = useLocation();
@@ -115,11 +165,7 @@ export function FiltersDrawer({
           location,
         );
         return (
-          <Link
-            className="focus:underline hover:underline"
-            prefetch="intent"
-            to={to}
-          >
+          <Link className="block font-noto py-1" prefetch="intent" to={to}>
             {option.label}
           </Link>
         );
@@ -143,43 +189,60 @@ export function FiltersDrawer({
 
   return (
     <>
-      <nav className="py-8">
-        {appliedFilters.length > 0 ? (
-          <div className="pb-8">
-            <AppliedFilters filters={appliedFilters} />
-          </div>
-        ) : null}
-
-        <Heading as="h4" size="lead" className="pb-4">
-          Filter By
-        </Heading>
-        <div className="divide-y">
+      <nav className="">
+        <div className="sm-minimum:hidden flex justify-between items-center py-[24px] px-[15px] text-[20px] font-bebas tracking-wider leading-[130%] border-b-[1px] border-[#E0E0E0]">
+          <span>Filter</span>
+          <button
+            aria-label="button"
+            onClick={() => {
+              setOpen!(false);
+            }}
+          >
+            <TfiClose />
+          </button>
+        </div>
+        <div className="sm-maximum:px-[15px] sm-maximum:py-6">
           {filters.map(
             (filter: Filter) =>
               filter.values.length > 1 && (
-                <Disclosure as="div" key={filter.id} className="w-full">
-                  {({open}) => (
-                    <>
-                      <Disclosure.Button className="flex justify-between w-full py-4">
-                        <Text size="lead">{filter.label}</Text>
-                        <IconCaret direction={open ? 'up' : 'down'} />
-                      </Disclosure.Button>
-                      <Disclosure.Panel key={filter.id}>
-                        <ul key={filter.id} className="py-2">
-                          {filter.values?.map((option) => {
-                            return (
-                              <li key={option.id} className="pb-4">
-                                {filterMarkup(filter, option)}
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </Disclosure.Panel>
-                    </>
-                  )}
-                </Disclosure>
+                <div key={filter.id} className="w-full pb-2">
+                  <div className="flex justify-between w-full ">
+                    <Text
+                      size="lead"
+                      className="font-bebas uppercase tracking-wider "
+                    >
+                      {filter.label}
+                    </Text>
+                  </div>
+                  <ul key={filter.id} className=" pl-[8px]">
+                    {filter.values?.map((option) => {
+                      return (
+                        <li
+                          key={option.id}
+                          className="h-fit w-full hover:underline"
+                        >
+                          {filterMarkup(filter, option)}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
               ),
           )}
+        </div>
+        <div className="sm-minimum:hidden absolute w-full bottom-0 left-0 bg-[#fff] py-[24px] px-[15px] border-t-[1px] border-[#E0E0E0]">
+          <button
+            aria-label="button"
+            onClick={() => {
+              setOpen!(false);
+            }}
+            className="flex justify-center items-center gap-2 w-[95%] mx-auto text-[#fff] bg-c-red rounded-[100px] py-[12px]"
+          >
+            <span className="font-noto font-bold tracking-widest text-[12px] leading-4 ">
+              SHOW RESULTS
+            </span>
+            <ImArrowUpRight2 className="text-[10px] rtl:rotate-[-90deg]" />
+          </button>
         </div>
       </nav>
     </>
@@ -189,22 +252,25 @@ export function FiltersDrawer({
 function AppliedFilters({filters = []}: {filters: AppliedFilter[]}) {
   const [params] = useSearchParams();
   const location = useLocation();
+
   return (
     <>
-      <Heading as="h4" size="lead" className="pb-4">
+      {/* <Heading as="h4" size="lead" className="pb-4">
         Applied filters
-      </Heading>
+      </Heading> */}
       <div className="flex flex-wrap gap-2">
         {filters.map((filter: AppliedFilter) => {
           return (
             <Link
               to={getAppliedFilterLink(filter, params, location)}
-              className="flex px-2 border rounded-full gap"
+              className="flex p-[8px] gap-[8px]  items-center bg-black text-[#fff] rounded-[2px]"
               key={`${filter.label}-${filter.urlParam}`}
             >
-              <span className="flex-grow">{filter.label}</span>
-              <span>
-                <IconXMark />
+              <span className="font-noto font-bold text-[12px] leading-[150%]">
+                {filter.label}
+              </span>
+              <span className="text-[11px]">
+                <TfiClose />
               </span>
             </Link>
           );
@@ -361,12 +427,8 @@ export default function SortMenu({itemsCount}: {itemsCount: number}) {
   const items: {name: string; value: SortParam}[] = [
     {name: 'Featured', value: 'featured'},
     {
-      name: 'Price: Low - High',
-      value: 'price-low-high',
-    },
-    {
-      name: 'Price: High - Low',
-      value: 'price-high-low',
+      name: 'Price',
+      value: 'price',
     },
     {
       name: 'Best Selling',
@@ -384,7 +446,7 @@ export default function SortMenu({itemsCount}: {itemsCount: number}) {
   return (
     <>
       {itemsCount > 0 ? (
-        <div className="flex items-center">
+        <div className="flex items-center sm-maximum:w-full">
           <SortBy
             isCategoriesPage={true}
             dataLinks={items}

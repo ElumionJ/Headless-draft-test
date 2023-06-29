@@ -180,7 +180,7 @@ export default function AllProducts() {
     setVendorsQuery(newVendors);
   };
   useEffect(() => {
-    setRotate((prev) => (prev === '0deg' ? '180deg' : '0deg'));
+    setRotate(varParams.reverse ? '0deg' : '180deg');
   }, [varParams.reverse]);
 
   const handleRemoveVendorOnChip = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -231,7 +231,7 @@ export default function AllProducts() {
     <>
       <header data-header className="relative w-full">
         <ImageComponent
-          loading={'eager'}
+          loading={'lazy'}
           data={customize.title_image.value}
           className="object-cover  h-full fadeIn relative title-bg-shadow max-h-[200px] "
         />
@@ -260,6 +260,7 @@ export default function AllProducts() {
                       {el.replaceAll("'", '')}
                     </span>
                     <button
+                      aria-label="button"
                       data-value={el}
                       value={el}
                       className="text-[11px]"
@@ -308,6 +309,7 @@ export default function AllProducts() {
                   {el.replaceAll("'", '')}
                 </span>
                 <button
+                  aria-label="button"
                   data-value={el}
                   value={el}
                   className="text-[11px]"
@@ -335,7 +337,7 @@ export default function AllProducts() {
                   <div className="flex justify-center gap-2 font-noto ">
                     {pageInfo.hasPreviousPage && (
                       <Link
-                        className="text-[12px] font-bold leading-[150%] hover:text-[#D80F16] block w-[100px] px-3 py-1 text-right rtl:text-left"
+                        className="text-[12px] font-bold leading-[150%] hover:text-feature-link-color block w-[100px] px-3 py-1 text-right rtl:text-left"
                         to={`${selectedLocale.pathPrefix}/products?sortKey=${
                           varParams.sortKey
                         }&reverse=${varParams.reverse}&cursor=${
@@ -347,7 +349,7 @@ export default function AllProducts() {
                     )}
                     {pageInfo.hasNextPage && (
                       <Link
-                        className="text-[12px] font-bold leading-[150%] hover:text-[#D80F16] block w-[100px] px-3 py-1 text-left rtl:text-right"
+                        className="text-[12px] font-bold leading-[150%] hover:text-feature-link-color block w-[100px] px-3 py-1 text-left rtl:text-right"
                         to={`${selectedLocale.pathPrefix}/products?sortKey=${
                           varParams.sortKey
                         }&reverse=${varParams.reverse}&cursor=${

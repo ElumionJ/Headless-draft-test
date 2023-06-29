@@ -140,6 +140,7 @@ function Country({
       }}
     >
       <Button
+        aria-label="Button"
         className={clsx([
           'text-contrast dark:text-primary',
           'bg-primary dark:bg-contrast w-full p-2 transition  flex justify-start',

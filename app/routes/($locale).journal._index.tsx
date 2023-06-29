@@ -60,7 +60,6 @@ export default function Journals() {
       <PageHeader heading={BLOG_HANDLE} variant="blog" />
       <Section>
         <Grid as="ol" layout="blog">
-          {/* Kate */}
           <div className="grid lg:grid-cols-3 gap-9">
             {articles.map((article, i) => (
               <ArticleCard

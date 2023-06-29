@@ -207,9 +207,6 @@ function MenuMobileNav({
   openCart: () => void;
 }) {
   const params = useParams();
-
-  //Kate
-
   const arText = 'تسجيلدخول';
   const enText = 'Login';
 
@@ -218,11 +215,11 @@ function MenuMobileNav({
     <>
       <nav className="font-bebas grid gap-4 p-[17px]  sm:gap-6 sm:pb-8  text-white">
         <div className="flex justify-between items-center border-b-[1px] border-[#A8272D] pb-3">
-          <button className="text-[20px]" onClick={onClose}>
+          <button className="text-[20px]" aria-label="Close" onClick={onClose}>
             <TfiClose />
           </button>
           <Link to={'/'} onClick={onClose}>
-            <img src={logo} className="w-[110px]" alt="mobile logo" />
+            <img src={logo} className="w-[110px] h-[30px]" alt="mobile logo" />
           </Link>
           <CartCount
             variant={'white'}
@@ -232,56 +229,59 @@ function MenuMobileNav({
         </div>
 
         <ul className="overflow-y-scroll gap-y-4 flex flex-col justify-center">
-          <Form
-            method="get"
-            action={params.locale ? `/${params.locale}/search` : '/search'}
-            onSubmit={onClose}
-            className=" font-noto items-center flex gap-2  sm:flex bg-white rounded-[100px] mt-[14px] mb-[14px] rtl:px-4"
-          >
-            <button
-              type="submit"
-              className="relative flex items-center justify-center w-8 h-8 text-[#A0A0A0] pl-4"
+          <li key={'search'} className="block">
+            <Form
+              method="get"
+              action={params.locale ? `/${params.locale}/search` : '/search'}
+              onSubmit={onClose}
+              className="font-noto items-center flex gap-2 sm:flex bg-white rounded-[100px] mt-[14px] mb-[14px] rtl:px-4"
             >
-              <div>
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 18 18"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <circle
-                    cx="6.74142"
-                    cy="6.74142"
-                    r="6.74142"
-                    transform="matrix(-1 0 0 1 15.918 2.08398)"
-                    stroke="#A0A0A0"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M4.48828 13.8652L1.84526 16.5014"
-                    stroke="#A0A0A0"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-            </button>
-            <Input
-              className={`${
-                isHome
-                  ? 'focus:border-contrast/20 dark:focus:border-primary/20 text-black w-full '
-                  : 'focus:border-primary/20 text-black w-full'
-              } block `}
-              type="search"
-              variant="minisearch"
-              placeholder="Tabasco, Cholula, Very Hot"
-              name="q"
-            />
-          </Form>
+              <button
+                aria-label="Submit"
+                type="submit"
+                className="relative flex items-center justify-center w-8 h-8 text-[#A0A0A0] pl-4"
+              >
+                <div>
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle
+                      cx="6.74142"
+                      cy="6.74142"
+                      r="6.74142"
+                      transform="matrix(-1 0 0 1 15.918 2.08398)"
+                      stroke="#A0A0A0"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M4.48828 13.8652L1.84526 16.5014"
+                      stroke="#A0A0A0"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              </button>
+              <Input
+                className={`${
+                  isHome
+                    ? 'focus:border-contrast/20 dark:focus:border-primary/20 text-black w-full '
+                    : 'focus:border-primary/20 text-black w-full'
+                } block `}
+                type="search"
+                variant="minisearch"
+                placeholder="Tabasco, Cholula, Very Hot"
+                name="q"
+              />
+            </Form>
+          </li>
 
           {(menu?.items || []).map((item) => {
             // if (item.to === '/products') {
@@ -350,9 +350,10 @@ function MenuMobileNav({
 
       <Link to="/account/login" onClick={onClose} className="mt-[80px] mx-3">
         <Button
+          aria-label="Button"
           as="span"
           width="full"
-          className=" border-white border-2 text-white mb-4  flex items-center justify-center  px-3 py-4  bg-[#D80F16] rounded-[100px] w-full hover:opacity-80"
+          className=" border-white border-2 text-white mb-4  flex items-center justify-center  px-3 py-4  bg-c-red rounded-[100px] w-full hover:opacity-80"
         >
           {languageText}
         </Button>
@@ -390,6 +391,7 @@ function MobileHeader({
     >
       <div className="flex items-center justify-start w-full gap-4 ">
         <button
+          aria-label="Icon menu"
           onClick={openMenu}
           className="relative flex items-center justify-center w-5 h-8 text-black"
         >
@@ -459,6 +461,7 @@ function DesktopHeader({
           className="flex items-center gap-2 "
         >
           <button
+            aria-label="Icon search"
             type="submit"
             className="relative flex items-center justify-center w-5 h-8 focus:ring-primary/5"
           >
@@ -477,9 +480,15 @@ function DesktopHeader({
                     <Link
                       to="/"
                       key={item.id}
-                      className="w-[140px]   flex justify-center items-center"
+                      className="w-[140px] flex justify-center items-center"
                     >
-                      <img src={logo} alt="Logo" loading="lazy" />
+                      <img
+                        src={logo}
+                        alt="Logo"
+                        width={140}
+                        className="w-[140px]"
+                        loading="lazy"
+                      />
                     </Link>
                   </div>
                 );
@@ -547,7 +556,7 @@ function DesktopHeader({
                                   submenu?.items.map((el) => (
                                     <li key={el.id}>
                                       <Link
-                                        className="text-[#333] font-noto leading-[150%] text-[16px]  py-3 inline-block"
+                                        className="text-[#333] font-noto leading-[150%] text-[16px]  py-3 block"
                                         key={`${item.id}-${submenu.id}-${el.id}`}
                                         to={el.to}
                                         target={el.target}
@@ -758,6 +767,7 @@ function Badge({
 
   return (
     <button
+      aria-label="Counter"
       onClick={openCart}
       className="relative flex items-center justify-center w-5 h-8 focus:ring-primary/5"
     >
@@ -831,7 +841,7 @@ export function Footer({
         <div className="flex items-center justify-end gap-x-6 rtl:justify-start">
           {/* instagram */}
 
-          <Link to="/" className="cursor-pointer ">
+          <Link to="/" className="cursor-pointer" aria-label="Instagram">
             <svg
               width="24"
               height="25"
@@ -861,7 +871,7 @@ export function Footer({
           </Link>
 
           {/* facebook */}
-          <Link to="/" className="cursor-pointer">
+          <Link to="/" className="cursor-pointer" aria-label="Facebook">
             <svg
               width="24"
               height="24"
@@ -887,14 +897,14 @@ export function Footer({
           </Link>
 
           {/* youtube */}
-          <Link to="/" className=" cursor-pointer">
+          <Link to="/" className="cursor-pointer" aria-label="Youtube">
             <svg
               width="32"
               height="24"
               viewBox="0 0 32 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="hover:fill-[#D80F16] transition-colors duration-200"
+              className="hover:fill-[#000] transition-colors duration-200"
             >
               <path
                 d="M30.3778 4.73562C30.1722 3.98918 29.7711 3.31128 29.2152 2.77481L29.2144 2.77397C28.6546 2.23298 27.9671 1.84436 27.216 1.64647C26.5642 1.47206 25.5162 1.35792 24.3944 1.27595C23.243 1.19183 21.9245 1.13623 20.6838 1.09931C19.4416 1.06234 18.2693 1.04388 17.4082 1.03466C16.9774 1.03004 16.6239 1.02773 16.3779 1.02658C16.2549 1.026 16.1587 1.02571 16.0932 1.02556L16.0182 1.02544L15.9987 1.02542L15.9978 1.02542C12.299 0.982833 8.60123 1.17129 4.92521 1.58972L4.84466 1.59889L4.76663 1.62092C4.02012 1.83165 3.33807 2.22639 2.78051 2.76835L2.78051 2.76835L2.77794 2.77087C2.22506 3.31217 1.82055 3.98379 1.60853 4.72501L1.59503 4.77224L1.58621 4.82056C1.1831 7.03031 0.987061 9.27394 1.0007 11.5213C0.98671 13.7667 1.18228 16.0097 1.58624 18.2223L1.59463 18.2683L1.60728 18.3133C1.816 19.0559 2.22139 19.7281 2.77843 20.2674C3.33648 20.8077 4.02625 21.1932 4.77727 21.3963L4.78292 21.3978C5.43964 21.5712 6.48928 21.6853 7.61359 21.7673C8.76486 21.8512 10.0806 21.9067 11.3178 21.9436C12.5564 21.9805 13.7242 21.9989 14.5818 22.0081C15.0108 22.0127 15.3626 22.015 15.6075 22.0162C15.73 22.0167 15.8257 22.017 15.891 22.0172L15.9656 22.0173L15.985 22.0173H15.9859C19.6893 22.0599 23.3917 21.8715 27.0723 21.453L27.1439 21.4449L27.2136 21.4266C27.966 21.2288 28.6547 20.8396 29.2153 20.2976L29.2167 20.2962C29.7758 19.7534 30.1762 19.0754 30.3776 18.3331L30.3881 18.2945L30.3954 18.2552C30.8091 16.046 31.0106 13.8012 30.997 11.5524C31.0275 9.28973 30.8259 7.02993 30.3954 4.80969L29.9556 4.85193L30.3778 4.73562Z"
@@ -952,7 +962,7 @@ function FooterMenu({menu}: {menu?: EnhancedMenu}) {
           <Disclosure>
             {({open}) => (
               <>
-                <Disclosure.Button className="text-center md:cursor-default hover:text-[#D80F16] ">
+                <Disclosure.Button className="text-center md:cursor-default hover:text-feature-link-color ">
                   <Heading className=" cursor-pointer" size="footer" as="h3">
                     <Link to={item.to}>
                       {item.title}
