@@ -137,22 +137,24 @@ export async function loader({params, context}: LoaderArgs) {
   allMetaobjectsArray.sort((a, b) => {
     const orderA = a[0].order.value;
     const orderB = b[0].order.value;
+
     return orderA - orderB;
   });
 
   const seo = seoPayload.home();
-
-  return defer({
-    allMetaobjectsArray,
-    featuredProducts: context.storefront.query<{
-      products: ProductConnection;
-    }>(HOMEPAGE_FEATURED_PRODUCTS_QUERY, {
-      variables: {
-        country,
-        language,
-      },
-    }),
+  const featuredProducts = await context.storefront.query<{
+    products: ProductConnection;
+  }>(HOMEPAGE_FEATURED_PRODUCTS_QUERY, {
+    variables: {
+      country,
+      language,
+    },
   });
+
+  return {
+    allMetaobjectsArray,
+    featuredProducts,
+  };
 }
 
 export default function Homepage() {
@@ -186,7 +188,7 @@ export default function Homepage() {
                             key={component[0].order.value}
                             products={products.nodes}
                             data={component[0]}
-                            title="Featured Products"
+                            // title="Featured Products"
                             count={4}
                           />
                         );
