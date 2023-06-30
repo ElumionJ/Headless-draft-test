@@ -4,6 +4,7 @@ import {LoaderArgs} from '@shopify/remix-oxygen';
 export enum FilterParamsKey {
   VENDORS = 'productVendor',
   AVAILABLE = 'available',
+  PRODUCT_TYPE = 'productType',
 }
 
 interface PrettyParams {
@@ -39,6 +40,10 @@ function filterCases(product: Product, param: PrettyParams): boolean {
     case FilterParamsKey.VENDORS:
       return param[type].some((el) => {
         return product.variants.nodes[0].product.vendor === el;
+      });
+    case FilterParamsKey.PRODUCT_TYPE:
+      return param[type].some((el) => {
+        return product.productType === el;
       });
     default:
       return true;
