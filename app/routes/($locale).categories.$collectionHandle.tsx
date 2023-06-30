@@ -18,6 +18,8 @@ import {seoPayload} from '~/lib/seo.server';
 import type {AppliedFilter, SortParam} from '~/components/SortFilter';
 import parseMetaobject from '~/helpers/parseMetaobject';
 
+import {filterGivenProducts} from './shared/collectionLogic';
+
 export const headers = routeHeaders;
 
 const PAGINATION_SIZE = 250;
@@ -93,7 +95,7 @@ export async function loader({params, request, context}: LoaderArgs) {
     });
   }
 
-  console.log(filters);
+  // console.log(filters);
   const {collection, collections, metaobject} = await context.storefront.query<{
     collection: CollectionType;
     collections: CollectionConnection;
@@ -103,7 +105,6 @@ export async function loader({params, request, context}: LoaderArgs) {
       handle: collectionHandle,
       pageBy: PAGINATION_SIZE,
       cursor,
-      filters,
       sortKey,
       reverse,
       country: context.storefront.i18n.country,
@@ -114,6 +115,7 @@ export async function loader({params, request, context}: LoaderArgs) {
   if (!collection) {
     throw new Response('collection', {status: 404});
   }
+  filterGivenProducts(collection, request);
 
   const collectionNodes = flattenConnection(collections);
   const bannerImg =
@@ -197,7 +199,7 @@ const COLLECTION_QUERY = `#graphql
     $language: LanguageCode
     $pageBy: Int!
     $cursor: String
-    $filters: [ProductFilter!]
+
     $sortKey: ProductCollectionSortKeys!
     $reverse: Boolean
   ) @inContext(country: $country, language: $language) {
@@ -232,7 +234,7 @@ const COLLECTION_QUERY = `#graphql
       products(
         first: $pageBy,
         after: $cursor,
-        filters: $filters,
+        
         sortKey: $sortKey,
         reverse: $reverse
       ) {

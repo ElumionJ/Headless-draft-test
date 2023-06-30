@@ -42,6 +42,7 @@ export const PRODUCT_CARD_FRAGMENT = `#graphql
     title
     publishedAt
     handle
+    productType
     collections(first:1){
       nodes{
         title
@@ -74,6 +75,7 @@ export const PRODUCT_CARD_FRAGMENT = `#graphql
         product {
           handle
           title
+          vendor
         }
       }
     }

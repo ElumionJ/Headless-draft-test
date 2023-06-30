@@ -51,6 +51,22 @@ export function SortFilter({
   const location = useLocation();
   const [params] = useSearchParams();
   const [rotate, setRotate] = useState<'180deg' | '0deg'>('0deg');
+  const [activeParams, setActiveParams] = useState(parseParams(appliedFilters));
+  const navigate = useNavigate();
+  useEffect(() => {
+    console.log(activeParams);
+    let filters = '';
+    Object.entries(activeParams).forEach(([key, value], i) => {
+      if (i > 0) {
+        filters += `&${key}=${value}`;
+      } else {
+        filters += `${key}=${value}`;
+      }
+    });
+    navigate(`${location.pathname}?${filters}`, {
+      preventScrollReset: true,
+    });
+  }, [activeParams]);
 
   useEffect(() => {
     setRotate(params.get('reverse') === 'true' ? '0deg' : '180deg');
@@ -92,13 +108,20 @@ export function SortFilter({
                 <FiltersDrawer
                   collections={collections}
                   filters={filters}
-                  appliedFilters={appliedFilters}
+                  setActiveParams={setActiveParams}
+                  activeParams={activeParams}
+                  // appliedFilters={appliedFilters}
                   setOpen={setIsOpen}
                 />
               </div>
             </div>
             <div className="sm-maximum:hidden">
-              <AppliedFilters filters={appliedFilters} />
+              <AppliedFilters
+                isMobile
+                setActiveParams={setActiveParams}
+                activeParams={activeParams}
+                filters={appliedFilters}
+              />
             </div>
           </div>
           <div className="flex gap-[16px] items-center sm-maximum:w-full ">
@@ -118,7 +141,11 @@ export function SortFilter({
         </div>
 
         <div className="sm-maximum:block hidden ">
-          <AppliedFilters filters={appliedFilters} />
+          <AppliedFilters
+            setActiveParams={setActiveParams}
+            activeParams={activeParams}
+            filters={appliedFilters}
+          />
         </div>
       </div>
       <div className="flex flex-col flex-wrap md:flex-row">
@@ -128,48 +155,118 @@ export function SortFilter({
   );
 }
 
+function parseParams(appliedFilters: AppliedFilter[]) {
+  return appliedFilters.reduce((acc, el) => {
+    acc[el.urlParam.key] = el.urlParam.value;
+    return acc;
+  }, {});
+}
+
 export function FiltersDrawer({
   filters = [],
-  appliedFilters = [],
+  // appliedFilters = [],
   collections = [],
   setOpen,
+  setActiveParams,
+  activeParams,
 }: {
   filters: Filter[];
-  appliedFilters: AppliedFilter[];
+  // appliedFilters: AppliedFilter[];
   collections: Collection[];
   setOpen?: (state: boolean) => void;
+  setActiveParams: (obj: any) => void;
+  activeParams: any;
 }) {
   const [params] = useSearchParams();
-  const location = useLocation();
 
-  const filterMarkup = (filter: Filter, option: Filter['values'][0]) => {
-    switch (filter.type) {
-      case 'PRICE_RANGE':
-        const min =
-          params.has('minPrice') && !isNaN(Number(params.get('minPrice')))
-            ? Number(params.get('minPrice'))
-            : undefined;
+  useEffect(() => {}, [activeParams]);
 
-        const max =
-          params.has('maxPrice') && !isNaN(Number(params.get('maxPrice')))
-            ? Number(params.get('maxPrice'))
-            : undefined;
+  // console.log(params);
+  const filterMarkup = (
+    filter: Filter,
+    option: Filter['values'][0],
+    changeParams: any,
+    paramsState: any,
+  ) => {
+    // switch (filter.type) {
+    //   case 'PRICE_RANGE':
+    //     const min =
+    //       params.has('minPrice') && !isNaN(Number(params.get('minPrice')))
+    //         ? Number(params.get('minPrice'))
+    //         : undefined;
 
-        return <PriceRangeFilter min={min} max={max} />;
+    //     const max =
+    //       params.has('maxPrice') && !isNaN(Number(params.get('maxPrice')))
+    //         ? Number(params.get('maxPrice'))
+    //         : undefined;
 
-      default:
-        const to = getFilterLink(
-          filter,
-          option.input as string,
-          params,
-          location,
-        );
-        return (
-          <Link className="block font-noto py-1" prefetch="intent" to={to}>
-            {option.label}
-          </Link>
-        );
+    //     return <PriceRangeFilter min={min} max={max} />;
+
+    //   default:
+    //     const to = getFilterLink(
+    //       filter,
+    //       option.input as string,
+    //       params,
+    //       location,
+    //     );
+    //     return (
+    //       <Link className="block font-noto py-1" prefetch="intent" to={to}>
+    //         {option.label}
+    //       </Link>
+    //     );
+    // }
+    const paramType = filter.id.substring(filter.id.lastIndexOf('.') + 1);
+    let checkedType = {key: '', value: ''};
+    const query = params.get(paramType);
+    const parsedInput = JSON.parse(option.input as string);
+    switch (paramType) {
+      case 'vendor':
+        checkedType = {key: 'productVendor', value: parsedInput.productVendor};
+        break;
+      case 'availability':
+        checkedType = {key: 'available', value: parsedInput.available};
+        break;
+      case 'product_type':
+        checkedType = {key: 'productType', value: parsedInput.productType};
+        break;
     }
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const type = e.target.dataset.type!;
+      const action = e.target.checked;
+      const paramsArr = paramsState[type]?.split(',');
+      const foundParamIndex = paramsArr?.indexOf(`${checkedType.value}`);
+
+      const copyState = {...paramsState};
+      if (action) {
+        if (foundParamIndex >= 0) return;
+        if (paramsArr?.length > 0) {
+          copyState[type] += `,${checkedType.value}`;
+        } else copyState[type] = `${checkedType.value}`;
+      } else if (!action) {
+        if (foundParamIndex === undefined || foundParamIndex < 0) return;
+        paramsArr.splice(foundParamIndex, 1);
+        if (paramsArr.length === 0) {
+          delete copyState[type];
+        } else {
+          copyState[type] = paramsArr.join(',');
+        }
+      }
+      changeParams(copyState);
+    };
+    // debugger;
+    return (
+      <label className="flex justify-between" htmlFor={option.id}>
+        {option.label}
+        <input
+          data-type={checkedType.key}
+          type="checkbox"
+          checked={paramsState[checkedType.key]?.includes(checkedType.value)}
+          onChange={handleChange}
+          id={option.id}
+        />
+      </label>
+    );
   };
 
   const collectionsMarkup = collections.map((collection) => {
@@ -219,9 +316,14 @@ export function FiltersDrawer({
                       return (
                         <li
                           key={option.id}
-                          className="h-fit w-full hover:underline"
+                          className="h-fit w-full flex flex-col hover:underline"
                         >
-                          {filterMarkup(filter, option)}
+                          {filterMarkup(
+                            filter,
+                            option,
+                            setActiveParams,
+                            activeParams,
+                          )}
                         </li>
                       );
                     })}
@@ -249,32 +351,54 @@ export function FiltersDrawer({
   );
 }
 
-function AppliedFilters({filters = []}: {filters: AppliedFilter[]}) {
+function AppliedFilters({
+  filters = [],
+  setActiveParams,
+  activeParams,
+  isMobile = false,
+}: {
+  isMobile?: boolean;
+  filters: AppliedFilter[];
+  setActiveParams: (obj: any) => void;
+  activeParams: any;
+}) {
   const [params] = useSearchParams();
   const location = useLocation();
-
+  const paramsArr = Object.entries(activeParams);
   return (
     <>
-      {/* <Heading as="h4" size="lead" className="pb-4">
-        Applied filters
-      </Heading> */}
       <div className="flex flex-wrap gap-2">
-        {filters.map((filter: AppliedFilter) => {
-          return (
-            <Link
-              to={getAppliedFilterLink(filter, params, location)}
-              className="flex p-[8px] gap-[8px]  items-center bg-black text-[#fff] rounded-[2px]"
-              key={`${filter.label}-${filter.urlParam}`}
-            >
-              <span className="font-noto font-bold text-[12px] leading-[150%]">
-                {filter.label}
-              </span>
-              <span className="text-[11px]">
-                <TfiClose />
-              </span>
-            </Link>
-          );
-        })}
+        {paramsArr.map(([key, value], i) =>
+          (value as string).split(',').map((el) => {
+            return (
+              <button
+                key={isMobile ? `${key}-${el}${i}` : `${el}-${key}${i}`}
+                onClick={(clickEvent) => {
+                  const type = key;
+                  const input = el;
+                  const copyState = {...activeParams};
+                  const splittedParams = (value as string).split(',');
+                  const foundParamIndex = splittedParams.indexOf(input);
+                  splittedParams.splice(foundParamIndex, 1);
+                  if (splittedParams.length === 0) {
+                    delete copyState[type];
+                  } else {
+                    copyState[type] = splittedParams.join(',');
+                  }
+                  setActiveParams(copyState);
+                }}
+                className="flex p-[8px] gap-[8px]  items-center bg-black text-[#fff] rounded-[2px]"
+              >
+                <span className="font-noto font-bold text-[12px] leading-[150%]">
+                  {el}
+                </span>
+                <span className="text-[11px]">
+                  <TfiClose />
+                </span>
+              </button>
+            );
+          }),
+        )}
       </div>
     </>
   );
