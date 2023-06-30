@@ -231,12 +231,12 @@ export default function Product() {
             <SwiperImages media={media.nodes} />
           </div>
           <div className=" gt-l:flex flex-col hidden max-w-[368px] w-full ">
-            <Heading as="h1" className="text-5xl">
+            <Heading as="h1" className="text-5xl sm:mt-[50px]">
               {title}
             </Heading>
           </div>
 
-          <div className=" md-lg:px-[40px] sm-maximum-md:px-[32px]  w-full hiddenScroll md:overflow-y-scroll ">
+          <div className=" md-lg:px-[0px] sm-maximum-md:px-[32px]  w-full hiddenScroll md:overflow-y-scroll ">
             <section className="flex flex-col w-full gap-8  md:mx-auto md:px-0 ">
               {vendor && (
                 <div className="gt-l:hidden flex gap-[8px] items-center tracking-wider leading-[22px]">
@@ -424,12 +424,12 @@ export function ProductForm() {
                 <Text>Sold out</Text>
               </Button>
             ) : (
-              <div className="flex gap-[16px] w-full items-end gt-xl:flex-col gt-l:flex-row">
+              <div className="flex gap-[16px] w-full  gt-xl:flex-col gt-l:flex-row items-center">
                 <ProductQuantity
                   quantity={quantity}
                   changeQuantity={changeQuantity}
                 />
-                <div className="w-full ">
+                <div className="w-full">
                   <AddToCartButton
                     lines={[
                       {
@@ -437,7 +437,7 @@ export function ProductForm() {
                         quantity,
                       },
                     ]}
-                    className="mt-2 flex justify-center items-center bg-c-red hover:bg-[#353535] transition-colors w-full gap-[12px] py-4 px-[16px] text-[#fff]"
+                    className="flex justify-center items-center bg-c-red hover:bg-[#353535] transition-colors w-full gap-[12px] py-4 px-[16px] text-[#fff]"
                     variant="primary"
                     data-test="add-to-cart"
                     analytics={{

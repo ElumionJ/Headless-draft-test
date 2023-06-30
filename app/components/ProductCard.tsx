@@ -24,6 +24,10 @@ export function ProductCard({
 }) {
   let cardLabel;
 
+  const {media} = product;
+  console.log(media);
+  // console.log(media.nodes[1]);
+
   const cardProduct: Product = product?.variants
     ? (product as Product)
     : getProductPlaceholder();
@@ -33,7 +37,6 @@ export function ProductCard({
 
   if (!firstVariant) return null;
   const {image, price, compareAtPrice, availableForSale} = firstVariant;
-  // console.log(firstVariant);
 
   if (label) {
     cardLabel = label;
@@ -65,7 +68,7 @@ export function ProductCard({
         prefetch="intent"
       >
         <div className={clsx('grid gap-4', className)}>
-          <div className="card-image aspect-[4/5] bg-primary/5">
+          <div className="card-image aspect-[4/5] bg-primary/5 relative overflow-hidden">
             {!availableForSale && (
               <div
                 data-outofstock-overlay
@@ -77,19 +80,29 @@ export function ProductCard({
               </div>
             )}
             {image && (
-              <Image
-                className={`object-cover w-full fadeIn rounded-[2px] `}
-                sizes="(min-width: 64em) 25vw, (min-width: 48em) 30vw, 45vw"
-                aspectRatio="4/5"
-                data={image}
-                alt={image.altText || `Picture of ${product.title}`}
-                loading={'lazy'}
-              />
+              <>
+                <Image
+                  className={`hover_image object-cover w-full fadeIn rounded-[2px] absolute z-0`}
+                  sizes="(min-width: 64em) 25vw, (min-width: 48em) 30vw, 45vw"
+                  aspectRatio="4/5"
+                  data={media?.nodes[1].previewImage}
+                  alt={image.altText || `Picture of ${product.title}`}
+                  loading={'lazy'}
+                />
+                <Image
+                  className={`object-cover w-full fadeIn absolute rounded-[2px] z-1`}
+                  sizes="(min-width: 64em) 25vw, (min-width: 48em) 30vw, 45vw"
+                  aspectRatio="4/5"
+                  data={media?.nodes[0].previewImage}
+                  alt={image.altText || `Picture of ${product.title}`}
+                  loading={'lazy'}
+                />
+              </>
             )}
             <Text
               as="label"
               size="fine"
-              className="absolute top-0 ltr:left-0 rtl:right-0 m-4 text-right text-notice font-noto tracking-wider uppercase"
+              className="absolute top-0 ltr:left-0 rtl:right-0 m-4 text-right text-notice font-noto tracking-wider uppercase z-10"
             >
               {cardLabel}
             </Text>
