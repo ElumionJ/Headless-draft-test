@@ -28,7 +28,7 @@ export function ProductSwimlaneHome({
   return (
     <div
       heading={title}
-      padding="y"
+      // padding="y"
       {...props}
       className=" gt-m:flex-col flex justify-between"
     >

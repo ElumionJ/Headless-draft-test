@@ -56,7 +56,7 @@ export function CountrySelector() {
 
   return (
     <section ref={observerRef} className=" w-fit " onMouseLeave={closeDropdown}>
-      <div className="flex items-center sm-max:justify-start justify-center ">
+      <div className="flex items-center sm-max:justify-start justify-center text-black">
         <div className="lg:hidden">
           <Heading
             size="lead"
@@ -69,7 +69,7 @@ export function CountrySelector() {
 
         <div className="relative ">
           <details
-            className="  w-max border-none rounded border-contrast/30 dark:border-white open:round-b-none overflow-clip "
+            className="w-max border-none rounded border-contrast/30 open:round-b-none overflow-clip "
             ref={closeRef}
           >
             <summary className="flex items-center justify-between w-full  cursor-pointer font-bebas">
@@ -88,7 +88,7 @@ export function CountrySelector() {
                 <polygon points="386.258,91.567 203.718,273.512 21.179,91.567 0,112.815 203.718,315.87 407.437,112.815 " />
               </svg>
             </summary>
-            <div className="absolute  rounded-[10px] w-max overflow-auto border-t border-contrast/30 dark:border-white bg-contrast/30 max-h-36">
+            <div className="absolute border-black rounded-[10px] w-max overflow-auto border max-h-36">
               {countries &&
                 Object.keys(countries).map((countryPath) => {
                   const countryLocale = countries[countryPath];

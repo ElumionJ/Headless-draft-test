@@ -181,7 +181,7 @@ export function MenuDrawer({
     <div
       className={`${
         isOpen ? 'left-0 rtl:right-0' : 'left-[-105%] rtl:right-[-105%]'
-      }  top-0 fixed bg-c-red z-50 h-full flex flex-col transition-left rtl:transition-right duration-200 ease-in w-full md-only:w-[60%]`}
+      }  top-0 fixed bg-white border-r-[0.5px] border-r-black  z-50 h-full flex flex-col transition-left rtl:transition-right duration-200 ease-in w-full md-only:w-[60%]`}
     >
       <MenuMobileNav
         openCart={openCart}
@@ -214,8 +214,12 @@ function MenuMobileNav({
   return (
     <>
       <nav className="font-bebas grid gap-4 p-[17px]  sm:gap-6 sm:pb-8  text-white">
-        <div className="flex justify-between items-center border-b-[1px] border-[#A8272D] pb-3">
-          <button className="text-[20px]" aria-label="Close" onClick={onClose}>
+        <div className="flex justify-between items-center border-b-[1px] border-black pb-3">
+          <button
+            className="text-[20px] text-black"
+            aria-label="Close"
+            onClick={onClose}
+          >
             <TfiClose />
           </button>
           <Link to={'/'} onClick={onClose}>
@@ -228,46 +232,44 @@ function MenuMobileNav({
           />
         </div>
 
-        <ul className="overflow-y-scroll gap-y-4 flex flex-col justify-center">
+        <ul className="overflow-y-scroll gap-y-4 flex flex-col justify-center text-black">
           <li key={'search'} className="block">
             <Form
               method="get"
               action={params.locale ? `/${params.locale}/search` : '/search'}
               onSubmit={onClose}
-              className="font-noto items-center flex gap-2 sm:flex bg-white mt-[14px] mb-[14px] rtl:px-4"
+              className="font-noto items-center flex gap-2 sm:flex bg-white mt-[14px] mb-[14px] rtl:px-4 border rounded-full border-[#A0A0A0]"
             >
               <button
                 aria-label="Submit"
                 type="submit"
                 className="relative flex items-center justify-center w-8 h-8 text-[#A0A0A0] pl-4"
               >
-                <div>
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 18 18"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle
-                      cx="6.74142"
-                      cy="6.74142"
-                      r="6.74142"
-                      transform="matrix(-1 0 0 1 15.918 2.08398)"
-                      stroke="#A0A0A0"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M4.48828 13.8652L1.84526 16.5014"
-                      stroke="#A0A0A0"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </div>
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="6.74142"
+                    cy="6.74142"
+                    r="6.74142"
+                    transform="matrix(-1 0 0 1 15.918 2.08398)"
+                    stroke="#A0A0A0"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M4.48828 13.8652L1.84526 16.5014"
+                    stroke="#A0A0A0"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </button>
               <Input
                 className={`${
@@ -330,7 +332,7 @@ function MenuMobileNav({
                   target={item.target}
                   onClick={onClose}
                   className={({isActive}) =>
-                    isActive ? 'pb-1 border-b -mb-px' : 'pb-1'
+                    isActive ? 'pb-1 border-b -mb-px border-black' : 'pb-1'
                   }
                 >
                   {/* <Text as="span" size="copy"> */}
@@ -381,12 +383,8 @@ function MobileHeader({
 
   return (
     <header
-      role="banner"
-      className={`${
-        isHome
-          ? 'bg-white dark:bg-contrast/60 text-contrast dark:text-primary dark:shadow-darkHeader'
-          : 'bg-white text-primary'
-      }
+      // role="banner"
+      className={`${isHome ? 'bg-white text-contrast' : 'bg-white text-primary'}
        flex lg:hidden items-center  sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 sm-maximum:px-4 sm-maximum-md:px-8 md-lg:px-10 h-fit`}
     >
       <div className="flex items-center justify-start w-full gap-4 ">
@@ -400,23 +398,21 @@ function MobileHeader({
       </div>
 
       <Link
-        className="flex items-center self-stretch leading-[3rem] md:leading-[4rem] justify-center flex-grow w-full h-full"
+        className="p-4 flex items-center self-stretch leading-[3rem] md:leading-[4rem] justify-center flex-grow w-full h-full"
         to="/"
       >
         <Heading
           className="font-bold leading-none text-center"
           as={isHome ? 'h1' : 'h2'}
         >
-          <div className="p-3 ">
-            <img
-              src={logo}
-              alt="Logo"
-              width={50}
-              height={50}
-              className="w-[110px]"
-              loading="lazy"
-            />
-          </div>
+          <img
+            src={logo}
+            alt="Logo"
+            width={50}
+            height={50}
+            className="w-[110px]"
+            loading="lazy"
+          />
         </Heading>
       </Link>
 
@@ -445,11 +441,9 @@ function DesktopHeader({
   const {y} = useWindowScroll();
   return (
     <header
-      role="banner"
+      // role="banner"
       className={`${
-        isHome
-          ? 'bg-white  dark:bg-contrast/60 text-contrast dark:text-primary dark:shadow-darkHeader'
-          : 'bg-white text-primary'
+        isHome ? 'bg-white text-contrast' : 'bg-white text-primary'
       } ${
         !isHome && y > 50 && ' '
       } hidden h-fit lg:flex items-center justify-center sticky transition duration-300 backdrop-blur-lg z-40 top-0  w-full leading-none gap-10 px-10 `}
@@ -521,7 +515,7 @@ function DesktopHeader({
                           height="7px"
                           width="7px"
                           version="1.1"
-                          id="Layer_1"
+                          // id="Layer_1"
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 407.437 407.437"
                           xmlSpace="preserve"
@@ -672,7 +666,7 @@ function AccountLink({className}: {className?: string}) {
   ) : (
     <Link to="/account/login" className={className}>
       {/* <IconLogin /> */}
-      <div className="tracking-widest font-bebas flex items-center justify-center   uppercase border-b-2  border-black dark:border-white w-fit gap-x-2 hover:opacity-80 ">
+      <div className="font-bebas flex items-center justify-center   uppercase border-b-2  border-black  w-fit gap-x-2 hover:opacity-80">
         {languageText}
         <span className="">
           <svg
@@ -746,17 +740,15 @@ function Badge({
 
   const BadgeCounter = useMemo(() => {
     if (count === 0) {
-      return <IconBag variant={variant} />;
+      return <IconBag variant={'black'} />;
     }
 
     return (
       <>
-        <IconBag variant={variant} />
+        <IconBag variant={'black'} />
         <span
           className={`${
-            dark
-              ? 'bg-contrast text-primary dark:text-contrast dark:bg-primary'
-              : ' bg-contrast text-primary'
+            dark ? 'bg-contrast text-primary ' : ' bg-contrast text-primary'
           } absolute bottom-1 left-[10px] rtl:right-[10px] rtl:left-0 text-[0.625rem] font-medium subpixel-antialiased h-3 min-w-[0.75rem] flex items-center justify-center leading-none text-center rounded-full w-auto px-[0.125rem] pb-px border border-black`}
         >
           <span>{count || 0}</span>
@@ -769,7 +761,7 @@ function Badge({
     <button
       aria-label="Counter"
       onClick={openCart}
-      className="relative flex items-center justify-center w-5 h-8 focus:ring-primary/5"
+      className="relative flex items-center justify-center w-5 h-8 focus:ring-primary/5 "
     >
       {BadgeCounter}
     </button>
@@ -815,9 +807,9 @@ export function Footer({
     <Section
       divider={isHome ? 'none' : 'top'}
       as="footer"
-      role="contentinfo"
-      className={`font-bebas uppercase !w-auto  border-t-0	 sm-maximum:px-4 sm-maximum-md:px-8 md-lg:px-10  md:py-0 md:gap-0 md-lg:py-0  md-lg:gap-0
-      bg-gradient-to-r from-white via-white to-white bg-no-repeat bg-cover dark:bg-primary dark:text-contrast text-primary  overflow-hidden`}
+      // role="contentinfo"
+      className={`font-bebas uppercase !w-auto !border-t-0	 sm-maximum:px-4 sm-maximum-md:px-8 md-lg:px-10  md:py-0 md:gap-0 md-lg:py-0  md-lg:gap-0
+      bg-gradient-to-r from-white via-white to-white bg-no-repeat bg-cover  text-primary  overflow-hidden`}
       style={{backgroundImage: `url(${footer})`}}
     >
       <div className="flex items-center justify-between w-full border-b-[1px] border-b-[#E0E0E0] py-[50px] ">
@@ -834,7 +826,7 @@ export function Footer({
           </div>
         </Link>
 
-        <div className="flex items-center justify-center gap-x-8 w-1/3 rtl:w-1/6">
+        <div className="flex items-center justify-center gap-x-8 w-1/3 rtl:w-1/6 text-black">
           <FooterMenu menu={menu} />
         </div>
 
@@ -923,7 +915,7 @@ export function Footer({
 
       <div className="flex items-center  flex-row-reverse gap-0 py-5 ">
         <div
-          className={`text-sm self-end opacity-50 md:col-span-2 lg:col-span-${itemsCount}`}
+          className={`text-sm self-end text-black opacity-50 md:col-span-2 lg:col-span-${itemsCount}`}
         >
           &copy; {new Date().getFullYear()} / Shopify, Inc. Hydrogen is an MIT
           Licensed Open Source project.
@@ -962,17 +954,21 @@ function FooterMenu({menu}: {menu?: EnhancedMenu}) {
           <Disclosure>
             {({open}) => (
               <>
-                <Disclosure.Button className="text-center md:cursor-default hover:text-feature-link-color ">
-                  <Heading className=" cursor-pointer" size="footer" as="h3">
-                    <Link to={item.to}>
-                      {item.title}
-                      {item?.items?.length > 0 && (
-                        <span className="md:hidden">
-                          <IconCaret direction={open ? 'up' : 'down'} />
-                        </span>
-                      )}
-                    </Link>
-                  </Heading>
+                <Disclosure.Button
+                  className="text-center md:cursor-default hover:text-feature-link-color "
+                  as={Link}
+                  to={item.to}
+                >
+                  {/* <Heading className=" cursor-pointer" size="footer" as="h3"> */}
+                  {/* <Link to={item.to} className="font-medium "> */}
+                  {item.title}
+                  {item?.items?.length > 0 && (
+                    <span className="md:hidden">
+                      <IconCaret direction={open ? 'up' : 'down'} />
+                    </span>
+                  )}
+                  {/* </Link> */}
+                  {/* </Heading> */}
                 </Disclosure.Button>
                 {item?.items?.length > 0 ? (
                   <div
@@ -1020,10 +1016,10 @@ function FooterMob({
     <Section
       divider={isHome ? 'none' : 'top'}
       as="footer"
-      role="contentinfo"
-      className={`font-bebas uppercase border-t-0 min-h-[15px] grid items-start grid-flow-row w-full pt-8  sm-maximum:px-4 sm-maximum-md:px-8 md-lg:px-10  lg:gap-12 grid-cols-1  lg:grid-cols-${itemsCount}
+      // role="contentinfo"
+      className={`font-bebas uppercase !border-t-0 min-h-[15px] grid items-start grid-flow-row w-full pt-8  sm-maximum:px-4 sm-maximum-md:px-8 md-lg:px-10  lg:gap-12 grid-cols-1  lg:grid-cols-${itemsCount}
 
-      bg-gradient-to-r from-white via-white to-white bg-no-repeat bg-cover dark:bg-primary dark:text-contrast text-primary overflow-hidden`}
+      bg-gradient-to-r from-white via-white to-white bg-no-repeat bg-cover text-primary overflow-hidden`}
       style={{backgroundImage: `url(${footer})`}}
     >
       <div className="flex flex-col items-center justify-center border-b-[1px] border-b-[#E0E0E0]">
@@ -1114,13 +1110,13 @@ function FooterMob({
         </div>
       </div>
 
-      <div className="border-b-[1px] border-b-[#E0E0E0] md:block ">
+      <div className="border-b-[1px] border-b-[#E0E0E0] md:block text-black">
         <FooterMenuMob menu={menu} />
       </div>
 
       <div className="">
         <div
-          className={` text-sm self-end opacity-50 md:col-span-2  lg:col-span-${itemsCount}`}
+          className={` text-sm self-end text-black opacity-50 md:col-span-2  lg:col-span-${itemsCount}`}
         >
           &copy; {new Date().getFullYear()} / Shopify, Inc. Hydrogen is an MIT
           Licensed Open Source project.
@@ -1159,19 +1155,23 @@ function FooterMenuMob({menu}: {menu?: EnhancedMenu}) {
           <Disclosure>
             {({open}) => (
               <>
-                <Disclosure.Button className="text-left md:cursor-default ">
-                  <Heading
+                <Disclosure.Button
+                  className="text-left md:cursor-default flex justify-between text-[20px]"
+                  as={Link}
+                  to={item.to}
+                >
+                  {/* <Heading
                     className="flex justify-between "
                     size="footer"
                     as="h3"
-                  >
-                    {item.title}
-                    {item?.items?.length > 0 && (
-                      <span className="md:hidden ">
-                        <IconCaret direction={open ? 'up' : 'down'} />
-                      </span>
-                    )}
-                  </Heading>
+                  > */}
+                  {item.title}
+                  {item?.items?.length > 0 && (
+                    <span className="md:hidden ">
+                      <IconCaret direction={open ? 'up' : 'down'} />
+                    </span>
+                  )}
+                  {/* </Heading> */}
                 </Disclosure.Button>
                 {item?.items?.length > 0 ? (
                   <div
