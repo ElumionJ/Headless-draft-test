@@ -127,6 +127,13 @@ export function SortFilter({
   );
 }
 
+function parseParams(appliedFilters: AppliedFilter[]) {
+  return appliedFilters.reduce((acc, el) => {
+    acc[el.urlParam.key] = el.urlParam.value;
+    return acc;
+  }, {});
+}
+
 export function FiltersDrawer({
   filters = [],
   appliedFilters = [],
@@ -140,9 +147,29 @@ export function FiltersDrawer({
 }) {
   const [params] = useSearchParams();
   const location = useLocation();
+  const [activeParams, setActiveParams] = useState(parseParams(appliedFilters));
+  const navigate = useNavigate();
+  useEffect(() => {
+    let filters = '';
+    Object.entries(activeParams).forEach(([key, value], i) => {
+      if (i > 0) {
+        filters += `&${key}=${value}`;
+      } else {
+        filters += `${key}=${value}`;
+      }
+    });
+    navigate(`${location.pathname}?${filters}`, {
+      preventScrollReset: true,
+    });
+  }, [activeParams]);
 
-  console.log(params);
-  const filterMarkup = (filter: Filter, option: Filter['values'][0]) => {
+  // console.log(params);
+  const filterMarkup = (
+    filter: Filter,
+    option: Filter['values'][0],
+    changeParams: any,
+    paramsState: any,
+  ) => {
     // switch (filter.type) {
     //   case 'PRICE_RANGE':
     //     const min =
@@ -172,33 +199,74 @@ export function FiltersDrawer({
     // }
     const paramType = filter.id.substring(filter.id.lastIndexOf('.') + 1);
     let partialQuery = '';
-    let checkedType = '';
+    let checkedType = {key: '', value: ''};
     const query = params.get(paramType);
     const parsedInput = JSON.parse(option.input as string);
     switch (paramType) {
       case 'vendor':
-        partialQuery = `productVendor=${parsedInput.productVendor}`;
-        checkedType = 'productVendor';
+        checkedType = {key: 'productVendor', value: parsedInput.productVendor};
+        // partialQuery = `${checkedType}=${parsedInput.productVendor}`;
         break;
       case 'availability':
-        partialQuery = `available=${parsedInput.available}`;
+        checkedType = {key: 'available', value: parsedInput.available};
+        // partialQuery = `${checkedType}=${parsedInput.available}`;
         break;
       case 'product_type':
         break;
     }
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const type = e.target.dataset.type!;
+      const action = e.target.checked;
+      const paramsArr = paramsState[type]?.split(',');
+      const foundParamIndex = paramsArr?.indexOf(checkedType.value);
+
+      const copyState = {...paramsState};
+      // console.log(foundParamIndex);
+      if (action) {
+        if (foundParamIndex >= 0) return;
+        // concatinatedLink = checkedType.value;
+        if (paramsArr?.length > 0) {
+          copyState[type] += `,${checkedType.value}`;
+        } else copyState[type] = `${checkedType.value}`;
+        // changeParams((prev) => {
+        //   console.log(e.target.checked);
+        // if (action) {
+        //   if (prev[type]) {
+        //     prev[type] += `,${checkedType.value}`;
+        //   } else {
+        //     prev[type] = checkedType.value;
+        //   }}
+        // } else {
+        // }
+        // return {...prev};
+      } else if (!action) {
+        if (!foundParamIndex) return;
+        paramsArr.splice(foundParamIndex, 1);
+        copyState[type] = paramsArr.join(',');
+      }
+      console.log(copyState);
+      changeParams(copyState);
+    };
+
     // console.log(option);
-    const isChecked = params
-      .get(checkedType)
-      ?.split(',')
-      .some((el) => el === option.label);
-    console.log(isChecked);
+    // const isChecked = params
+    //   .get(checkedType)
+    //   ?.split(',')
+    //   .some((el) => el === option.label);
+    // console.log(isChecked);
     return (
-      <Link to={`${location.pathname}?${params.toString()}&${partialQuery}`}>
-        <label htmlFor={option.id}>
-          {option.label}
-          <input checked={isChecked} type="checkbox" id={option.id} />
-        </label>
-      </Link>
+      // <Link to={`${location.pathname}?${params.toString()}&${partialQuery}`}>
+      <label className="flex justify-between" htmlFor={option.id}>
+        {option.label}
+        <input
+          data-type={checkedType.key}
+          type="checkbox"
+          onChange={handleChange}
+          id={option.id}
+        />
+      </label>
+      // </Link>
     );
   };
 
@@ -250,7 +318,12 @@ export function FiltersDrawer({
                           key={option.id}
                           className="h-fit w-full flex flex-col hover:underline"
                         >
-                          {filterMarkup(filter, option)}
+                          {filterMarkup(
+                            filter,
+                            option,
+                            setActiveParams,
+                            activeParams,
+                          )}
                         </li>
                       );
                     })}
@@ -280,19 +353,18 @@ export function FiltersDrawer({
 function AppliedFilters({filters = []}: {filters: AppliedFilter[]}) {
   const [params] = useSearchParams();
   const location = useLocation();
-
   return (
     <>
       {/* <Heading as="h4" size="lead" className="pb-4">
         Applied filters
       </Heading> */}
       <div className="flex flex-wrap gap-2">
-        {filters.map((filter: AppliedFilter) => {
+        {filters.map((filter: AppliedFilter, i) => {
           return (
             <Link
               to={getAppliedFilterLink(filter, params, location)}
               className="flex p-[8px] gap-[8px]  items-center bg-black text-[#fff] rounded-[2px]"
-              key={`${filter.label}-${filter.urlParam}`}
+              key={`${filter.label}-${filter.urlParam.key}${i}`}
             >
               <span className="font-noto font-bold text-[12px] leading-[150%]">
                 {filter.label}
