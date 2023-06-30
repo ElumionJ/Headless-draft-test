@@ -141,34 +141,65 @@ export function FiltersDrawer({
   const [params] = useSearchParams();
   const location = useLocation();
 
+  console.log(params);
   const filterMarkup = (filter: Filter, option: Filter['values'][0]) => {
-    switch (filter.type) {
-      case 'PRICE_RANGE':
-        const min =
-          params.has('minPrice') && !isNaN(Number(params.get('minPrice')))
-            ? Number(params.get('minPrice'))
-            : undefined;
+    // switch (filter.type) {
+    //   case 'PRICE_RANGE':
+    //     const min =
+    //       params.has('minPrice') && !isNaN(Number(params.get('minPrice')))
+    //         ? Number(params.get('minPrice'))
+    //         : undefined;
 
-        const max =
-          params.has('maxPrice') && !isNaN(Number(params.get('maxPrice')))
-            ? Number(params.get('maxPrice'))
-            : undefined;
+    //     const max =
+    //       params.has('maxPrice') && !isNaN(Number(params.get('maxPrice')))
+    //         ? Number(params.get('maxPrice'))
+    //         : undefined;
 
-        return <PriceRangeFilter min={min} max={max} />;
+    //     return <PriceRangeFilter min={min} max={max} />;
 
-      default:
-        const to = getFilterLink(
-          filter,
-          option.input as string,
-          params,
-          location,
-        );
-        return (
-          <Link className="block font-noto py-1" prefetch="intent" to={to}>
-            {option.label}
-          </Link>
-        );
+    //   default:
+    //     const to = getFilterLink(
+    //       filter,
+    //       option.input as string,
+    //       params,
+    //       location,
+    //     );
+    //     return (
+    //       <Link className="block font-noto py-1" prefetch="intent" to={to}>
+    //         {option.label}
+    //       </Link>
+    //     );
+    // }
+    const paramType = filter.id.substring(filter.id.lastIndexOf('.') + 1);
+    let partialQuery = '';
+    let checkedType = '';
+    const query = params.get(paramType);
+    const parsedInput = JSON.parse(option.input as string);
+    switch (paramType) {
+      case 'vendor':
+        partialQuery = `productVendor=${parsedInput.productVendor}`;
+        checkedType = 'productVendor';
+        break;
+      case 'availability':
+        partialQuery = `available=${parsedInput.available}`;
+        break;
+      case 'product_type':
+        break;
     }
+    // console.log(option);
+    const isChecked = params
+      .get(checkedType)
+      ?.split(',')
+      .some((el) => el === option.label);
+    console.log(isChecked);
+    return (
+      <Link to={`${location.pathname}?${params.toString()}&${partialQuery}`}>
+        <label htmlFor={option.id}>
+          {option.label}
+          <input checked={isChecked} type="checkbox" id={option.id} />
+        </label>
+      </Link>
+    );
   };
 
   const collectionsMarkup = collections.map((collection) => {
@@ -217,7 +248,7 @@ export function FiltersDrawer({
                       return (
                         <li
                           key={option.id}
-                          className="h-fit w-full hover:underline"
+                          className="h-fit w-full flex flex-col hover:underline"
                         >
                           {filterMarkup(filter, option)}
                         </li>

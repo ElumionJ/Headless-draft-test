@@ -74,6 +74,7 @@ export const PRODUCT_CARD_FRAGMENT = `#graphql
         product {
           handle
           title
+          vendor
         }
       }
     }
