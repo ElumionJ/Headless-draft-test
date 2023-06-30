@@ -80,7 +80,7 @@ export function CountrySelector() {
                 height="7px"
                 width="7px"
                 version="1.1"
-                id="Layer_1"
+                // id="Layer_1"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 407.437 407.437"
                 xmlSpace="preserve"
