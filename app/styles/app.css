@@ -283,3 +283,26 @@ shop-pay-button {
 details summary::-webkit-details-marker {
   display: none;
 }
+
+.swiper-pagination {
+  position: absolute !important;
+  bottom: 10px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
+
+.swiper-pagination-bullet {
+  width: 6px !important;
+  height: 6px !important;
+  background-color: gray !important;
+  border-radius: 50% !important;
+  display: inline-block !important;
+  cursor: pointer !important;
+}
+
+.swiper-pagination-bullet-active {
+  background: black !important;
+  width: 36px !important;
+  height: 6px !important;
+  border-radius: 10px !important;
+}
