@@ -380,7 +380,7 @@ export function ProductForm() {
                         quantity,
                       },
                     ]}
-                    className="mt-2 flex justify-between items-center bg-c-red w-fit gap-[12px] py-4 px-[16px] rounded-[100px] text-[#fff]"
+                    className="mt-2 flex justify-between items-center bg-c-red w-fit gap-[12px] py-4 px-[16px] text-[#fff]"
                     variant="primary"
                     data-test="add-to-cart"
                     analytics={{

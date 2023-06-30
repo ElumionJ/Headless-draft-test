@@ -101,18 +101,18 @@ function Description({
     <div className="flex  gap-[170px] gt-l:flex-col gt-l:gap-[40px]">
       {attributes?.length > 0 && (
         <div className="min-w-[500px] gt-l:w-full gt-l:min-w-0">
-          <h3 className=" text-[24px] uppercase mb-[24px] font-bebas">
+          <h2 className=" text-[24px] uppercase mb-[24px] font-bebas">
             {attributesTitle}
-          </h3>
+          </h2>
           <ul className="w-full">
             {attributes?.map((el) => (
               <li
                 key={el.key.value}
                 className="flex gap-[30px] w-full border-b-[#D0D0D0] border-b-[1px] py-[24px] last:border-b-0 gt-m:grid gt-m:grid-cols-2"
               >
-                <h4 className="min-w-[180px] gt-l:w-full gt-l:text-[14px] gt-l:min-w-0 text-[16px] font-bold leading-[150%] font-noto">
+                <h3 className="min-w-[180px] gt-l:w-full gt-l:text-[14px] gt-l:min-w-0 text-[16px] font-bold leading-[150%] font-noto">
                   {el.title.value}
-                </h4>
+                </h3>
                 <p className=" w-full text-[16px] gt-l:text-[14px] leading-[150%] font-noto">
                   {el.meaning.value}
                 </p>
@@ -122,9 +122,9 @@ function Description({
         </div>
       )}
       <div className="">
-        <h3 className="text-[24px] pb-[24px] uppercase font-bebas">
+        <h2 className="text-[24px] pb-[24px] uppercase font-bebas">
           About {title}
-        </h3>
+        </h2>
         <p className="text-[16px] leading-[150%] font-noto">{description}</p>
       </div>
     </div>

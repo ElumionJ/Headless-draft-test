@@ -76,7 +76,7 @@ export function SortFilter({
                 aria-label="button"
                 className={`${
                   isOpen ? 'bg-c-red text-[#fff]' : 'bg-c-gray'
-                } py-[13px] px-[24px] rounded-[100px] flex justify-between font-bebas items-center gap-1 w-[180px] gt-sm:w-full uppercase text-[20px] `}
+                } py-[13px] px-[24px] flex justify-between font-bebas items-center gap-1 w-[180px] gt-sm:w-full uppercase text-[20px] `}
                 onClick={() => {
                   setIsOpen((prev) => !prev);
                 }}
@@ -236,7 +236,7 @@ export function FiltersDrawer({
             onClick={() => {
               setOpen!(false);
             }}
-            className="flex justify-center items-center gap-2 w-[95%] mx-auto text-[#fff] bg-c-red rounded-[100px] py-[12px]"
+            className="flex justify-center items-center gap-2 w-[95%] mx-auto text-[#fff] bg-c-red py-[12px]"
           >
             <span className="font-noto font-bold tracking-widest text-[12px] leading-4 ">
               SHOW RESULTS

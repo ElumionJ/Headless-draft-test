@@ -424,7 +424,7 @@ export function ProductForm() {
                 <Text>Sold out</Text>
               </Button>
             ) : (
-              <div className="flex gap-[16px] w-full items-center gt-xl:flex-col gt-l:flex-row">
+              <div className="flex gap-[16px] w-full items-end gt-xl:flex-col gt-l:flex-row">
                 <ProductQuantity
                   quantity={quantity}
                   changeQuantity={changeQuantity}
@@ -437,7 +437,7 @@ export function ProductForm() {
                         quantity,
                       },
                     ]}
-                    className="mt-2 flex justify-center items-center bg-c-red hover:bg-[#353535] transition-colors w-full gap-[12px] py-4 px-[16px] rounded-[100px] text-[#fff]"
+                    className="mt-2 flex justify-center items-center bg-c-red hover:bg-[#353535] transition-colors w-full gap-[12px] py-4 px-[16px] text-[#fff]"
                     variant="primary"
                     data-test="add-to-cart"
                     analytics={{

@@ -1,5 +1,7 @@
-import {Image} from '@shopify/hydrogen';
+import {useEffect} from 'react';
 import ImageZoom from 'react-image-zooom';
+import {Pagination} from 'swiper';
+import {Swiper, SwiperSlide} from 'swiper/react';
 
 interface Props {
   media: any[];
@@ -9,10 +11,15 @@ export const SwiperImages = ({media}: Props) => {
   return (
     <>
       <div className="min-h-[300px] m-auto">
-        <div className="w-full">
-          <div>
-            {media.map((el) => (
-              <div key={el.id} className="aspect-[3/4]">
+        <Swiper
+          modules={[Pagination]}
+          spaceBetween={50}
+          slidesPerView={1}
+          pagination={{clickable: true, el: '.pagination'}}
+        >
+          {media.map((el) => (
+            <SwiperSlide key={el.id}>
+              <div className="aspect-[3/4]">
                 <div
                   className="object-cover h-full relative"
                   style={{
@@ -33,17 +40,12 @@ export const SwiperImages = ({media}: Props) => {
                     preload
                     className={`object-cover image-zoom !w-full scale-[1] z-50 after:!opacity-0`}
                   />
-                  {/* <Image
-                    aspectRatio="3/4"
-                    loading={'eager'}
-                    data={el.image!}
-                    className="object-cover h-full fadeIn absolute top-0 left-0 z-50 "
-                  /> */}
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+        <div className="pagination flex mt-[24px] justify-center"></div>
       </div>
     </>
   );

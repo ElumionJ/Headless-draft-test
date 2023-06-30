@@ -32,7 +32,7 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
           aria-label="Brands"
           className={`${
             open ? 'bg-c-red text-[#fff]' : 'bg-c-gray text-[#000]'
-          } uppercase px-[24px] py-[13px] rounded-[100px] flex justify-between font-bebas text-[20px] leading-[110%] tracking-wider gap-1 w-[180px] gt-sm:w-full`}
+          } uppercase px-[24px] py-[13px] flex justify-between font-bebas text-[20px] leading-[110%] tracking-wider gap-1 w-[180px] gt-sm:w-full`}
           onClick={() => {
             setOpen((prevState) => !prevState);
             setMobileOpen((prevState) => !prevState);
@@ -128,7 +128,7 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
               onClick={() => {
                 setMobileOpen(false);
               }}
-              className="flex justify-center items-center gap-2 w-[95%] mx-auto text-[#fff] bg-c-red rounded-[100px] py-[12px]"
+              className="flex justify-center items-center gap-2 w-[95%] mx-auto text-[#fff] bg-c-red py-[12px]"
             >
               <span className="font-noto font-bold tracking-widest text-[12px] leading-4 ">
                 SHOW RESULTS
