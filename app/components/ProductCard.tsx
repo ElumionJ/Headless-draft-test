@@ -87,7 +87,7 @@ export function ProductCard({
               />
             )}
             <Text
-              as="label"
+              // as="label"
               size="fine"
               className="absolute top-0 ltr:left-0 rtl:right-0 m-4 text-right text-notice font-noto tracking-wider uppercase"
             >
@@ -107,6 +107,7 @@ export function ProductCard({
                   className="font-bebas tracking-wider leading-[130%]"
                   withoutTrailingZeros
                   data={price!}
+                  as="span"
                 />
                 {/* {isDiscounted(price as MoneyV2, compareAtPrice as MoneyV2) && (
                   <CompareAtPrice
