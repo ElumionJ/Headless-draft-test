@@ -225,13 +225,6 @@ function CartCheckoutActions({
     en_text: enTextForBag,
   });
 
-  console.log(root);
-  // https://headless-draft-2158.myshopify.com/ar-sa/cart/c/c1-cd889427dc44d5839ab3f174c08279d8
-  // https://headless-draft-2158.myshopify.com/en-us/cart/c/c1-cd889427dc44d5839ab3f174c08279d8
-  // https://headless-draft-2158.myshopify.com/en-us/cart/c/c1-cd889427dc44d5839ab3f174c08279d8
-  // https://headless-draft-2158.myshopify.com/en-us/cart/c/c1-cd889427dc44d5839ab3f174c08279d8
-  // https://headless-draft-2158.myshopify.com/ar-sa/cart/c/c1-cd889427dc44d5839ab3f174c08279d8
-  // /ar-sahttps://headless-draft-2158.myshopify.com/en-us/cart/c/c1-cd889427dc44d5839ab3f174c08279d8
   return (
     <div className="flex flex-col items-center justify-center mt-2">
       <a href={validCheckoutUrl} target="_self" className="w-full">
