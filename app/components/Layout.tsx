@@ -226,7 +226,7 @@ function MenuMobileNav({
             <img src={logo} className="w-[110px] h-[30px]" alt="mobile logo" />
           </Link>
           <CartCount
-            variant={'white'}
+            // variant={'white'}
             isHome={isHome || false}
             openCart={openCart}
           />
@@ -627,12 +627,13 @@ function DesktopHeader({
           </nav>
         </div>
 
-        <div className="flex items-center gap-x-9 rtl:lg:gap-x-6 font-bebas justify-end">
+        <div className="flex items-center gap-x-9 rtl:lg:gap-x-3 font-bebas justify-end">
           <div className="">
             <CountrySelector />
           </div>
 
-          <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5 rtl:w-1/4 rtl:ml-[10px]" />
+          <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5 rtl:w-1/4" />
+          {/* rtl:ml-[10px]" */}
 
           <CartCount isHome={isHome} openCart={openCart} />
         </div>
@@ -655,7 +656,7 @@ function AccountLink({className}: {className?: string}) {
   return isLoggedIn ? (
     <Link to="/account" className={className}>
       {/* Kate */}
-      <div className="absolute top-[11%] right-[96%] rtl:lg-only:left-[-19%] rtl:xl:left-[3%] rtl:2xl-only:left-[11%] rtl:top-[12%] rtl:right-auto">
+      <div className="absolute top-[17%] right-[96%] rtl:lg-only:left-[-19%] rtl:xl:left-[-4%] rtl:2xl-only:left-[11%] rtl:top-[12%] rtl:right-auto rtl:ml-[10px]">
         <IconAccount />
       </div>
 
@@ -701,11 +702,11 @@ function AccountLink({className}: {className?: string}) {
 export default function CartCount({
   isHome,
   openCart,
-  variant,
-}: {
+}: // variant,
+{
   isHome: boolean;
   openCart: () => void;
-  variant?: 'black' | 'white';
+  // variant?: 'black' | 'white';
 }) {
   const [root] = useMatches();
 
@@ -714,7 +715,7 @@ export default function CartCount({
       <Await resolve={root.data?.cart}>
         {(cart) => (
           <Badge
-            variant={variant}
+            // variant={variant}
             dark={isHome}
             openCart={openCart}
             count={cart?.totalQuantity || 0}
@@ -729,27 +730,29 @@ function Badge({
   openCart,
   dark,
   count,
-  variant,
-}: {
+}: // variant,
+{
   count: number;
   dark: boolean;
   openCart: () => void;
-  variant?: 'white' | 'black';
+  // variant?: 'white' | 'black';
 }) {
   const isHydrated = useIsHydrated();
 
   const BadgeCounter = useMemo(() => {
     if (count === 0) {
-      return <IconBag variant={'black'} />;
+      // return <IconBag variant={'black'} />;
+      return <IconBag />;
     }
 
     return (
       <>
-        <IconBag variant={'black'} />
+        {/* <IconBag variant={'black'} /> */}
+        <IconBag fill="black" />
         <span
           className={`${
             dark ? 'bg-contrast text-primary ' : ' bg-contrast text-primary'
-          } absolute bottom-1 left-[10px] rtl:right-[10px] rtl:left-0 text-[0.625rem] font-medium subpixel-antialiased h-3 min-w-[0.75rem] flex items-center justify-center leading-none text-center rounded-full w-auto px-[0.125rem] pb-px border border-black`}
+          } absolute bottom-1 left-[10px] rtl:right-[10px] rtl:left-0 text-[0.625rem] font-medium subpixel-antialiased h-3 min-w-[0.75rem] flex items-center justify-center leading-none rounded-full w-auto px-[0.125rem] pb-px border border-black font-bebas`}
         >
           <span>{count || 0}</span>
         </span>
@@ -808,7 +811,7 @@ export function Footer({
       divider={isHome ? 'none' : 'top'}
       as="footer"
       // role="contentinfo"
-      className={`md:!py-0 md!gap-0 md-lg:py-0 md-lg:gap-0   font-bebas uppercase !w-auto !border-t-0 sm-maximum:px-4 sm-maximum-md:px-8 md-lg:px-10  
+      className={`md:!py-0 md!gap-0 md-lg:py-0 md-lg:gap-0 font-bebas uppercase !w-auto !border-t-0 sm-maximum:px-4 sm-maximum-md:px-8 md-lg:px-10  
       bg-gradient-to-r from-white via-white to-white bg-no-repeat bg-cover text-primary overflow-hidden`}
       style={{backgroundImage: `url(${footer})`}}
     >
@@ -826,7 +829,7 @@ export function Footer({
           </div>
         </Link>
 
-        <div className="flex items-center justify-center gap-x-8 w-1/3 rtl:w-1/6 text-black">
+        <div className="flex items-center justify-center gap-x-8 w-1/3 rtl:w-1/6 text-black ">
           <FooterMenu menu={menu} />
         </div>
 
@@ -913,7 +916,7 @@ export function Footer({
         </div>
       </div>
 
-      <div className="flex items-center  flex-row-reverse gap-0 py-5  ">
+      <div className="flex items-center flex-row-reverse gap-0 pb-8  md-lg:py-5">
         <div
           className={`text-sm self-end text-black opacity-50 md:col-span-2 lg:col-span-${itemsCount}`}
         >
@@ -955,7 +958,7 @@ function FooterMenu({menu}: {menu?: EnhancedMenu}) {
             {({open}) => (
               <>
                 <Disclosure.Button
-                  className="text-center md:cursor-default hover:text-feature-link-color "
+                  className="text-center  hover:text-feature-link-color "
                   as={Link}
                   to={item.to}
                 >

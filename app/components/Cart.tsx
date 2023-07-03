@@ -54,7 +54,7 @@ export function CartDetails({
   const cartHasItems = !!cart && cart.totalQuantity > 0;
   const container = {
     drawer: 'grid grid-cols-1 h-screen-no-nav grid-rows-[1fr_auto] ',
-    page: 'w-full pt-4 pb-12 lg:flex  md:pt-8 md:items-start lg:pt-0 min-h-screen ',
+    page: 'w-full pt-4 pb-12 lg:flex md:pt-8 md:items-start lg:pt-0',
   };
 
   if (layout === 'page' && !cartHasItems) {
@@ -449,7 +449,7 @@ function CartLineItem({
       </div>
 
       {/*  className="flex items-center justify-between flex-grow gap-6" */}
-      <div className="flex flex-col sm:flex-row justify-between flex-grow">
+      <div className="flex flex-col sm:flex-row justify-between flex-grow w-1/4">
         <div className={additionalClasses.cartItem}>
           {/* max-w-[200px] */}
           <div className="font-bebas text-base flex flex-col h-full justify-between">
@@ -471,7 +471,7 @@ function CartLineItem({
           </div>
         </div>
 
-        <div className="flex justify-start text-copy w-1/4">
+        <div className="flex justify-start text-copy ">
           <CartLineQuantityAdjust line={line} />
         </div>
 
@@ -484,7 +484,7 @@ function CartLineItem({
             <CartLinePrice
               line={line}
               as="span"
-              className="font-semibold gt-sm:absolute gt-sm:bottom-[20px] gt-sm:right-0 rtl:gt-sm:right-auto rtl:gt-sm:left-0 "
+              className="font-semibold gt-sm:absolute gt-sm:bottom-[20px] gt-sm:right-0 rtl:gt-sm:right-auto rtl:gt-sm:left-0 md:w-[80px]"
             />
           </div>
         </Text>
@@ -527,7 +527,7 @@ function CartLineQuantityAdjust({line}: {line: CartLine}) {
       <label htmlFor={`quantity-${lineId}`} className="sr-only">
         Quantity, {quantity}
       </label>
-      <div className="gt-m:h-[38px] flex border border-black font-bebas h-fit items-center">
+      <div className="gt-m:h-[38px] flex border border-black font-bebas h-fit items-center relative md:w-full ">
         <UpdateCartButton lines={[{id: lineId, quantity: prevQuantity}]}>
           <button
             name="decrease-quantity"
@@ -541,7 +541,7 @@ function CartLineQuantityAdjust({line}: {line: CartLine}) {
         </UpdateCartButton>
 
         <div
-          className="gt-m:w-5 gt-m:h-5 font-semibold text-center"
+          className="gt-m:w-5 gt-m:h-5 font-semibold text-center md:absolute md:top-1/2 md:left-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2"
           data-test="item-quantity"
         >
           {quantity}
