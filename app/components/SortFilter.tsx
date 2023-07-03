@@ -112,7 +112,7 @@ export function SortFilter({
               <div
                 className={`${
                   isOpen ? 'block' : 'hidden'
-                } absolute top-full rtl:right-0 left-0 bg-[#fff] w-full p-[24px] font-noto shadow-darkPopUp mt-[13px] z-30 sm-maximum:fixed sm-maximum:z-50 sm-maximum:w-[320px] sm-maximum:left-0 sm-maximum:h-full sm-maximum:mt-auto sm-maximum:top-0 sm-maximum:p-0`}
+                } absolute top-full rtl:right-0 left-0 bg-[#fff] w-[320px] p-[24px] font-noto shadow-darkPopUp mt-[13px] z-30 sm-maximum:fixed sm-maximum:z-50 sm-maximum:w-[320px] sm-maximum:left-0 sm-maximum:h-full sm-maximum:mt-auto sm-maximum:top-0 sm-maximum:p-0`}
               >
                 <FiltersDrawer
                   collections={collections}
@@ -265,7 +265,7 @@ export function FiltersDrawer({
     };
     // debugger;
     return (
-      <label className="flex justify-between" htmlFor={option.id}>
+      <label className="flex justify-between py-1" htmlFor={option.id}>
         {option.label}
         <input
           data-type={checkedType.key}
