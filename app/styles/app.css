@@ -316,3 +316,8 @@ details summary::-webkit-details-marker {
   height: 6px !important;
   border-radius: 10px !important;
 }
+
+body:not(.focus-visible) :focus:not(.focus-visible) {
+  outline: 0 !important;
+  box-shadow: none !important;
+}
