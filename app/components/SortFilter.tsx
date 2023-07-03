@@ -52,9 +52,12 @@ export function SortFilter({
   const [params] = useSearchParams();
   const [rotate, setRotate] = useState<'180deg' | '0deg'>('0deg');
   const [activeParams, setActiveParams] = useState(parseParams(appliedFilters));
+
   const navigate = useNavigate();
   useEffect(() => {
-    console.log(activeParams);
+    const clonedFiltersParams = new URLSearchParams(params);
+    const activeSort = clonedFiltersParams.get('sort');
+    // console.log(activeParams);
     let filters = '';
     Object.entries(activeParams).forEach(([key, value], i) => {
       if (i > 0) {
@@ -63,7 +66,7 @@ export function SortFilter({
         filters += `${key}=${value}`;
       }
     });
-    navigate(`${location.pathname}?${filters}`, {
+    navigate(`${location.pathname}?sort=${activeSort || 'newest'}&${filters}`, {
       preventScrollReset: true,
     });
   }, [activeParams]);
@@ -71,6 +74,12 @@ export function SortFilter({
   useEffect(() => {
     setRotate(params.get('reverse') === 'true' ? '0deg' : '180deg');
   }, [params]);
+
+  const updateParams = () => {
+    const clonedFiltersParams = new URLSearchParams(params);
+    clonedFiltersParams.delete('sort');
+    return clonedFiltersParams.toString();
+  };
 
   const getLinkReverseSort = (location: Location, params: URLSearchParams) => {
     const clonedParams = new URLSearchParams(params);
@@ -136,7 +145,7 @@ export function SortFilter({
               <HiArrowLongDown className="ltr:mr-[-4px] rtl:ml-[-4px]" />
               <HiArrowNarrowUp className="ltr:ml-[-4px] rtl:mr-[-4px]" />
             </Link>
-            <SortMenu itemsCount={itemsCount} />
+            <SortMenu activeFilters={updateParams()} itemsCount={itemsCount} />
           </div>
         </div>
 
@@ -263,6 +272,7 @@ export function FiltersDrawer({
           type="checkbox"
           checked={paramsState[checkedType.key]?.includes(checkedType.value)}
           onChange={handleChange}
+          className="text-[#000]"
           id={option.id}
         />
       </label>
@@ -311,12 +321,12 @@ export function FiltersDrawer({
                       {filter.label}
                     </Text>
                   </div>
-                  <ul key={filter.id} className=" pl-[8px]">
+                  <ul key={filter.id} className=" pl-[8px] ">
                     {filter.values?.map((option) => {
                       return (
                         <li
                           key={option.id}
-                          className="h-fit w-full flex flex-col hover:underline"
+                          className="h-fit w-full flex flex-col "
                         >
                           {filterMarkup(
                             filter,
@@ -547,7 +557,13 @@ function filterInputToParams(
   return params;
 }
 
-export default function SortMenu({itemsCount}: {itemsCount: number}) {
+export default function SortMenu({
+  itemsCount,
+  activeFilters,
+}: {
+  itemsCount: number;
+  activeFilters: string;
+}) {
   const items: {name: string; value: SortParam}[] = [
     {name: 'Featured', value: 'featured'},
     {
@@ -565,6 +581,7 @@ export default function SortMenu({itemsCount}: {itemsCount: number}) {
   ];
   const [params] = useSearchParams();
   // `${selectedLocale.pathPrefix}/products?reverse=${varParams.reverse}&query=${vendorsQuery}`
+  // console.log({params});
   const location = useLocation();
   // const activeItem = items.find((item) => item.key === params.get('sort'));
   return (
@@ -574,7 +591,7 @@ export default function SortMenu({itemsCount}: {itemsCount: number}) {
           <SortBy
             isCategoriesPage={true}
             dataLinks={items}
-            linkStr={`${location.pathname}`}
+            linkStr={`${location.pathname}?${activeFilters}`}
             activeSort={params.get('sort') || 'newest'}
           />
         </div>

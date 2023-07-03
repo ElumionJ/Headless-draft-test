@@ -25,7 +25,7 @@ export function ProductCard({
   let cardLabel;
 
   const {media} = product;
-  console.log(media);
+  // console.log(media);
   // console.log(media.nodes[1]);
 
   const cardProduct: Product = product?.variants
