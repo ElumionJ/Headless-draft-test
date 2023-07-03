@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import {useRef} from 'react';
+import {useContext, useEffect, useRef} from 'react';
 import {useScroll} from 'react-use';
 import {flattenConnection, Image, Money} from '@shopify/hydrogen';
 import type {
@@ -9,7 +9,7 @@ import type {
   CartLineUpdateInput,
   Product,
 } from '@shopify/hydrogen/storefront-api-types';
-import {useFetcher} from '@remix-run/react';
+import {useFetcher, useLocation, useMatches} from '@remix-run/react';
 
 import {Button, IconRemove, IconClose, Text, Link, Heading} from '~/components';
 import {CartAction} from '~/lib/type';
@@ -175,7 +175,6 @@ function CartLines({
       ? 'flex-grow  md:translate-y-4 pr-6 pl-6 h-fit  border-y-[1px] border-black pt-[40px]'
       : 'px-6 pb-6 sm-max:pt-2 overflow-auto transition  text-black',
   ]);
-  //Kate
 
   return (
     <section
@@ -205,7 +204,13 @@ function CartCheckoutActions({
   checkoutUrl: string;
   layout: Layouts;
 }) {
+  const [root] = useMatches();
+
+  const {origin, pathname} = new URL(checkoutUrl);
   if (!checkoutUrl) return null;
+  const validCheckoutUrl = `${origin}/${
+    root.params.locale || 'en-us'
+  }${pathname.substring(6)}`;
 
   const arText = 'الخروج الآمن';
   const enText = 'Secure Checkout';
@@ -220,9 +225,16 @@ function CartCheckoutActions({
     en_text: enTextForBag,
   });
 
+  console.log(root);
+  // https://headless-draft-2158.myshopify.com/ar-sa/cart/c/c1-cd889427dc44d5839ab3f174c08279d8
+  // https://headless-draft-2158.myshopify.com/en-us/cart/c/c1-cd889427dc44d5839ab3f174c08279d8
+  // https://headless-draft-2158.myshopify.com/en-us/cart/c/c1-cd889427dc44d5839ab3f174c08279d8
+  // https://headless-draft-2158.myshopify.com/en-us/cart/c/c1-cd889427dc44d5839ab3f174c08279d8
+  // https://headless-draft-2158.myshopify.com/ar-sa/cart/c/c1-cd889427dc44d5839ab3f174c08279d8
+  // /ar-sahttps://headless-draft-2158.myshopify.com/en-us/cart/c/c1-cd889427dc44d5839ab3f174c08279d8
   return (
     <div className="flex flex-col items-center justify-center mt-2">
-      <Link to={checkoutUrl} target="_self" className="w-full">
+      <a href={validCheckoutUrl} target="_self" className="w-full">
         <Button
           aria-label="Language"
           as="span"
@@ -255,10 +267,10 @@ function CartCheckoutActions({
             />
           </svg>
         </Button>
-      </Link>
+      </a>
 
       {layout === 'drawer' && (
-        <Link to={'/cart' || '/cart/ar'} reloadDocument>
+        <Link to={'/cart'} reloadDocument>
           <span className="flex flex-row  items-center justify-center  font-bold font-noto text-xs  text-black uppercase border-b-2 border-black w-fit gap-x-2 hover:opacity-80">
             {languageTextForBag}
             <svg
