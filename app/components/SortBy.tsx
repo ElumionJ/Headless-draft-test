@@ -1,4 +1,4 @@
-import {Link} from '@remix-run/react';
+import {Link, useParams} from '@remix-run/react';
 import {HiArrowSmDown} from 'react-icons/hi';
 import {useRef, useState} from 'react';
 
@@ -48,7 +48,7 @@ export const SortBy = ({
                 setOpen(false);
               }}
               prefetch="intent"
-              to={`${linkStr}${isCategoriesPage ? '?sort' : '&sortKey'}=${
+              to={`${linkStr}${isCategoriesPage ? '&sort' : '&sortKey'}=${
                 el.value
               }`}
             >

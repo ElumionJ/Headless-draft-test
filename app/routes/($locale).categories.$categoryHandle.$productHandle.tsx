@@ -415,8 +415,8 @@ export function ProductForm() {
                 Price:
               </span>
               <span className="font-bebas text-[32px] md-only:text-[20px] leading-[120%] tracking-wider text-feature-link-color">
-                {firstVariant.price.currencyCode}
-                {firstVariant.price.amount}
+                {selectedVariant.price.currencyCode}
+                {selectedVariant.price.amount}
               </span>
             </div>
             {isOutOfStock ? (
@@ -433,7 +433,7 @@ export function ProductForm() {
                   <AddToCartButton
                     lines={[
                       {
-                        merchandiseId: firstVariant.id,
+                        merchandiseId: selectedVariant.id,
                         quantity,
                       },
                     ]}

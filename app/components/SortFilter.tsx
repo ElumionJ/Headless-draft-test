@@ -52,9 +52,12 @@ export function SortFilter({
   const [params] = useSearchParams();
   const [rotate, setRotate] = useState<'180deg' | '0deg'>('0deg');
   const [activeParams, setActiveParams] = useState(parseParams(appliedFilters));
+
   const navigate = useNavigate();
   useEffect(() => {
-    console.log(activeParams);
+    const clonedFiltersParams = new URLSearchParams(params);
+    const activeSort = clonedFiltersParams.get('sort');
+    // console.log(activeParams);
     let filters = '';
     Object.entries(activeParams).forEach(([key, value], i) => {
       if (i > 0) {
@@ -63,7 +66,7 @@ export function SortFilter({
         filters += `${key}=${value}`;
       }
     });
-    navigate(`${location.pathname}?${filters}`, {
+    navigate(`${location.pathname}?sort=${activeSort || 'newest'}&${filters}`, {
       preventScrollReset: true,
     });
   }, [activeParams]);
@@ -71,6 +74,12 @@ export function SortFilter({
   useEffect(() => {
     setRotate(params.get('reverse') === 'true' ? '0deg' : '180deg');
   }, [params]);
+
+  const updateParams = () => {
+    const clonedFiltersParams = new URLSearchParams(params);
+    clonedFiltersParams.delete('sort');
+    return clonedFiltersParams.toString();
+  };
 
   const getLinkReverseSort = (location: Location, params: URLSearchParams) => {
     const clonedParams = new URLSearchParams(params);
@@ -82,10 +91,10 @@ export function SortFilter({
   return (
     <>
       <div className="flex flex-col w-full gap-3">
-        <div className="sm-maximum:grid sm-maximum:grid-cols-2 flex items-center justify-between w-full">
-          <div className="flex items-center sm:gap-[40px]">
+        <div className=" flex items-center justify-between w-full gt-sm:gap-1">
+          <div className="flex items-center sm:gap-[40px] gt-sm:w-full ">
             <div
-              className="relative sm-maximum:static sm-maximum:w-full"
+              className="relative gt-sm:static gt-sm:w-full "
               ref={sortByRef}
             >
               <button
@@ -103,7 +112,7 @@ export function SortFilter({
               <div
                 className={`${
                   isOpen ? 'block' : 'hidden'
-                } absolute top-full rtl:right-0 left-0 bg-[#fff] w-full p-[24px] font-noto shadow-darkPopUp mt-[13px] z-30 sm-maximum:fixed sm-maximum:z-50 sm-maximum:w-[320px] sm-maximum:left-0 sm-maximum:h-full sm-maximum:mt-auto sm-maximum:top-0 sm-maximum:p-0`}
+                } absolute top-full rtl:right-0 left-0 bg-[#fff] w-[320px] p-[24px] font-noto shadow-darkPopUp mt-[13px] z-30 gt-sm:fixed gt-sm:z-50 gt-sm:w-[320px] gt-sm:left-0 gt-sm:h-full gt-sm:mt-auto gt-sm:top-0 gt-sm:p-0`}
               >
                 <FiltersDrawer
                   collections={collections}
@@ -115,7 +124,7 @@ export function SortFilter({
                 />
               </div>
             </div>
-            <div className="sm-maximum:hidden">
+            <div className="gt-sm:hidden ">
               <AppliedFilters
                 isMobile
                 setActiveParams={setActiveParams}
@@ -124,7 +133,7 @@ export function SortFilter({
               />
             </div>
           </div>
-          <div className="flex gap-[16px] items-center sm-maximum:w-full ">
+          <div className="flex gap-[16px] items-center gt-sm:w-full ">
             <Link
               to={getLinkReverseSort(location, params)}
               prefetch="intent"
@@ -136,11 +145,24 @@ export function SortFilter({
               <HiArrowLongDown className="ltr:mr-[-4px] rtl:ml-[-4px]" />
               <HiArrowNarrowUp className="ltr:ml-[-4px] rtl:mr-[-4px]" />
             </Link>
-            <SortMenu itemsCount={itemsCount} />
+            <SortMenu activeFilters={updateParams()} itemsCount={itemsCount} />
+          </div>
+          <div className="hidden gt-sm:flex">
+            <Link
+              to={getLinkReverseSort(location, params)}
+              prefetch="intent"
+              className=" flex gap-0"
+              style={{
+                rotate,
+              }}
+            >
+              <HiArrowLongDown className="ltr:mr-[-4px] rtl:ml-[-4px]" />
+              <HiArrowNarrowUp className="ltr:ml-[-4px] rtl:mr-[-4px]" />
+            </Link>
           </div>
         </div>
 
-        <div className="sm-maximum:block hidden ">
+        <div className="gt-sm:block hidden ">
           <AppliedFilters
             setActiveParams={setActiveParams}
             activeParams={activeParams}
@@ -256,13 +278,14 @@ export function FiltersDrawer({
     };
     // debugger;
     return (
-      <label className="flex justify-between" htmlFor={option.id}>
+      <label className="flex justify-between py-1" htmlFor={option.id}>
         {option.label}
         <input
           data-type={checkedType.key}
           type="checkbox"
           checked={paramsState[checkedType.key]?.includes(checkedType.value)}
           onChange={handleChange}
+          className="text-[#000]"
           id={option.id}
         />
       </label>
@@ -311,12 +334,12 @@ export function FiltersDrawer({
                       {filter.label}
                     </Text>
                   </div>
-                  <ul key={filter.id} className=" pl-[8px]">
+                  <ul key={filter.id} className=" pl-[8px] ">
                     {filter.values?.map((option) => {
                       return (
                         <li
                           key={option.id}
-                          className="h-fit w-full flex flex-col hover:underline"
+                          className="h-fit w-full flex flex-col "
                         >
                           {filterMarkup(
                             filter,
@@ -547,7 +570,13 @@ function filterInputToParams(
   return params;
 }
 
-export default function SortMenu({itemsCount}: {itemsCount: number}) {
+export default function SortMenu({
+  itemsCount,
+  activeFilters,
+}: {
+  itemsCount: number;
+  activeFilters: string;
+}) {
   const items: {name: string; value: SortParam}[] = [
     {name: 'Featured', value: 'featured'},
     {
@@ -565,6 +594,7 @@ export default function SortMenu({itemsCount}: {itemsCount: number}) {
   ];
   const [params] = useSearchParams();
   // `${selectedLocale.pathPrefix}/products?reverse=${varParams.reverse}&query=${vendorsQuery}`
+  // console.log({params});
   const location = useLocation();
   // const activeItem = items.find((item) => item.key === params.get('sort'));
   return (
@@ -574,7 +604,7 @@ export default function SortMenu({itemsCount}: {itemsCount: number}) {
           <SortBy
             isCategoriesPage={true}
             dataLinks={items}
-            linkStr={`${location.pathname}`}
+            linkStr={`${location.pathname}?${activeFilters}`}
             activeSort={params.get('sort') || 'newest'}
           />
         </div>

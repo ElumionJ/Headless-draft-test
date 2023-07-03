@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import {useRef} from 'react';
+import {useContext, useEffect, useRef} from 'react';
 import {useScroll} from 'react-use';
 import {flattenConnection, Image, Money} from '@shopify/hydrogen';
 import type {
@@ -9,7 +9,7 @@ import type {
   CartLineUpdateInput,
   Product,
 } from '@shopify/hydrogen/storefront-api-types';
-import {useFetcher} from '@remix-run/react';
+import {useFetcher, useLocation, useMatches} from '@remix-run/react';
 
 import {Button, IconRemove, IconClose, Text, Link, Heading} from '~/components';
 import {CartAction} from '~/lib/type';
@@ -54,7 +54,7 @@ export function CartDetails({
   const cartHasItems = !!cart && cart.totalQuantity > 0;
   const container = {
     drawer: 'grid grid-cols-1 h-screen-no-nav grid-rows-[1fr_auto] ',
-    page: 'w-full pt-4 pb-12 lg:flex  md:pt-8 md:items-start lg:pt-0 min-h-screen ',
+    page: 'w-full pt-4 pb-12 lg:flex md:pt-8 md:items-start lg:pt-0',
   };
 
   if (layout === 'page' && !cartHasItems) {
@@ -175,7 +175,6 @@ function CartLines({
       ? 'flex-grow  md:translate-y-4 pr-6 pl-6 h-fit  border-y-[1px] border-black pt-[40px]'
       : 'px-6 pb-6 sm-max:pt-2 overflow-auto transition  text-black',
   ]);
-  //Kate
 
   return (
     <section
@@ -205,7 +204,13 @@ function CartCheckoutActions({
   checkoutUrl: string;
   layout: Layouts;
 }) {
+  const [root] = useMatches();
+
+  const {origin, pathname} = new URL(checkoutUrl);
   if (!checkoutUrl) return null;
+  const validCheckoutUrl = `${origin}/${
+    root.params.locale || 'en-us'
+  }${pathname.substring(6)}`;
 
   const arText = 'الخروج الآمن';
   const enText = 'Secure Checkout';
@@ -222,7 +227,7 @@ function CartCheckoutActions({
 
   return (
     <div className="flex flex-col items-center justify-center mt-2">
-      <Link to={checkoutUrl} target="_self" className="w-full">
+      <a href={validCheckoutUrl} target="_self" className="w-full">
         <Button
           aria-label="Language"
           as="span"
@@ -237,7 +242,6 @@ function CartCheckoutActions({
             viewBox="0 0 11 10"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="rtl:scale-x-[-1]"
           >
             <path
               d="M7.45672 2.20542L3.44174 7.9394"
@@ -255,14 +259,13 @@ function CartCheckoutActions({
             />
           </svg>
         </Button>
-      </Link>
+      </a>
 
       {layout === 'drawer' && (
-        <Link to={'/cart' || '/cart/ar'} reloadDocument>
+        <Link to={'/cart'} reloadDocument>
           <span className="flex flex-row  items-center justify-center  font-bold font-noto text-xs  text-black uppercase border-b-2 border-black w-fit gap-x-2 hover:opacity-80">
             {languageTextForBag}
             <svg
-              className="rtl:scale-x-[-1]"
               width="10"
               height="10"
               viewBox="0 0 10 10"
@@ -444,7 +447,7 @@ function CartLineItem({
       </div>
 
       {/*  className="flex items-center justify-between flex-grow gap-6" */}
-      <div className="flex flex-col sm:flex-row justify-between flex-grow">
+      <div className="flex flex-col sm:flex-row justify-between flex-grow w-1/4">
         <div className={additionalClasses.cartItem}>
           {/* max-w-[200px] */}
           <div className="font-bebas text-base flex flex-col h-full justify-between">
@@ -466,7 +469,7 @@ function CartLineItem({
           </div>
         </div>
 
-        <div className="flex justify-start text-copy w-1/4">
+        <div className="flex justify-start text-copy ">
           <CartLineQuantityAdjust line={line} />
         </div>
 
@@ -479,7 +482,7 @@ function CartLineItem({
             <CartLinePrice
               line={line}
               as="span"
-              className="font-semibold gt-sm:absolute gt-sm:bottom-[20px] gt-sm:right-0 rtl:gt-sm:right-auto rtl:gt-sm:left-0 "
+              className="font-semibold gt-sm:absolute gt-sm:bottom-[20px] gt-sm:right-0 rtl:gt-sm:right-auto rtl:gt-sm:left-0 md:w-[80px]"
             />
           </div>
         </Text>
@@ -522,7 +525,7 @@ function CartLineQuantityAdjust({line}: {line: CartLine}) {
       <label htmlFor={`quantity-${lineId}`} className="sr-only">
         Quantity, {quantity}
       </label>
-      <div className="gt-m:h-[38px] flex border border-black font-bebas h-fit items-center">
+      <div className="gt-m:h-[38px] flex border border-black font-bebas h-fit items-center relative md:w-full ">
         <UpdateCartButton lines={[{id: lineId, quantity: prevQuantity}]}>
           <button
             name="decrease-quantity"
@@ -536,7 +539,7 @@ function CartLineQuantityAdjust({line}: {line: CartLine}) {
         </UpdateCartButton>
 
         <div
-          className="gt-m:w-5 gt-m:h-5 font-semibold text-center"
+          className="gt-m:w-5 gt-m:h-5 font-semibold text-center md:absolute md:top-1/2 md:left-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2"
           data-test="item-quantity"
         >
           {quantity}
@@ -655,7 +658,6 @@ export function CartEmpty({
             >
               {languageTextStart}
               <svg
-                className="rtl:scale-x-[-1]"
                 width="11"
                 height="10"
                 viewBox="0 0 11 10"

@@ -249,10 +249,11 @@ shop-pay-button {
 
 .hover_image {
   transition: transform 0.7s ease;
+  opacity: 0;
 }
 
 .product-card:hover .hover_image {
-  z-index: 2;
+  opacity: 1;
   transform: scale(1.05);
 }
 
@@ -315,4 +316,18 @@ details summary::-webkit-details-marker {
   width: 36px !important;
   height: 6px !important;
   border-radius: 10px !important;
+}
+
+body:not(.focus-visible) :focus:not(.focus-visible) {
+  /* outline: 0 !important;
+  box-shadow: none !important; */
+}
+
+@media not all and (min-resolution: 0.001dpcm) {
+  @supports (-webkit-appearance: none) and (stroke-color: transparent) {
+    /* Specific styles for Safari */
+    .safari-drawer-close {
+      outline: 1px solid transparent;
+    }
+  }
 }

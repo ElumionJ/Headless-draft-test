@@ -42,6 +42,7 @@ export const PRODUCT_CARD_FRAGMENT = `#graphql
     title
     publishedAt
     handle
+    productType
     media(first:7, sortKey:POSITION){
       nodes{
         previewImage{
