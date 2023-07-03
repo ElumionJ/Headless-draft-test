@@ -627,12 +627,12 @@ function DesktopHeader({
           </nav>
         </div>
 
-        <div className="flex items-center gap-x-9 rtl:lg:gap-x-3 font-bebas justify-end">
+        <div className="flex items-center gap-x-9 font-bebas justify-end">
           <div className="">
             <CountrySelector />
           </div>
 
-          <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5 rtl:w-1/4" />
+          <AccountLink className="relative flex items-center justify-center  h-8 focus:ring-primary/5 rtl:w-1/4" />
           {/* rtl:ml-[10px]" */}
 
           <CartCount isHome={isHome} openCart={openCart} />

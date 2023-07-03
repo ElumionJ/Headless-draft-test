@@ -25,11 +25,6 @@ export function ProductCard({
   let cardLabel;
 
   const {media} = product;
-<<<<<<< HEAD
-  // console.log(media);
-  // console.log(media.nodes[1]);
-=======
->>>>>>> plp-hover-fix-bugs
 
   const cardProduct: Product = product?.variants
     ? (product as Product)

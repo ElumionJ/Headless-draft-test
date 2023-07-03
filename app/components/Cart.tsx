@@ -242,7 +242,6 @@ function CartCheckoutActions({
             viewBox="0 0 11 10"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="rtl:scale-x-[-1]"
           >
             <path
               d="M7.45672 2.20542L3.44174 7.9394"
@@ -267,7 +266,6 @@ function CartCheckoutActions({
           <span className="flex flex-row  items-center justify-center  font-bold font-noto text-xs  text-black uppercase border-b-2 border-black w-fit gap-x-2 hover:opacity-80">
             {languageTextForBag}
             <svg
-              className="rtl:scale-x-[-1]"
               width="10"
               height="10"
               viewBox="0 0 10 10"
@@ -660,7 +658,6 @@ export function CartEmpty({
             >
               {languageTextStart}
               <svg
-                className="rtl:scale-x-[-1]"
                 width="11"
                 height="10"
                 viewBox="0 0 11 10"
