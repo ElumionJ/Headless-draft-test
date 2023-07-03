@@ -138,8 +138,6 @@ export default function AllProducts() {
     selectedLocale,
   } = useLoaderData<typeof loader>();
 
-  // console.log(selectedLocale);
-
   const [timer, setTimer] = useState<number | null>(null);
   const navigate = useNavigate();
   const [rotate, setRotate] = useState<'180deg' | '0deg'>('0deg');
@@ -337,7 +335,7 @@ export default function AllProducts() {
                   <div className="flex justify-center gap-2 font-noto ">
                     {pageInfo.hasPreviousPage && (
                       <Link
-                        className="text-[12px] font-bold leading-[150%] hover:text-feature-link-color block w-[100px] px-3 py-1 text-right rtl:text-left"
+                        className="text-[12px] font-bold leading-[150%] hover:text-feature-link-color block w-[100px] px-3 py-1 text-center"
                         to={`${selectedLocale.pathPrefix}/products?sortKey=${
                           varParams.sortKey
                         }&reverse=${varParams.reverse}&cursor=${
@@ -349,7 +347,7 @@ export default function AllProducts() {
                     )}
                     {pageInfo.hasNextPage && (
                       <Link
-                        className="text-[12px] font-bold leading-[150%] hover:text-feature-link-color block w-[100px] px-3 py-1 text-left rtl:text-right"
+                        className="text-[12px] font-bold leading-[150%] hover:text-feature-link-color block w-[100px] px-3 py-1 text-center"
                         to={`${selectedLocale.pathPrefix}/products?sortKey=${
                           varParams.sortKey
                         }&reverse=${varParams.reverse}&cursor=${

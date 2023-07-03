@@ -32,7 +32,7 @@ export const VendorsFilter = ({vendors, click, url}: Props) => {
           aria-label="Brands"
           className={`${
             open ? 'bg-c-red text-[#fff]' : 'bg-c-gray text-[#000]'
-          } uppercase px-[24px] py-[13px] flex justify-between font-bebas text-[20px] leading-[110%] tracking-wider gap-1 w-[180px] gt-sm:w-full`}
+          } uppercase px-[24px] py-[13px] flex justify-between items-center font-bebas text-[20px] tracking-wider gap-1 w-[180px] gt-sm:w-full`}
           onClick={() => {
             setOpen((prevState) => !prevState);
             setMobileOpen((prevState) => !prevState);

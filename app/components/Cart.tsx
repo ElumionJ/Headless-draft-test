@@ -72,7 +72,7 @@ export function CartDetails({
     // When its empty - work not correct
     <div className="flex flex-col w-full bg-[#FFFEFA] text-black ">
       {layout === 'page' && (
-        <span className="pl-6 pt-3 lg:pt-8 lg:pb-6 lg:pl-[32px] xl:pl-[159px] font-normal uppercase font-bebas text-[32px]">
+        <span className="pl-6 rtl:pr-6 rtl:pl-0 pt-3 lg:pt-8 lg:pb-6 lg:pl-[32px] rtl:lg:pl-0 rtl:lg:pr-[32px]  font-normal uppercase font-bebas text-[32px]">
           {languageText} ({cart?.totalQuantity})
         </span>
       )}
@@ -172,9 +172,10 @@ function CartLines({
     // y > 0 ? 'border-t' : '',
     y > 0 ? '' : '',
     layout === 'page'
-      ? 'flex-grow  md:translate-y-4 pr-6 pl-6 h-fit  border-y-[1px] border-black pt-[40px]  xl:pl-12'
+      ? 'flex-grow  md:translate-y-4 pr-6 pl-6 h-fit  border-y-[1px] border-black pt-[40px]'
       : 'px-6 pb-6 sm-max:pt-2 overflow-auto transition  text-black',
   ]);
+  //Kate
 
   return (
     <section
@@ -230,11 +231,13 @@ function CartCheckoutActions({
         >
           {languageText}
           <svg
+            className="rtl:scale-x-[-1]"
             width="11"
             height="10"
             viewBox="0 0 11 10"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            className="rtl:scale-x-[-1]"
           >
             <path
               d="M7.45672 2.20542L3.44174 7.9394"
@@ -259,11 +262,13 @@ function CartCheckoutActions({
           <span className="flex flex-row  items-center justify-center  font-bold font-noto text-xs  text-black uppercase border-b-2 border-black w-fit gap-x-2 hover:opacity-80">
             {languageTextForBag}
             <svg
+              className="rtl:scale-x-[-1]"
               width="10"
               height="10"
               viewBox="0 0 10 10"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              className="rtl:scale-x-[-1]"
             >
               <path
                 d="M7.07025 2.25054L2.12057 7.20022"
@@ -461,7 +466,7 @@ function CartLineItem({
           </div>
         </div>
 
-        <div className="flex justify-start text-copy">
+        <div className="flex justify-start text-copy w-1/4">
           <CartLineQuantityAdjust line={line} />
         </div>
 
@@ -646,15 +651,17 @@ export function CartEmpty({
             <Button
               aria-label="Language"
               onClick={onClose}
-              className="flex items-center justify-center gap-x-5 px-3 py-4 w-[200px] bg-c-red m-auto hover:opacity-80 text-white font-noto uppercase text-xs font-bold	"
+              className="flex items-center justify-center gap-x-5 px-3 py-4 w-[200px] bg-c-red m-auto hover:opacity-80 text-white font-noto uppercase text-xs font-bold"
             >
               {languageTextStart}
               <svg
+                className="rtl:scale-x-[-1]"
                 width="11"
                 height="10"
                 viewBox="0 0 11 10"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                className="rtl:scale-x-[-1]"
               >
                 <path
                   d="M7.45672 2.20542L3.44174 7.9394"

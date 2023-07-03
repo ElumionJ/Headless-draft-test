@@ -24,6 +24,7 @@ export default {
         'sm-minimum': {min: '37.51em'}, //600px and higher
         'sm-maximum-md': {min: '37.5em', max: '56.3em'}, //600 - 900
         'md-lg': {min: '56.3em'}, //900 and higher
+        'md-xl': {min: '75em'}, //1200 and higher
         '2xl': '96em',
         'sm-max': {max: '48em'},
         'sm-only': {min: '32em', max: '48em'},
