@@ -25,8 +25,6 @@ export function ProductCard({
   let cardLabel;
 
   const {media} = product;
-  console.log(media);
-  // console.log(media.nodes[1]);
 
   const cardProduct: Product = product?.variants
     ? (product as Product)
@@ -82,18 +80,18 @@ export function ProductCard({
             {image && (
               <>
                 <Image
-                  className={`hover_image object-cover w-full fadeIn rounded-[2px] absolute z-0`}
+                  className={`object-cover w-full fadeIn absolute rounded-[2px]`}
                   sizes="(min-width: 64em) 25vw, (min-width: 48em) 30vw, 45vw"
                   aspectRatio="4/5"
-                  data={media?.nodes[1].previewImage}
+                  data={media?.nodes[0].previewImage}
                   alt={image.altText || `Picture of ${product.title}`}
                   loading={'lazy'}
                 />
                 <Image
-                  className={`object-cover w-full fadeIn absolute rounded-[2px] z-1`}
+                  className={`hover_image object-cover w-full rounded-[2px] absolute`}
                   sizes="(min-width: 64em) 25vw, (min-width: 48em) 30vw, 45vw"
                   aspectRatio="4/5"
-                  data={media?.nodes[0].previewImage}
+                  data={media?.nodes[1].previewImage}
                   alt={image.altText || `Picture of ${product.title}`}
                   loading={'lazy'}
                 />

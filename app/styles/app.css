@@ -249,10 +249,11 @@ shop-pay-button {
 
 .hover_image {
   transition: transform 0.7s ease;
+  opacity: 0;
 }
 
 .product-card:hover .hover_image {
-  z-index: 2;
+  opacity: 1;
   transform: scale(1.05);
 }
 
