@@ -318,6 +318,15 @@ details summary::-webkit-details-marker {
 }
 
 body:not(.focus-visible) :focus:not(.focus-visible) {
-  outline: 0 !important;
-  box-shadow: none !important;
+  /* outline: 0 !important;
+  box-shadow: none !important; */
+}
+
+@media not all and (min-resolution: 0.001dpcm) {
+  @supports (-webkit-appearance: none) and (stroke-color: transparent) {
+    /* Specific styles for Safari */
+    .safari-drawer-close {
+      outline: 1px solid transparent;
+    }
+  }
 }
