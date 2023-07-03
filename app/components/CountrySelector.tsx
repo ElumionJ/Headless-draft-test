@@ -90,29 +90,27 @@ export function CountrySelector() {
             ref={closeRef}
           >
             <summary className="flex items-center justify-between w-full  cursor-pointer font-bebas">
-              <div className="max-h-36">
-                {Object.keys(countries).length > 0 &&
-                  (() => {
-                    const countryLocale =
-                      countries[
-                        root.data.selectedLocale.language === 'AR'
-                          ? 'default'
-                          : '/ar-sa'
-                      ];
-                    const countryUrlPath = getCountryUrlPath({
-                      countryLocale,
-                      defaultLocalePrefix,
-                      pathWithoutLocale,
-                    });
-                    return (
-                      <Country
-                        key={'countryPath'}
-                        countryUrlPath={countryUrlPath}
-                        countryLocale={countryLocale}
-                      />
-                    );
-                  })()}
-              </div>
+              {Object.keys(countries).length > 0 &&
+                (() => {
+                  const countryLocale =
+                    countries[
+                      root.data.selectedLocale.language === 'AR'
+                        ? 'default'
+                        : '/ar-sa'
+                    ];
+                  const countryUrlPath = getCountryUrlPath({
+                    countryLocale,
+                    defaultLocalePrefix,
+                    pathWithoutLocale,
+                  });
+                  return (
+                    <Country
+                      key={'countryPath'}
+                      countryUrlPath={countryUrlPath}
+                      countryLocale={countryLocale}
+                    />
+                  );
+                })()}
             </summary>
           </details>
         </div>
