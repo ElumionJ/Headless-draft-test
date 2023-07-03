@@ -240,8 +240,8 @@ export default function AllProducts() {
         </div>
       </header>
       <Section>
-        <div className="gt-sm:grid gt-sm:grid-cols-2 w-full flex justify-between items-center border-b-[1px] border-b-[#E0E0E0] pb-[32px] text-black">
-          <div className="flex items-center sm:gap-[40px] ">
+        <div className=" gt-sm:flex w-full flex gt-sm:gap-1 justify-between items-center border-b-[1px] border-b-[#E0E0E0] pb-[32px] text-black">
+          <div className="flex items-center sm:gap-[40px] gt-sm:w-full">
             <VendorsFilter
               url={vendorsQuery || ''}
               click={handleVendorClick}
@@ -294,6 +294,22 @@ export default function AllProducts() {
 
               {}
             </div>
+          </div>
+          <div className="gt-sm:flex hidden w-fit">
+            {' '}
+            <Link
+              to={`${selectedLocale.pathPrefix}/products?sortKey=${
+                varParams.sortKey
+              }&reverse=${!varParams.reverse}&query=${vendorsQuery}`}
+              preventScrollReset
+              className=" flex gap-0"
+              style={{
+                rotate,
+              }}
+            >
+              <HiArrowLongDown className="ltr:mr-[-4px] rtl:ml-[-4px]" />
+              <HiArrowNarrowUp className="ltr:ml-[-4px] rtl:mr-[-4px]" />
+            </Link>
           </div>
         </div>
         <div className="hidden gt-l:flex gap-[16px] flex-wrap">

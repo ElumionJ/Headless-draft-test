@@ -91,10 +91,10 @@ export function SortFilter({
   return (
     <>
       <div className="flex flex-col w-full gap-3">
-        <div className="sm-maximum:grid sm-maximum:grid-cols-2 flex items-center justify-between w-full">
-          <div className="flex items-center sm:gap-[40px]">
+        <div className=" flex items-center justify-between w-full gt-sm:gap-1">
+          <div className="flex items-center sm:gap-[40px] gt-sm:w-full ">
             <div
-              className="relative sm-maximum:static sm-maximum:w-full"
+              className="relative gt-sm:static gt-sm:w-full "
               ref={sortByRef}
             >
               <button
@@ -112,7 +112,7 @@ export function SortFilter({
               <div
                 className={`${
                   isOpen ? 'block' : 'hidden'
-                } absolute top-full rtl:right-0 left-0 bg-[#fff] w-[320px] p-[24px] font-noto shadow-darkPopUp mt-[13px] z-30 sm-maximum:fixed sm-maximum:z-50 sm-maximum:w-[320px] sm-maximum:left-0 sm-maximum:h-full sm-maximum:mt-auto sm-maximum:top-0 sm-maximum:p-0`}
+                } absolute top-full rtl:right-0 left-0 bg-[#fff] w-[320px] p-[24px] font-noto shadow-darkPopUp mt-[13px] z-30 gt-sm:fixed gt-sm:z-50 gt-sm:w-[320px] gt-sm:left-0 gt-sm:h-full gt-sm:mt-auto gt-sm:top-0 gt-sm:p-0`}
               >
                 <FiltersDrawer
                   collections={collections}
@@ -124,7 +124,7 @@ export function SortFilter({
                 />
               </div>
             </div>
-            <div className="sm-maximum:hidden">
+            <div className="gt-sm:hidden ">
               <AppliedFilters
                 isMobile
                 setActiveParams={setActiveParams}
@@ -133,7 +133,7 @@ export function SortFilter({
               />
             </div>
           </div>
-          <div className="flex gap-[16px] items-center sm-maximum:w-full ">
+          <div className="flex gap-[16px] items-center gt-sm:w-full ">
             <Link
               to={getLinkReverseSort(location, params)}
               prefetch="intent"
@@ -147,9 +147,22 @@ export function SortFilter({
             </Link>
             <SortMenu activeFilters={updateParams()} itemsCount={itemsCount} />
           </div>
+          <div className="hidden gt-sm:flex">
+            <Link
+              to={getLinkReverseSort(location, params)}
+              prefetch="intent"
+              className=" flex gap-0"
+              style={{
+                rotate,
+              }}
+            >
+              <HiArrowLongDown className="ltr:mr-[-4px] rtl:ml-[-4px]" />
+              <HiArrowNarrowUp className="ltr:ml-[-4px] rtl:mr-[-4px]" />
+            </Link>
+          </div>
         </div>
 
-        <div className="sm-maximum:block hidden ">
+        <div className="gt-sm:block hidden ">
           <AppliedFilters
             setActiveParams={setActiveParams}
             activeParams={activeParams}
