@@ -122,7 +122,8 @@ function Header({
           isOpen={isMobNavigationOpen}
           onClose={() => {
             setIsMobNavigationOpen(false);
-            setSubmenuVisibility({});
+            // setSubmenuVisibility({});
+            document.body.style.overflowY = 'scroll';
           }}
           menu={menu}
           imagesLinks={imagesLinks}
@@ -141,6 +142,7 @@ function Header({
         openCart={openCart}
         openMenu={() => {
           setIsMobNavigationOpen(true);
+          document.body.style.overflowY = 'hidden';
         }}
         imagesLinks={imagesLinks}
       />
@@ -299,14 +301,17 @@ function MenuMobileNav({
               <li
                 key={item.id}
                 className="block relative"
-                onClick={() => toggleSubmenu(item.id)}
+                onClick={() => {
+                  toggleSubmenu(item.id);
+                  const svgElement = document.getElementById(item.id);
+                  svgElement.classList.toggle('rotate-180');
+                }}
               >
                 <Link
                   to={item.to}
                   target={item.target}
                   onClick={() => {
                     onClose();
-                    // setSubmenuVisibility({});
                   }}
                   className={({isActive}) =>
                     isActive ? 'pb-1 border-b -mb-px border-black' : 'pb-1'
@@ -321,12 +326,12 @@ function MenuMobileNav({
                 </Link>
                 {item.items.length > 0 && (
                   <svg
-                    className="absolute top-[11px] right-0 rtl:left-0 rtl:right-auto ml-1 mb-[1px] rtl:ml-0 rtl:mr-1"
+                    id={item.id}
+                    className="absolute top-[11px] right-0 rtl:left-0 rtl:right-auto ml-1 mb-[1px] rtl:ml-0 rtl:mr-1 transition-transform duration-300"
                     fill="#000000"
                     height="10px"
                     width="10px"
                     version="1.1"
-                    // id="Layer_1"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 407.437 407.437"
                     xmlSpace="preserve"
@@ -348,7 +353,10 @@ function MenuMobileNav({
                             key={`${item.id}-${submenu.id}`}
                           >
                             <Link
-                              onClick={onClose}
+                              onClick={() => {
+                                onClose();
+                                setSubmenuVisibility({});
+                              }}
                               key={submenu.id}
                               to={submenu.to}
                               prefetch="intent"
@@ -364,7 +372,10 @@ function MenuMobileNav({
                                 submenu?.items.map((el) => (
                                   <li key={el.id}>
                                     <Link
-                                      onClick={onClose}
+                                      onClick={() => {
+                                        onClose();
+                                        setSubmenuVisibility({});
+                                      }}
                                       className="text-[#333] font-noto leading-[150%] text-[16px]  py-3 block"
                                       key={`${item.id}-${submenu.id}-${el.id}`}
                                       to={el.to}
@@ -749,12 +760,12 @@ function DesktopHeader({
           </nav>
         </div>
 
-        <div className="flex items-center gap-x-9 font-bebas justify-end">
+        <div className="flex items-center gap-x-9 rtl:lg:gap-x-3 font-bebas justify-end">
           <div className="">
             <CountrySelector />
           </div>
 
-          <AccountLink className="relative flex items-center justify-center  h-8 focus:ring-primary/5 rtl:w-1/4" />
+          <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5 rtl:w-1/4" />
           {/* rtl:ml-[10px]" */}
 
           <CartCount isHome={isHome} openCart={openCart} />
