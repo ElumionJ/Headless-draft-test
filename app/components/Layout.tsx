@@ -36,8 +36,8 @@ import banner1 from '~/../public/banner1.png';
 import banner2 from '~/../public/banner2.png';
 import banner3 from '~/../public/banner3.png';
 import footer from '~/../public/footer.png';
-
 import {useLanguageText} from '~/hooks/useLanguageText';
+
 import type {LayoutData} from '../root';
 
 interface ParsedMetaobject {
@@ -122,6 +122,7 @@ function Header({
           isOpen={isMobNavigationOpen}
           onClose={() => {
             setIsMobNavigationOpen(false);
+            setSubmenuVisibility({});
           }}
           menu={menu}
           imagesLinks={imagesLinks}
@@ -181,7 +182,7 @@ export function MenuDrawer({
     <div
       className={`${
         isOpen ? 'left-0 rtl:right-0' : 'left-[-105%] rtl:right-[-105%]'
-      }  top-0 fixed bg-white border-r-[0.5px] border-r-black  z-50 h-full flex flex-col transition-left rtl:transition-right duration-200 ease-in w-full md-only:w-[60%]`}
+      }  top-0 fixed bg-white border-r-[0.5px] border-r-black  z-50 h-full flex flex-col transition-left rtl:transition-right duration-200 ease-in w-full md-only:w-[60%] overflow-y-scroll`}
     >
       <MenuMobileNav
         openCart={openCart}
@@ -211,6 +212,7 @@ function MenuMobileNav({
   const enText = 'Login';
 
   const languageText = useLanguageText({ar_text: arText, en_text: enText});
+  const [submenuVisibility, setSubmenuVisibility] = useState({});
   return (
     <>
       <nav className="font-bebas grid gap-4 p-[17px]  sm:gap-6 sm:pb-8  text-white">
@@ -286,51 +288,26 @@ function MenuMobileNav({
           </li>
 
           {(menu?.items || []).map((item) => {
-            // if (item.to === '/products') {
-            //   return (
-            //     <Link to="/products" onClick={onClose} key={item.id}>
-            //       <span
-            //         className="flex justify-center items-center bg-no-repeat w-[345px] h-[120px]"
-            //         style={{backgroundImage: `url(${banner1})`}}
-            //       >
-            //         <span className="uppercase  text-3xl">All products</span>
-            //       </span>
-            //     </Link>
-            //   );
-            // }
-
-            // if (item.to === '/collections/freestyle') {
-            //   return (
-            //     <Link to="/collections" onClick={onClose} key={item.id}>
-            //       <div
-            //         className="flex justify-center items-center  bg-no-repeat	 w-[345px] h-[120px]"
-            //         style={{backgroundImage: `url(${banner2})`}}
-            //       >
-            //         <span className="uppercase text-3xl">Shop bundles</span>
-            //       </div>
-            //     </Link>
-            //   );
-            // }
-
-            // if (item.to === '/journal') {
-            //   return (
-            //     <Link to="/journal" onClick={onClose} key={item.id}>
-            //       <div
-            //         className="flex justify-center items-center  bg-no-repeat w-[345px] h-[120px]"
-            //         style={{backgroundImage: `url(${banner3})`}}
-            //       >
-            //         <span className="uppercase  text-3xl">Journal</span>
-            //       </div>
-            //     </Link>
-            //   );
-            // }
+            const toggleSubmenu = (itemId: string) => {
+              setSubmenuVisibility((prevState) => ({
+                ...prevState,
+                [itemId]: !prevState[itemId],
+              }));
+            };
 
             return (
-              <li key={item.id} className="block">
+              <li
+                key={item.id}
+                className="block relative"
+                onClick={() => toggleSubmenu(item.id)}
+              >
                 <Link
                   to={item.to}
                   target={item.target}
-                  onClick={onClose}
+                  onClick={() => {
+                    onClose();
+                    // setSubmenuVisibility({});
+                  }}
                   className={({isActive}) =>
                     isActive ? 'pb-1 border-b -mb-px border-black' : 'pb-1'
                   }
@@ -341,6 +318,123 @@ function MenuMobileNav({
                   </span>
                   {/* </Text> */}
                 </Link>
+                {item.items.length > 0 && (
+                  <svg
+                    className="absolute top-[11px] right-0 rtl:left-0 rtl:right-auto ml-1 mb-[1px] rtl:ml-0 rtl:mr-1"
+                    fill="#000000"
+                    height="10px"
+                    width="10px"
+                    version="1.1"
+                    // id="Layer_1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 407.437 407.437"
+                    xmlSpace="preserve"
+                  >
+                    <polygon points="386.258,91.567 203.718,273.512 21.179,91.567 0,112.815 203.718,315.87 407.437,112.815 " />
+                  </svg>
+                )}
+                {item?.items.length > 0 && (
+                  <div
+                    className={`mt-[10px] ml-[12px] rtl:mr-[12px] ${
+                      submenuVisibility[item.id] ? '' : 'hidden'
+                    }`}
+                  >
+                    <ul className="flex flex-col">
+                      {(item?.items || []).map((submenu) => {
+                        return (
+                          <li
+                            className="max-w-[150px] "
+                            key={`${item.id}-${submenu.id}`}
+                          >
+                            <Link
+                              onClick={onClose}
+                              key={submenu.id}
+                              to={submenu.to}
+                              target={submenu.target}
+                              className="py-3 uppercase font-bebas text-[20px] leading-[110%] tracking-wider text-[#1f1f1f] flex"
+                            >
+                              {submenu.title}
+                            </Link>
+
+                            {/*  nested menu - 3 level */}
+                            <ul className="ml-[12px] rtl:mr-[12px]">
+                              {submenu.items.length > 0 &&
+                                submenu?.items.map((el) => (
+                                  <li key={el.id}>
+                                    <Link
+                                      onClick={onClose}
+                                      className="text-[#333] font-noto leading-[150%] text-[16px]  py-3 block"
+                                      key={`${item.id}-${submenu.id}-${el.id}`}
+                                      to={el.to}
+                                      target={el.target}
+                                    >
+                                      {el.title}
+                                    </Link>
+                                  </li>
+                                ))}
+                            </ul>
+                          </li>
+                        );
+                      })}
+
+                      <li className="flex gap-x-10 pl-32 rtl:pr-32 rtl:pl-0">
+                        {imagesLinks &&
+                          typeof imagesLinks.navigation_relative.value ===
+                            'string' &&
+                          imagesLinks.navigation_relative.value.toLowerCase() ===
+                            item.title.toLowerCase() && (
+                            <div className="flex flex-col-reverse ">
+                              <Link
+                                onClick={onClose}
+                                to={imagesLinks.link.value}
+                                className="pt-3 text-xl"
+                              >
+                                {imagesLinks.text.value}
+                              </Link>
+
+                              {imagesLinks.image && (
+                                <Link to={imagesLinks.link.value}>
+                                  <img
+                                    src={imagesLinks.image.value.url}
+                                    alt={imagesLinks.text.value}
+                                    width={200}
+                                    height={500}
+                                    loading="lazy"
+                                  />
+                                </Link>
+                              )}
+                            </div>
+                          )}
+
+                        {imagesLinks &&
+                          typeof imagesLinks.navigation_relative.value ===
+                            'string' &&
+                          imagesLinks.navigation_relative.value.toLowerCase() ===
+                            item.title.toLowerCase() && (
+                            <div className="flex flex-col-reverse">
+                              <Link
+                                to={imagesLinks.link_2.value}
+                                className="pt-3 text-xl"
+                              >
+                                {imagesLinks.text_2.value}
+                              </Link>
+                              {imagesLinks.image_2 && (
+                                <Link to={imagesLinks.link_2.value}>
+                                  <img
+                                    src={imagesLinks.image_2.value.url}
+                                    alt={imagesLinks.text_2.value}
+                                    width={200}
+                                    height={500}
+                                    loading="lazy"
+                                  />
+                                </Link>
+                              )}
+                            </div>
+                          )}
+                      </li>
+                    </ul>
+                  </div>
+                )}
               </li>
             );
           })}
@@ -539,7 +633,7 @@ function DesktopHeader({
                                 key={submenu.id}
                                 to={submenu.to}
                                 target={submenu.target}
-                                className="pb-[6px] inline-block uppercase font-bebas text-[20px] leading-[110%] tracking-wider text-[#1f1f1f]"
+                                className="py-3 inline-block uppercase font-bebas text-[20px] leading-[110%] tracking-wider text-[#1f1f1f]"
                               >
                                 {submenu.title}
                               </Link>
@@ -752,7 +846,7 @@ function Badge({
         <span
           className={`${
             dark ? 'bg-contrast text-primary ' : ' bg-contrast text-primary'
-          } absolute bottom-1 left-[10px] rtl:right-[10px] rtl:left-0 text-[0.625rem] font-medium subpixel-antialiased h-3 min-w-[0.75rem] flex items-center justify-center leading-none rounded-full w-auto px-[0.125rem] pb-px border border-black font-bebas`}
+          } absolute bottom-1 left-[10px] rtl:right-[10px] rtl:left-0 text-[0.625rem] font-medium subpixel-antialiased h-3 min-w-[0.75rem] flex items-center justify-center leading-none rounded-full w-auto px-[0.125rem] rtl:pl-[1.5px] py-[2px] border border-black font-bebas`}
         >
           <span>{count || 0}</span>
         </span>
