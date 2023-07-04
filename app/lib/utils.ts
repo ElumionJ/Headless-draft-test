@@ -81,7 +81,6 @@ function resolveToFromType(
   },
 ) {
   if (!pathname || !type) return '';
-
   /*
     MenuItemType enum
     @see: https://shopify.dev/api/storefront/unstable/enums/MenuItemType

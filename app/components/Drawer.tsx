@@ -77,7 +77,7 @@ export function Drawer({
               >
                 <Dialog.Panel className="w-screen max-w-lg text-left align-middle transition-all transform shadow-xl h-screen-dynamic bg-[#FFFEFA]">
                   <header
-                    className={`text-black sticky top-0 flex items-center px-6  h-nav  border-b-[1px] border-black mb-8 ${
+                    className={`text-black sticky top-0 flex items-center px-6 h-nav  border-b-[1px] border-black mb-8 ${
                       heading ? 'justify-between' : 'justify-end'
                     }`}
                   >
