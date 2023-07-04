@@ -242,7 +242,6 @@ function CartCheckoutActions({
             viewBox="0 0 11 10"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="rtl:scale-x-[-1]"
           >
             <path
               d="M7.45672 2.20542L3.44174 7.9394"
@@ -273,7 +272,6 @@ function CartCheckoutActions({
               viewBox="0 0 10 10"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="rtl:scale-x-[-1]"
             >
               <path
                 d="M7.07025 2.25054L2.12057 7.20022"
@@ -666,7 +664,6 @@ export function CartEmpty({
                 viewBox="0 0 11 10"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="rtl:scale-x-[-1]"
               >
                 <path
                   d="M7.45672 2.20542L3.44174 7.9394"
