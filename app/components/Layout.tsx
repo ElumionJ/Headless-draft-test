@@ -752,7 +752,7 @@ function Badge({
         <span
           className={`${
             dark ? 'bg-contrast text-primary ' : ' bg-contrast text-primary'
-          } absolute bottom-1 left-[10px] rtl:right-[10px] rtl:left-0 text-[0.625rem] font-medium subpixel-antialiased h-3 min-w-[0.75rem] flex items-center justify-center leading-none rounded-full w-auto px-[0.125rem] pb-px border border-black font-bebas`}
+          } absolute bottom-1 left-[10px] rtl:right-[10px] rtl:left-0 text-[0.625rem] font-medium subpixel-antialiased h-3 min-w-[0.75rem] flex items-center justify-center leading-none rounded-full w-auto px-[0.125rem] rtl:pl-[1.5px] py-[2px] border border-black font-bebas`}
         >
           <span>{count || 0}</span>
         </span>
