@@ -135,7 +135,13 @@ function Country({
         countryCode: countryLocale.country,
       }}
     >
-      <button aria-label="Button" type="submit">
+      <button
+        aria-label="Button"
+        type="submit"
+        onClick={() => {
+          document.body.style.overflowY = 'scroll';
+        }}
+      >
         {countryLocale.label}
       </button>
     </ChangeLocaleForm>

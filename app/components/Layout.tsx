@@ -321,7 +321,7 @@ function MenuMobileNav({
                   target={item.target}
                   onClick={() => {
                     onClose();
-                    setSubmenuVisibility({});
+                    // setSubmenuVisibility({});
                   }}
                   className={({isActive}) =>
                     isActive ? 'pb-1 border-b -mb-px border-black' : 'pb-1'
@@ -365,7 +365,6 @@ function MenuMobileNav({
                             <Link
                               onClick={() => {
                                 onClose();
-                                setSubmenuVisibility({});
                               }}
                               key={submenu.id}
                               to={submenu.to}
@@ -384,7 +383,7 @@ function MenuMobileNav({
                                     <Link
                                       onClick={() => {
                                         onClose();
-                                        setSubmenuVisibility({});
+                                        // setSubmenuVisibility({'none'});
                                       }}
                                       className="text-[#333] font-noto leading-[150%] text-[16px]  py-3 block"
                                       key={`${item.id}-${submenu.id}-${el.id}`}
