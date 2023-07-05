@@ -181,18 +181,28 @@ export function MenuDrawer({
   imagesLinks: any;
 }) {
   return (
-    <div
-      className={`${
-        isOpen ? 'ltr:left-0 rtl:right-0' : 'ltr:left-[-105%] rtl:right-[-105%]'
-      }  top-0 fixed bg-white border-r-[0.5px] border-r-black  z-50 h-full flex flex-col ltr:transition-left rtl:transition-right duration-200 ease-in w-full md-only:w-[60%] overflow-y-scroll`}
-    >
-      <MenuMobileNav
-        openCart={openCart}
-        menu={menu}
-        onClose={onClose}
-        imagesLinks={imagesLinks}
-      />
-    </div>
+    <>
+      <div
+        onClick={onClose}
+        className={`${
+          isOpen ? ' z-50 opacity-100' : 'z-[-20] opacity-0 hidden'
+        } w-full fixed h-full z-50 bg-[#39393986] transition-opacity ease-in `}
+      ></div>
+      <div
+        className={`${
+          isOpen
+            ? 'ltr:left-0 rtl:right-0'
+            : 'ltr:left-[-105%] rtl:right-[-105%]'
+        }  top-0 fixed bg-white border-r-[0.5px] border-r-black  z-50 h-full flex flex-col ltr:transition-left rtl:transition-right duration-200 ease-in w-full md-only:w-[60%] overflow-y-scroll`}
+      >
+        <MenuMobileNav
+          openCart={openCart}
+          menu={menu}
+          onClose={onClose}
+          imagesLinks={imagesLinks}
+        />
+      </div>
+    </>
   );
 }
 

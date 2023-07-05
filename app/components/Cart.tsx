@@ -36,7 +36,7 @@ export function Cart({
   return (
     <>
       <CartEmpty hidden={linesCount} onClose={onClose} layout={layout} />
-      <CartDetails cart={cart} layout={layout} />
+      <CartDetails cart={cart} layout={layout} onClose={onClose} />
     </>
   );
 }
@@ -45,10 +45,12 @@ export function CartDetails({
   layout,
   cart,
   heading,
+  onClose,
 }: {
   layout: Layouts;
   cart: CartType | null;
   heading?: string;
+  onClose: () => void;
 }) {
   // @todo: get optimistic cart cost
   const cartHasItems = !!cart && cart.totalQuantity > 0;
@@ -60,8 +62,6 @@ export function CartDetails({
   if (layout === 'page' && !cartHasItems) {
     return <></>;
   }
-
-  //Kate
 
   const arText = 'حقيبتي';
   const enText = 'My bag';
@@ -77,7 +77,7 @@ export function CartDetails({
         </span>
       )}
       <div className={container[layout]}>
-        <CartLines lines={cart?.lines} layout={layout} />
+        <CartLines lines={cart?.lines} layout={layout} onClose={onClose} />
 
         {cartHasItems && (
           <CartSummary
@@ -149,9 +149,11 @@ function UpdateDiscountForm({children}: {children: React.ReactNode}) {
 function CartLines({
   layout = 'drawer',
   lines: cartLines,
+  onClose,
 }: {
   layout: Layouts;
   lines: CartType['lines'] | undefined;
+  onClose?: () => void;
 }) {
   const currentLines = cartLines ? flattenConnection(cartLines) : [];
   const scrollRef = useRef(null);
@@ -190,6 +192,7 @@ function CartLines({
             additionalClasses={styles}
             staticPrice={line.cost.amountPerQuantity}
             layout={layout}
+            onClose={onClose}
           />
         ))}
       </ul>
@@ -414,6 +417,7 @@ function CartLineItem({
   additionalClasses,
   product,
   staticPrice,
+  onClose,
 }: {
   layout: Layouts;
   line: CartLine;
@@ -421,6 +425,7 @@ function CartLineItem({
   priceType?: 'regular' | 'compareAt';
   product: Product;
   staticPrice: StaticPrice;
+  onClose?: () => void;
 }) {
   if (!line?.id) return null;
 
@@ -453,7 +458,10 @@ function CartLineItem({
           <div className="font-bebas text-base flex flex-col h-full justify-between w-max">
             {/* <Heading as="h3" size="copy"> */}
             {merchandise?.product?.handle ? (
-              <Link to={`/products/${merchandise.product.handle}`}>
+              <Link
+                onClick={onClose}
+                to={`/products/${merchandise.product.handle}`}
+              >
                 {merchandise?.product?.title || ''}
               </Link>
             ) : (
