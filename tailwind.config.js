@@ -87,6 +87,9 @@ export default {
       gridTemplateColumns: {
         header: '1fr 1fr 1fr',
         navigation: '1fr 1fr 1fr 1fr 1fr',
+        drawerLine3: '1fr 82px 80px',
+        drawerLine2: '1fr 100px',
+        ajaxLine: '112px 1fr',
       },
     },
   },
