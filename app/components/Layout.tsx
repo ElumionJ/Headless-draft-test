@@ -183,8 +183,8 @@ export function MenuDrawer({
   return (
     <div
       className={`${
-        isOpen ? 'left-0 rtl:right-0' : 'left-[-105%] rtl:right-[-105%]'
-      }  top-0 fixed bg-white border-r-[0.5px] border-r-black  z-50 h-full flex flex-col transition-left rtl:transition-right duration-200 ease-in w-full md-only:w-[60%] overflow-y-scroll`}
+        isOpen ? 'ltr:left-0 rtl:right-0' : 'ltr:left-[-105%] rtl:right-[-105%]'
+      }  top-0 fixed bg-white border-r-[0.5px] border-r-black  z-50 h-full flex flex-col ltr:transition-left rtl:transition-right duration-200 ease-in w-full md-only:w-[60%] overflow-y-scroll`}
     >
       <MenuMobileNav
         openCart={openCart}
@@ -229,11 +229,10 @@ function MenuMobileNav({
           <Link to={'/'} prefetch="intent" onClick={onClose}>
             <img src={logo} className="w-[110px] h-[30px]" alt="mobile logo" />
           </Link>
-          <CartCount
-            // variant={'white'}
-            isHome={isHome || false}
-            openCart={openCart}
-          />
+
+          {/* <div className="hidden">
+            <CartCount isHome={isHome || false} openCart={openCart} />
+          </div> */}
         </div>
 
         <ul className="overflow-y-scroll gap-y-4 flex flex-col justify-center text-black">
@@ -312,6 +311,10 @@ function MenuMobileNav({
                   target={item.target}
                   onClick={() => {
                     onClose();
+<<<<<<< HEAD
+=======
+                    setSubmenuVisibility({});
+>>>>>>> bugs-10
                   }}
                   className={({isActive}) =>
                     isActive ? 'pb-1 border-b -mb-px border-black' : 'pb-1'
@@ -326,8 +329,12 @@ function MenuMobileNav({
                 </Link>
                 {item.items.length > 0 && (
                   <svg
+<<<<<<< HEAD
                     id={item.id}
                     className="absolute top-[11px] right-0 rtl:left-0 rtl:right-auto ml-1 mb-[1px] rtl:ml-0 rtl:mr-1 transition-transform duration-300"
+=======
+                    className="absolute top-[11px] right-0 rtl:left-0 rtl:right-auto ml-1 mb-[1px] rtl:ml-0 rtl:mr-1 "
+>>>>>>> bugs-10
                     fill="#000000"
                     height="10px"
                     width="10px"
@@ -872,7 +879,7 @@ function Badge({
   const BadgeCounter = useMemo(() => {
     if (count === 0) {
       // return <IconBag variant={'black'} />;
-      return <IconBag />;
+      return <IconBag fill="black" />;
     }
 
     return (

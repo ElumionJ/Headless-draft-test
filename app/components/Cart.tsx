@@ -165,7 +165,7 @@ function CartLines({
     price:
       layout === 'page'
         ? 'item flex  flex-row-reverse gap-x-8 font-bebas text-[20px]'
-        : 'item ajax-styles flex flex-col  gap-y-16 font-bebas text-[20px] max-w-[65px] w-full',
+        : 'item ajax-styles flex flex-col  gap-y-16 font-bebas text-[20px] max-w-[65px] w-full rtl:max-w-none	 rtl:w-none',
   };
 
   const className = clsx([
@@ -266,6 +266,7 @@ function CartCheckoutActions({
           <span className="flex flex-row  items-center justify-center  font-bold font-noto text-xs  text-black uppercase border-b-2 border-black w-fit gap-x-2 hover:opacity-80">
             {languageTextForBag}
             <svg
+              className="rtl:scale-x-[-1]"
               width="10"
               height="10"
               viewBox="0 0 10 10"
@@ -449,16 +450,16 @@ function CartLineItem({
       <div className="flex flex-col sm:flex-row justify-between flex-grow w-1/4">
         <div className={additionalClasses.cartItem}>
           {/* max-w-[200px] */}
-          <div className="font-bebas text-base flex flex-col h-full justify-between">
-            <Heading as="h3" size="copy">
-              {merchandise?.product?.handle ? (
-                <Link to={`/products/${merchandise.product.handle}`}>
-                  {merchandise?.product?.title || ''}
-                </Link>
-              ) : (
-                <Text>{merchandise?.product?.title || ''}</Text>
-              )}
-            </Heading>
+          <div className="font-bebas text-base flex flex-col h-full justify-between w-max">
+            {/* <Heading as="h3" size="copy"> */}
+            {merchandise?.product?.handle ? (
+              <Link to={`/products/${merchandise.product.handle}`}>
+                {merchandise?.product?.title || ''}
+              </Link>
+            ) : (
+              <Text>{merchandise?.product?.title || ''}</Text>
+            )}
+            {/* </Heading> */}
 
             {layout === 'page' && (
               <span>
@@ -657,6 +658,7 @@ export function CartEmpty({
             >
               {languageTextStart}
               <svg
+                className="rtl:scale-x-[-1]"
                 width="11"
                 height="10"
                 viewBox="0 0 11 10"
