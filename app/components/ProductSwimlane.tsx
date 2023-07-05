@@ -33,7 +33,7 @@ export function ProductSwimlane({
   const mlDesk = marginLeftDesktop || '40';
   return (
     <div
-      heading={title}
+      // heading={title}
       // padding="y"
       {...props}
       className=" gt-m:flex-col flex justify-between"

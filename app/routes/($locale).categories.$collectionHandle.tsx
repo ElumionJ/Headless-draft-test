@@ -165,7 +165,7 @@ export default function Collection() {
           {collection.title}
         </h1>
       </div>
-      {collection?.description && (
+      {/* {collection?.description && (
         <div className=" px-[48px] mt-[32px] text-[16px] font-noto leading-[150%] text-[#333] flex items-baseline justify-between w-full">
           <div>
             <Text format width="narrow" as="p" className="inline-block">
@@ -173,7 +173,7 @@ export default function Collection() {
             </Text>
           </div>
         </div>
-      )}
+      )} */}
       <Section>
         <SortFilter
           filters={collection.products.filters as Filter[]}

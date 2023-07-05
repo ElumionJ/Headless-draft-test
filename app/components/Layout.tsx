@@ -226,7 +226,7 @@ function MenuMobileNav({
           >
             <TfiClose />
           </button>
-          <Link to={'/'} onClick={onClose}>
+          <Link to={'/'} prefetch="intent" onClick={onClose}>
             <img src={logo} className="w-[110px] h-[30px]" alt="mobile logo" />
           </Link>
           <CartCount
@@ -316,6 +316,7 @@ function MenuMobileNav({
                   className={({isActive}) =>
                     isActive ? 'pb-1 border-b -mb-px border-black' : 'pb-1'
                   }
+                  prefetch="intent"
                 >
                   {/* <Text as="span" size="copy"> */}
                   <span className="text-2xl font-bebas tracking-wider	">
@@ -358,6 +359,7 @@ function MenuMobileNav({
                               }}
                               key={submenu.id}
                               to={submenu.to}
+                              prefetch="intent"
                               target={submenu.target}
                               className="py-3 uppercase font-bebas text-[20px] leading-[110%] tracking-wider text-[#1f1f1f] flex"
                             >
@@ -378,6 +380,7 @@ function MenuMobileNav({
                                       key={`${item.id}-${submenu.id}-${el.id}`}
                                       to={el.to}
                                       target={el.target}
+                                      prefetch="intent"
                                     >
                                       {el.title}
                                     </Link>
@@ -396,6 +399,7 @@ function MenuMobileNav({
                             item.title.toLowerCase() && (
                             <div className="flex flex-col-reverse ">
                               <Link
+                                prefetch="intent"
                                 onClick={onClose}
                                 to={imagesLinks.link.value}
                                 className="pt-3 text-xl"
@@ -404,7 +408,10 @@ function MenuMobileNav({
                               </Link>
 
                               {imagesLinks.image && (
-                                <Link to={imagesLinks.link.value}>
+                                <Link
+                                  to={imagesLinks.link.value}
+                                  prefetch="intent"
+                                >
                                   <img
                                     src={imagesLinks.image.value.url}
                                     alt={imagesLinks.text.value}
@@ -424,13 +431,17 @@ function MenuMobileNav({
                             item.title.toLowerCase() && (
                             <div className="flex flex-col-reverse">
                               <Link
+                                prefetch="intent"
                                 to={imagesLinks.link_2.value}
                                 className="pt-3 text-xl"
                               >
                                 {imagesLinks.text_2.value}
                               </Link>
                               {imagesLinks.image_2 && (
-                                <Link to={imagesLinks.link_2.value}>
+                                <Link
+                                  to={imagesLinks.link_2.value}
+                                  prefetch="intent"
+                                >
                                   <img
                                     src={imagesLinks.image_2.value.url}
                                     alt={imagesLinks.text_2.value}
@@ -455,7 +466,12 @@ function MenuMobileNav({
         </div>
       </nav>
 
-      <Link to="/account/login" onClick={onClose} className="mt-[80px] mx-3">
+      <Link
+        to="/account/login"
+        onClick={onClose}
+        className="mt-[80px] mx-3"
+        prefetch="intent"
+      >
         <Button
           aria-label="Button"
           as="span"
@@ -503,6 +519,7 @@ function MobileHeader({
       </div>
 
       <Link
+        prefetch="intent"
         className="p-4 flex items-center self-stretch leading-[3rem] md:leading-[4rem] justify-center flex-grow w-full h-full"
         to="/"
       >
@@ -569,7 +586,7 @@ function DesktopHeader({
         </Form>
 
         <div className=" flex gap-10 justify-center">
-          <nav className=" font-bebas  grid grid-cols-navigation items-center gap-x-10 rtl:gap-x-6">
+          <nav className=" font-bebas  grid grid-cols-navigation items-center  rtl:gap-x-6">
             {/* Top level menu items */}
 
             {(menu?.items || []).map((item) => {
@@ -580,6 +597,7 @@ function DesktopHeader({
                       to="/"
                       key={item.id}
                       className="w-[140px] flex justify-center items-center"
+                      prefetch="intent"
                     >
                       <img
                         src={logo}
@@ -604,7 +622,7 @@ function DesktopHeader({
                       prefetch="intent"
                       className={({isActive}) => {
                         const mainStyles =
-                          ' py-8  flex justify-center items-center';
+                          ' p-8  flex justify-center items-center';
                         const activeStyle = '';
 
                         return isActive
@@ -641,6 +659,7 @@ function DesktopHeader({
                               key={`${item.id}-${submenu.id}`}
                             >
                               <Link
+                                prefetch="intent"
                                 key={submenu.id}
                                 to={submenu.to}
                                 target={submenu.target}
@@ -659,6 +678,7 @@ function DesktopHeader({
                                         key={`${item.id}-${submenu.id}-${el.id}`}
                                         to={el.to}
                                         target={el.target}
+                                        prefetch="intent"
                                       >
                                         {el.title}
                                       </Link>
@@ -678,12 +698,16 @@ function DesktopHeader({
                                   <Link
                                     to={imagesLinks.link.value}
                                     className="pt-3 text-xl"
+                                    prefetch="intent"
                                   >
                                     {imagesLinks.text.value}
                                   </Link>
 
                                   {imagesLinks.image && (
-                                    <Link to={imagesLinks.link.value}>
+                                    <Link
+                                      to={imagesLinks.link.value}
+                                      prefetch="intent"
+                                    >
                                       <img
                                         src={imagesLinks.image.value.url}
                                         alt={imagesLinks.text.value}
@@ -705,11 +729,15 @@ function DesktopHeader({
                                   <Link
                                     to={imagesLinks.link_2.value}
                                     className="pt-3 text-xl"
+                                    prefetch="intent"
                                   >
                                     {imagesLinks.text_2.value}
                                   </Link>
                                   {imagesLinks.image_2 && (
-                                    <Link to={imagesLinks.link_2.value}>
+                                    <Link
+                                      to={imagesLinks.link_2.value}
+                                      prefetch="intent"
+                                    >
                                       <img
                                         src={imagesLinks.image_2.value.url}
                                         alt={imagesLinks.text_2.value}
@@ -751,16 +779,13 @@ function AccountLink({className}: {className?: string}) {
   const [root] = useMatches();
   const isLoggedIn = root.data?.isLoggedIn;
 
-  //Kate
-
   const arText = 'تسجيلدخول';
   const enText = 'Login';
 
   const languageText = useLanguageText({ar_text: arText, en_text: enText});
 
   return isLoggedIn ? (
-    <Link to="/account" className={className}>
-      {/* Kate */}
+    <Link to="/account" className={className} prefetch="intent">
       <div className="absolute top-[17%] right-[96%] rtl:lg-only:left-[-19%] rtl:xl:left-[-4%] rtl:2xl-only:left-[11%] rtl:top-[12%] rtl:right-auto rtl:ml-[10px]">
         <IconAccount />
       </div>
@@ -770,7 +795,7 @@ function AccountLink({className}: {className?: string}) {
       </div>
     </Link>
   ) : (
-    <Link to="/account/login" className={className}>
+    <Link to="/account/login" className={className} prefetch="intent">
       {/* <IconLogin /> */}
       <div className="font-bebas flex items-center justify-center   uppercase border-b-2  border-black  w-fit gap-x-2 hover:opacity-80">
         {languageText}
@@ -921,7 +946,7 @@ export function Footer({
       style={{backgroundImage: `url(${footer})`}}
     >
       <div className="flex items-center justify-between w-full border-b-[1px] border-b-[#E0E0E0] py-[50px] ">
-        <Link to="/">
+        <Link to="/" prefetch="intent">
           <div className="">
             <img
               src={logo}
@@ -941,7 +966,12 @@ export function Footer({
         <div className="flex items-center justify-end gap-x-6 rtl:justify-start">
           {/* instagram */}
 
-          <Link to="/" className="cursor-pointer" aria-label="Instagram">
+          <Link
+            to="/"
+            className="cursor-pointer"
+            aria-label="Instagram"
+            prefetch="intent"
+          >
             <svg
               width="24"
               height="25"
@@ -971,7 +1001,12 @@ export function Footer({
           </Link>
 
           {/* facebook */}
-          <Link to="/" className="cursor-pointer" aria-label="Facebook">
+          <Link
+            to="/"
+            className="cursor-pointer"
+            aria-label="Facebook"
+            prefetch="intent"
+          >
             <svg
               width="24"
               height="24"
@@ -997,7 +1032,12 @@ export function Footer({
           </Link>
 
           {/* youtube */}
-          <Link to="/" className="cursor-pointer" aria-label="Youtube">
+          <Link
+            to="/"
+            className="cursor-pointer"
+            aria-label="Youtube"
+            prefetch="intent"
+          >
             <svg
               width="32"
               height="24"
@@ -1036,7 +1076,12 @@ export function Footer({
 function FooterLink({item}: {item: ChildEnhancedMenuItem}) {
   if (item.to.startsWith('http')) {
     return (
-      <Link to={item.to} target={item.target} rel="noopener noreferrer">
+      <Link
+        to={item.to}
+        target={item.target}
+        rel="noopener noreferrer"
+        prefetch="intent"
+      >
         {item.title}
       </Link>
     );
