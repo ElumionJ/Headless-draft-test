@@ -122,7 +122,8 @@ function Header({
           isOpen={isMobNavigationOpen}
           onClose={() => {
             setIsMobNavigationOpen(false);
-            setSubmenuVisibility({});
+            // setSubmenuVisibility({});
+            document.body.style.overflowY = 'scroll';
           }}
           menu={menu}
           imagesLinks={imagesLinks}
@@ -141,6 +142,7 @@ function Header({
         openCart={openCart}
         openMenu={() => {
           setIsMobNavigationOpen(true);
+          document.body.style.overflowY = 'hidden';
         }}
         imagesLinks={imagesLinks}
       />
@@ -179,18 +181,28 @@ export function MenuDrawer({
   imagesLinks: any;
 }) {
   return (
-    <div
-      className={`${
-        isOpen ? 'left-0 rtl:right-0' : 'left-[-105%] rtl:right-[-105%]'
-      }  top-0 fixed bg-white border-r-[0.5px] border-r-black  z-50 h-full flex flex-col transition-left rtl:transition-right duration-200 ease-in w-full md-only:w-[60%] overflow-y-scroll`}
-    >
-      <MenuMobileNav
-        openCart={openCart}
-        menu={menu}
-        onClose={onClose}
-        imagesLinks={imagesLinks}
-      />
-    </div>
+    <>
+      <div
+        onClick={onClose}
+        className={`${
+          isOpen ? ' z-50 opacity-100' : 'z-[-20] opacity-0 hidden'
+        } w-full fixed h-full z-50 bg-[#39393986] transition-opacity ease-in `}
+      ></div>
+      <div
+        className={`${
+          isOpen
+            ? 'ltr:left-0 rtl:right-0'
+            : 'ltr:left-[-105%] rtl:right-[-105%]'
+        }  top-0 fixed bg-white border-r-[0.5px] border-r-black  z-50 h-full flex flex-col ltr:transition-left rtl:transition-right duration-200 ease-in w-full md-only:w-[60%] overflow-y-scroll`}
+      >
+        <MenuMobileNav
+          openCart={openCart}
+          menu={menu}
+          onClose={onClose}
+          imagesLinks={imagesLinks}
+        />
+      </div>
+    </>
   );
 }
 
@@ -224,14 +236,13 @@ function MenuMobileNav({
           >
             <TfiClose />
           </button>
-          <Link to={'/'} onClick={onClose}>
+          <Link to={'/'} prefetch="intent" onClick={onClose}>
             <img src={logo} className="w-[110px] h-[30px]" alt="mobile logo" />
           </Link>
-          <CartCount
-            // variant={'white'}
-            isHome={isHome || false}
-            openCart={openCart}
-          />
+
+          {/* <div className="hidden">
+            <CartCount isHome={isHome || false} openCart={openCart} />
+          </div> */}
         </div>
 
         <ul className="overflow-y-scroll gap-y-4 flex flex-col justify-center text-black">
@@ -299,18 +310,23 @@ function MenuMobileNav({
               <li
                 key={item.id}
                 className="block relative"
-                onClick={() => toggleSubmenu(item.id)}
+                onClick={() => {
+                  toggleSubmenu(item.id);
+                  const svgElement = document.getElementById(item.id);
+                  svgElement.classList.toggle('rotate-180');
+                }}
               >
                 <Link
                   to={item.to}
                   target={item.target}
                   onClick={() => {
                     onClose();
-                    // setSubmenuVisibility({});
+                    setSubmenuVisibility({});
                   }}
                   className={({isActive}) =>
                     isActive ? 'pb-1 border-b -mb-px border-black' : 'pb-1'
                   }
+                  prefetch="intent"
                 >
                   {/* <Text as="span" size="copy"> */}
                   <span className="text-2xl font-bebas tracking-wider	">
@@ -320,12 +336,12 @@ function MenuMobileNav({
                 </Link>
                 {item.items.length > 0 && (
                   <svg
-                    className="absolute top-[11px] right-0 rtl:left-0 rtl:right-auto ml-1 mb-[1px] rtl:ml-0 rtl:mr-1"
+                    id={item.id}
+                    className="absolute top-[11px] right-0 rtl:left-0 rtl:right-auto ml-1 mb-[1px] rtl:ml-0 rtl:mr-1 transition-transform duration-300"
                     fill="#000000"
                     height="10px"
                     width="10px"
                     version="1.1"
-                    // id="Layer_1"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 407.437 407.437"
                     xmlSpace="preserve"
@@ -347,9 +363,13 @@ function MenuMobileNav({
                             key={`${item.id}-${submenu.id}`}
                           >
                             <Link
-                              onClick={onClose}
+                              onClick={() => {
+                                onClose();
+                                setSubmenuVisibility({});
+                              }}
                               key={submenu.id}
                               to={submenu.to}
+                              prefetch="intent"
                               target={submenu.target}
                               className="py-3 uppercase font-bebas text-[20px] leading-[110%] tracking-wider text-[#1f1f1f] flex"
                             >
@@ -362,11 +382,15 @@ function MenuMobileNav({
                                 submenu?.items.map((el) => (
                                   <li key={el.id}>
                                     <Link
-                                      onClick={onClose}
+                                      onClick={() => {
+                                        onClose();
+                                        setSubmenuVisibility({});
+                                      }}
                                       className="text-[#333] font-noto leading-[150%] text-[16px]  py-3 block"
                                       key={`${item.id}-${submenu.id}-${el.id}`}
                                       to={el.to}
                                       target={el.target}
+                                      prefetch="intent"
                                     >
                                       {el.title}
                                     </Link>
@@ -385,6 +409,7 @@ function MenuMobileNav({
                             item.title.toLowerCase() && (
                             <div className="flex flex-col-reverse ">
                               <Link
+                                prefetch="intent"
                                 onClick={onClose}
                                 to={imagesLinks.link.value}
                                 className="pt-3 text-xl"
@@ -393,7 +418,10 @@ function MenuMobileNav({
                               </Link>
 
                               {imagesLinks.image && (
-                                <Link to={imagesLinks.link.value}>
+                                <Link
+                                  to={imagesLinks.link.value}
+                                  prefetch="intent"
+                                >
                                   <img
                                     src={imagesLinks.image.value.url}
                                     alt={imagesLinks.text.value}
@@ -413,13 +441,17 @@ function MenuMobileNav({
                             item.title.toLowerCase() && (
                             <div className="flex flex-col-reverse">
                               <Link
+                                prefetch="intent"
                                 to={imagesLinks.link_2.value}
                                 className="pt-3 text-xl"
                               >
                                 {imagesLinks.text_2.value}
                               </Link>
                               {imagesLinks.image_2 && (
-                                <Link to={imagesLinks.link_2.value}>
+                                <Link
+                                  to={imagesLinks.link_2.value}
+                                  prefetch="intent"
+                                >
                                   <img
                                     src={imagesLinks.image_2.value.url}
                                     alt={imagesLinks.text_2.value}
@@ -444,7 +476,12 @@ function MenuMobileNav({
         </div>
       </nav>
 
-      <Link to="/account/login" onClick={onClose} className="mt-[80px] mx-3">
+      <Link
+        to="/account/login"
+        onClick={onClose}
+        className="mt-[80px] mx-3"
+        prefetch="intent"
+      >
         <Button
           aria-label="Button"
           as="span"
@@ -492,6 +529,7 @@ function MobileHeader({
       </div>
 
       <Link
+        prefetch="intent"
         className="p-4 flex items-center self-stretch leading-[3rem] md:leading-[4rem] justify-center flex-grow w-full h-full"
         to="/"
       >
@@ -558,7 +596,7 @@ function DesktopHeader({
         </Form>
 
         <div className=" flex gap-10 justify-center">
-          <nav className=" font-bebas  grid grid-cols-navigation items-center gap-x-10 rtl:gap-x-6">
+          <nav className=" font-bebas  grid grid-cols-navigation items-center  ">
             {/* Top level menu items */}
 
             {(menu?.items || []).map((item) => {
@@ -568,13 +606,14 @@ function DesktopHeader({
                     <Link
                       to="/"
                       key={item.id}
-                      className="w-[140px] flex justify-center items-center"
+                      className="w-[140px] md-lg:mx-6 md-xl:mx-8 flex justify-center items-center"
+                      prefetch="intent"
                     >
                       <img
                         src={logo}
                         alt="Logo"
                         width={140}
-                        className="w-[140px]"
+                        className="w-[140px]  "
                         loading="lazy"
                       />
                     </Link>
@@ -593,7 +632,7 @@ function DesktopHeader({
                       prefetch="intent"
                       className={({isActive}) => {
                         const mainStyles =
-                          ' py-8  flex justify-center items-center';
+                          'md-xl:p-8 md-lg:p-6  flex justify-center items-center';
                         const activeStyle = '';
 
                         return isActive
@@ -630,6 +669,7 @@ function DesktopHeader({
                               key={`${item.id}-${submenu.id}`}
                             >
                               <Link
+                                prefetch="intent"
                                 key={submenu.id}
                                 to={submenu.to}
                                 target={submenu.target}
@@ -648,6 +688,7 @@ function DesktopHeader({
                                         key={`${item.id}-${submenu.id}-${el.id}`}
                                         to={el.to}
                                         target={el.target}
+                                        prefetch="intent"
                                       >
                                         {el.title}
                                       </Link>
@@ -667,12 +708,16 @@ function DesktopHeader({
                                   <Link
                                     to={imagesLinks.link.value}
                                     className="pt-3 text-xl"
+                                    prefetch="intent"
                                   >
                                     {imagesLinks.text.value}
                                   </Link>
 
                                   {imagesLinks.image && (
-                                    <Link to={imagesLinks.link.value}>
+                                    <Link
+                                      to={imagesLinks.link.value}
+                                      prefetch="intent"
+                                    >
                                       <img
                                         src={imagesLinks.image.value.url}
                                         alt={imagesLinks.text.value}
@@ -694,11 +739,15 @@ function DesktopHeader({
                                   <Link
                                     to={imagesLinks.link_2.value}
                                     className="pt-3 text-xl"
+                                    prefetch="intent"
                                   >
                                     {imagesLinks.text_2.value}
                                   </Link>
                                   {imagesLinks.image_2 && (
-                                    <Link to={imagesLinks.link_2.value}>
+                                    <Link
+                                      to={imagesLinks.link_2.value}
+                                      prefetch="intent"
+                                    >
                                       <img
                                         src={imagesLinks.image_2.value.url}
                                         alt={imagesLinks.text_2.value}
@@ -726,7 +775,7 @@ function DesktopHeader({
             <CountrySelector />
           </div>
 
-          <AccountLink className="relative flex items-center justify-center  h-8 focus:ring-primary/5 rtl:w-1/4" />
+          <AccountLink className="relative flex items-center justify-center h-8 focus:ring-primary/5" />
           {/* rtl:ml-[10px]" */}
 
           <CartCount isHome={isHome} openCart={openCart} />
@@ -740,16 +789,13 @@ function AccountLink({className}: {className?: string}) {
   const [root] = useMatches();
   const isLoggedIn = root.data?.isLoggedIn;
 
-  //Kate
-
   const arText = 'تسجيلدخول';
   const enText = 'Login';
 
   const languageText = useLanguageText({ar_text: arText, en_text: enText});
 
   return isLoggedIn ? (
-    <Link to="/account" className={className}>
-      {/* Kate */}
+    <Link to="/account" className={className} prefetch="intent">
       <div className="absolute top-[17%] right-[96%] rtl:lg-only:left-[-19%] rtl:xl:left-[-4%] rtl:2xl-only:left-[11%] rtl:top-[12%] rtl:right-auto rtl:ml-[10px]">
         <IconAccount />
       </div>
@@ -759,7 +805,7 @@ function AccountLink({className}: {className?: string}) {
       </div>
     </Link>
   ) : (
-    <Link to="/account/login" className={className}>
+    <Link to="/account/login" className={className} prefetch="intent">
       {/* <IconLogin /> */}
       <div className="font-bebas flex items-center justify-center   uppercase border-b-2  border-black  w-fit gap-x-2 hover:opacity-80">
         {languageText}
@@ -836,7 +882,7 @@ function Badge({
   const BadgeCounter = useMemo(() => {
     if (count === 0) {
       // return <IconBag variant={'black'} />;
-      return <IconBag />;
+      return <IconBag fill="black" />;
     }
 
     return (
@@ -910,7 +956,7 @@ export function Footer({
       style={{backgroundImage: `url(${footer})`}}
     >
       <div className="flex items-center justify-between w-full border-b-[1px] border-b-[#E0E0E0] py-[50px] ">
-        <Link to="/">
+        <Link to="/" prefetch="intent">
           <div className="">
             <img
               src={logo}
@@ -930,7 +976,12 @@ export function Footer({
         <div className="flex items-center justify-end gap-x-6 rtl:justify-start">
           {/* instagram */}
 
-          <Link to="/" className="cursor-pointer" aria-label="Instagram">
+          <Link
+            to="/"
+            className="cursor-pointer"
+            aria-label="Instagram"
+            prefetch="intent"
+          >
             <svg
               width="24"
               height="25"
@@ -960,7 +1011,12 @@ export function Footer({
           </Link>
 
           {/* facebook */}
-          <Link to="/" className="cursor-pointer" aria-label="Facebook">
+          <Link
+            to="/"
+            className="cursor-pointer"
+            aria-label="Facebook"
+            prefetch="intent"
+          >
             <svg
               width="24"
               height="24"
@@ -986,7 +1042,12 @@ export function Footer({
           </Link>
 
           {/* youtube */}
-          <Link to="/" className="cursor-pointer" aria-label="Youtube">
+          <Link
+            to="/"
+            className="cursor-pointer"
+            aria-label="Youtube"
+            prefetch="intent"
+          >
             <svg
               width="32"
               height="24"
@@ -1025,7 +1086,12 @@ export function Footer({
 function FooterLink({item}: {item: ChildEnhancedMenuItem}) {
   if (item.to.startsWith('http')) {
     return (
-      <Link to={item.to} target={item.target} rel="noopener noreferrer">
+      <Link
+        to={item.to}
+        target={item.target}
+        rel="noopener noreferrer"
+        prefetch="intent"
+      >
         {item.title}
       </Link>
     );
