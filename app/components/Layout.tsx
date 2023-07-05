@@ -311,10 +311,7 @@ function MenuMobileNav({
                   target={item.target}
                   onClick={() => {
                     onClose();
-<<<<<<< HEAD
-=======
                     setSubmenuVisibility({});
->>>>>>> bugs-10
                   }}
                   className={({isActive}) =>
                     isActive ? 'pb-1 border-b -mb-px border-black' : 'pb-1'
@@ -329,12 +326,8 @@ function MenuMobileNav({
                 </Link>
                 {item.items.length > 0 && (
                   <svg
-<<<<<<< HEAD
                     id={item.id}
                     className="absolute top-[11px] right-0 rtl:left-0 rtl:right-auto ml-1 mb-[1px] rtl:ml-0 rtl:mr-1 transition-transform duration-300"
-=======
-                    className="absolute top-[11px] right-0 rtl:left-0 rtl:right-auto ml-1 mb-[1px] rtl:ml-0 rtl:mr-1 "
->>>>>>> bugs-10
                     fill="#000000"
                     height="10px"
                     width="10px"
