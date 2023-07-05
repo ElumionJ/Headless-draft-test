@@ -596,7 +596,7 @@ function DesktopHeader({
         </Form>
 
         <div className=" flex gap-10 justify-center">
-          <nav className=" font-bebas  grid grid-cols-navigation items-center  rtl:gap-x-6">
+          <nav className=" font-bebas  grid grid-cols-navigation items-center  ">
             {/* Top level menu items */}
 
             {(menu?.items || []).map((item) => {
@@ -606,14 +606,14 @@ function DesktopHeader({
                     <Link
                       to="/"
                       key={item.id}
-                      className="w-[140px] flex justify-center items-center"
+                      className="w-[140px] md-lg:mx-6 md-xl:mx-8 flex justify-center items-center"
                       prefetch="intent"
                     >
                       <img
                         src={logo}
                         alt="Logo"
                         width={140}
-                        className="w-[140px]"
+                        className="w-[140px]  "
                         loading="lazy"
                       />
                     </Link>
@@ -632,7 +632,7 @@ function DesktopHeader({
                       prefetch="intent"
                       className={({isActive}) => {
                         const mainStyles =
-                          ' p-8  flex justify-center items-center';
+                          'md-xl:p-8 md-lg:p-6  flex justify-center items-center';
                         const activeStyle = '';
 
                         return isActive
