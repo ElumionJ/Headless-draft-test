@@ -224,6 +224,13 @@ shop-pay-button {
 .product-card button {
   transition: opacity 0.2s ease-in;
 }
+
+@media (hover: none) {
+  .product-card button {
+    opacity: 1;
+  }
+}
+
 .product-card:hover button {
   opacity: 1;
 }
