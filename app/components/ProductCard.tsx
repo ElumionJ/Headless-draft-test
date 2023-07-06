@@ -55,7 +55,7 @@ export function ProductCard({
   };
 
   return (
-    <div className="product-card flex flex-col gap-2 ">
+    <div className="product-card flex flex-col justify-between gap-2 ">
       <Link
         onClick={onClick}
         to={
@@ -107,7 +107,7 @@ export function ProductCard({
           </div>
           <div className="grid gap-1">
             <Text
-              className="w-full overflow-hidden whitespace-nowrap !text-[20px] leading-[110%] font-bebas tracking-wider"
+              className="w-full   !text-[20px] leading-[110%] font-bebas "
               as="h2"
             >
               {product.title}

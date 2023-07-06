@@ -230,7 +230,7 @@ export default function Product() {
           <div className="max-h-[468px] max-w-[368px] w-full gt-ssm:w-[280px] m-auto">
             <SwiperImages media={media.nodes} />
           </div>
-          <div className=" gt-l:flex flex-col hidden max-w-[368px] w-full ">
+          <div className=" gt-l:flex flex-col hidden max-w-[368px] w-full text-center">
             <Heading as="h1" className="text-5xl sm:mt-[50px]">
               {title}
             </Heading>

@@ -225,6 +225,8 @@ function MenuMobileNav({
 
   const languageText = useLanguageText({ar_text: arText, en_text: enText});
   const [submenuVisibility, setSubmenuVisibility] = useState({});
+  console.log(submenuVisibility);
+
   return (
     <>
       <nav className="font-bebas grid gap-4 p-[17px]  sm:gap-6 sm:pb-8  text-white">
@@ -313,15 +315,18 @@ function MenuMobileNav({
                 onClick={() => {
                   toggleSubmenu(item.id);
                   const svgElement = document.getElementById(item.id);
-                  svgElement.classList.toggle('rotate-180');
+                  // svgElement.classList.toggle('rotate-180');
                 }}
               >
                 <Link
                   to={item.to}
                   target={item.target}
-                  onClick={() => {
-                    onClose();
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setSubmenuVisibility({});
+                    const svgElement = document.getElementById(item.id);
+                    // svgElement.classList.remove('rotate-180');
+                    onClose();
                   }}
                   className={({isActive}) =>
                     isActive ? 'pb-1 border-b -mb-px border-black' : 'pb-1'
@@ -337,7 +342,9 @@ function MenuMobileNav({
                 {item.items.length > 0 && (
                   <svg
                     id={item.id}
-                    className="absolute top-[11px] right-0 rtl:left-0 rtl:right-auto ml-1 mb-[1px] rtl:ml-0 rtl:mr-1 transition-transform duration-300"
+                    className={`${
+                      submenuVisibility[item.id] ? 'rotate-180' : 'rotate-0'
+                    } absolute top-[11px] right-0 rtl:left-0 rtl:right-auto ml-1 mb-[1px] rtl:ml-0 rtl:mr-1 transition-transform duration-300`}
                     fill="#000000"
                     height="10px"
                     width="10px"
@@ -365,7 +372,6 @@ function MenuMobileNav({
                             <Link
                               onClick={() => {
                                 onClose();
-                                setSubmenuVisibility({});
                               }}
                               key={submenu.id}
                               to={submenu.to}
@@ -384,7 +390,7 @@ function MenuMobileNav({
                                     <Link
                                       onClick={() => {
                                         onClose();
-                                        setSubmenuVisibility({});
+                                        // setSubmenuVisibility({'none'});
                                       }}
                                       className="text-[#333] font-noto leading-[150%] text-[16px]  py-3 block"
                                       key={`${item.id}-${submenu.id}-${el.id}`}

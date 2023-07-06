@@ -43,7 +43,6 @@ export function Drawer({
   };
   const cart = useAsyncValue();
 
-  //Kate
   const arText = 'حقيبتك';
   const enText = ' YOUR BAG';
 

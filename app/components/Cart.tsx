@@ -167,7 +167,7 @@ function CartLines({
     price:
       layout === 'page'
         ? 'item flex  flex-row-reverse gap-x-8 font-bebas text-[20px]'
-        : 'item ajax-styles flex flex-col  gap-y-16 font-bebas text-[20px] max-w-[65px] w-full rtl:max-w-none	 rtl:w-none',
+        : 'item ajax-styles flex flex-col  gap-y-16 font-bebas text-[20px] w-full rtl:max-w-none	 rtl:w-none',
   };
 
   const className = clsx([
@@ -314,13 +314,11 @@ function CartSummary({
     page: 'sticky top-nav grid gap-6 pt-8 lg:pt-0 md:translate-y-4 rounded lg:w-1/3 lg:ml-10 rtl:lg:mr-10 rtl:lg:ml-0',
   };
 
-  //Kate
   const arText = 'ملخص الطلب';
   const enText = 'Order summary';
 
   const languageText = useLanguageText({ar_text: arText, en_text: enText});
 
-  //Kate
   const arTextTotal = 'المجموع';
   const enTextTotal = 'Total';
 
@@ -329,7 +327,6 @@ function CartSummary({
     en_text: enTextTotal,
   });
 
-  //Kate
   const arTextTotalDelivery = 'التسليم يحسب عند الخروج';
   const enTextTotalDelivery = ' Delivery calculated at checkout';
 
@@ -338,7 +335,6 @@ function CartSummary({
     en_text: enTextTotalDelivery,
   });
 
-  //Kate
   const arTextTotalSubtotal = 'المجموع الفرعي';
   const enTextTotalSubtotal = 'Subtotal';
 
@@ -436,7 +432,7 @@ function CartLineItem({
   return (
     <li
       key={id}
-      className={` gt-sm:relative flex gap-4 mb-4 border-solid border-b-[1px] border-[#E0E0E0] gt-sm:justify-end pb-4 last:border-none`}
+      className={` gt-sm:relative grid grid-cols-ajaxLine gap-4 mb-4 border-solid border-b-[1px] border-[#E0E0E0] gt-sm:justify-end pb-4 last:border-none`}
     >
       <div className="flex-shrink w-max">
         {merchandise.image && (
@@ -452,21 +448,26 @@ function CartLineItem({
       </div>
 
       {/*  className="flex items-center justify-between flex-grow gap-6" */}
-      <div className="flex flex-col sm:flex-row justify-between flex-grow w-1/4">
-        <div className={additionalClasses.cartItem}>
+      <div className="grid grid-cols-drawerLine3 sm-maximum:grid-cols-drawerLine2 gap-2 sm:flex-row justify-between flex-grow ">
+        <div className={`${additionalClasses.cartItem} w-full`}>
           {/* max-w-[200px] */}
-          <div className="font-bebas text-base flex flex-col h-full justify-between w-max">
+          <div className="font-bebas text-base flex flex-col h-full justify-between rtl:text-right w-full">
             {/* <Heading as="h3" size="copy"> */}
-            {merchandise?.product?.handle ? (
-              <Link
-                onClick={onClose}
-                to={`/products/${merchandise.product.handle}`}
-              >
-                {merchandise?.product?.title || ''}
-              </Link>
-            ) : (
-              <Text>{merchandise?.product?.title || ''}</Text>
-            )}
+            <div className="flex flex-col h-full justify-between">
+              {merchandise?.product?.handle ? (
+                <Link
+                  onClick={onClose}
+                  to={`/products/${merchandise.product.handle}`}
+                >
+                  {merchandise?.product?.title || ''}
+                </Link>
+              ) : (
+                <Text>{merchandise?.product?.title || ''}</Text>
+              )}
+              <div className=" justify-start text-copy hidden sm-maximum:flex ">
+                <CartLineQuantityAdjust line={line} />
+              </div>
+            </div>
             {/* </Heading> */}
 
             {layout === 'page' && (
@@ -477,12 +478,14 @@ function CartLineItem({
           </div>
         </div>
 
-        <div className="flex justify-start text-copy ">
+        <div className="flex justify-start text-copy sm-maximum:hidden">
           <CartLineQuantityAdjust line={line} />
         </div>
 
         <Text>
-          <div className={additionalClasses.price}>
+          <div
+            className={`${additionalClasses.price} h-full flex flex-col justify-between`}
+          >
             <div className="gt-sm:absolute gt-sm:top-0 gt-sm:right-0  rtl:gt-sm:right-auto rtl:gt-sm:left-0 flex justify-end">
               <ItemRemoveButton lineIds={[id]} />
             </div>
@@ -490,7 +493,7 @@ function CartLineItem({
             <CartLinePrice
               line={line}
               as="span"
-              className="font-semibold gt-sm:absolute gt-sm:bottom-[20px] gt-sm:right-0 rtl:gt-sm:right-auto rtl:gt-sm:left-0 md:w-[80px]"
+              className="font-semibold gt-sm:absolute gt-sm:bottom-[20px] gt-sm:right-0 rtl:gt-sm:right-auto rtl:gt-sm:left-0 text-right rtl:text-left"
             />
           </div>
         </Text>
@@ -632,7 +635,6 @@ export function CartEmpty({
     ]),
   };
 
-  //Kate
   const arText = 'حقيبتك فارغة';
   const enText = ' YOUR BAG IS EMPTY';
 

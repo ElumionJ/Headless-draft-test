@@ -334,7 +334,7 @@ export function FiltersDrawer({
                       {filter.label}
                     </Text>
                   </div>
-                  <ul key={filter.id} className=" pl-[8px] ">
+                  <ul key={filter.id} className=" px-[8px] ">
                     {filter.values?.map((option) => {
                       return (
                         <li
