@@ -36,7 +36,7 @@ export function Cart({
   return (
     <>
       <CartEmpty hidden={linesCount} onClose={onClose} layout={layout} />
-      <CartDetails cart={cart} layout={layout} onClose={onClose} />
+      <CartDetails cart={cart} type="cart" layout={layout} onClose={onClose} />
     </>
   );
 }
@@ -46,10 +46,12 @@ export function CartDetails({
   cart,
   heading,
   onClose,
+  type = 'ajax',
 }: {
   layout: Layouts;
   cart: CartType | null;
   heading?: string;
+  type?: 'ajax' | 'cart';
   onClose: () => void;
 }) {
   // @todo: get optimistic cart cost
@@ -77,7 +79,12 @@ export function CartDetails({
         </span>
       )}
       <div className={container[layout]}>
-        <CartLines lines={cart?.lines} layout={layout} onClose={onClose} />
+        <CartLines
+          type={type}
+          lines={cart?.lines}
+          layout={layout}
+          onClose={onClose}
+        />
 
         {cartHasItems && (
           <CartSummary
@@ -150,9 +157,11 @@ function CartLines({
   layout = 'drawer',
   lines: cartLines,
   onClose,
+  type = 'ajax',
 }: {
   layout: Layouts;
   lines: CartType['lines'] | undefined;
+  type: 'ajax' | 'cart';
   onClose?: () => void;
 }) {
   const currentLines = cartLines ? flattenConnection(cartLines) : [];
@@ -187,6 +196,7 @@ function CartLines({
       <ul className="">
         {currentLines.map((line) => (
           <CartLineItem
+            type={type}
             key={line.id}
             line={line as CartLine}
             additionalClasses={styles}
@@ -414,6 +424,7 @@ function CartLineItem({
   product,
   staticPrice,
   onClose,
+  type = 'ajax',
 }: {
   layout: Layouts;
   line: CartLine;
@@ -422,6 +433,7 @@ function CartLineItem({
   product: Product;
   staticPrice: StaticPrice;
   onClose?: () => void;
+  type?: 'ajax' | 'cart';
 }) {
   if (!line?.id) return null;
 
@@ -448,8 +460,17 @@ function CartLineItem({
       </div>
 
       {/*  className="flex items-center justify-between flex-grow gap-6" */}
-      <div className="grid grid-cols-drawerLine3 sm-maximum:grid-cols-drawerLine2 gap-2 sm:flex-row justify-between flex-grow ">
-        <div className={`${additionalClasses.cartItem} w-full`}>
+      {/* <div className="grid grid-cols-drawerLine3 sm-maximum:grid-cols-drawerLine2 !grid-cols-[1fr_1fr] gap-2 sm:flex-row justify-between flex-grow "> */}
+      <div
+        className={`grid sm-maximum:grid-cols-[1fr_80px] ${
+          type === 'cart' ? 'grid-cols-[1fr_1fr]' : 'grid-cols-[1fr_1fr]'
+        }  gap-2 sm:flex-row justify-between flex-grow `}
+      >
+        <div
+          className={`${additionalClasses.cartItem} ${
+            type === 'cart' ? ' !w-full ' : ' w-full '
+          } `}
+        >
           {/* max-w-[200px] */}
           <div className="font-bebas text-base flex flex-col h-full justify-between rtl:text-right w-full">
             {/* <Heading as="h3" size="copy"> */}
@@ -470,33 +491,34 @@ function CartLineItem({
             </div>
             {/* </Heading> */}
 
-            {layout === 'page' && (
+            {/* {layout === 'page' && (
               <span>
                 {staticPrice.currencyCode} {staticPrice.amount}
               </span>
-            )}
+            )} */}
           </div>
         </div>
+        <div className="flex w-full justify-between">
+          <div className="flex justify-start text-copy sm-maximum:hidden">
+            <CartLineQuantityAdjust line={line} />
+          </div>
 
-        <div className="flex justify-start text-copy sm-maximum:hidden">
-          <CartLineQuantityAdjust line={line} />
-        </div>
+          <Text>
+            <div
+              className={`${additionalClasses.price} h-full flex flex-col justify-between`}
+            >
+              <div className="gt-sm:absolute gt-sm:top-0 gt-sm:right-0  rtl:gt-sm:right-auto rtl:gt-sm:left-0 flex justify-end">
+                <ItemRemoveButton lineIds={[id]} />
+              </div>
 
-        <Text>
-          <div
-            className={`${additionalClasses.price} h-full flex flex-col justify-between`}
-          >
-            <div className="gt-sm:absolute gt-sm:top-0 gt-sm:right-0  rtl:gt-sm:right-auto rtl:gt-sm:left-0 flex justify-end">
-              <ItemRemoveButton lineIds={[id]} />
+              <CartLinePrice
+                line={line}
+                as="span"
+                className="font-semibold gt-sm:absolute gt-sm:bottom-[20px] gt-sm:right-0 rtl:gt-sm:right-auto rtl:gt-sm:left-0 text-right rtl:text-left"
+              />
             </div>
-
-            <CartLinePrice
-              line={line}
-              as="span"
-              className="font-semibold gt-sm:absolute gt-sm:bottom-[20px] gt-sm:right-0 rtl:gt-sm:right-auto rtl:gt-sm:left-0 text-right rtl:text-left"
-            />
-          </div>
-        </Text>
+          </Text>
+        </div>
       </div>
     </li>
   );
