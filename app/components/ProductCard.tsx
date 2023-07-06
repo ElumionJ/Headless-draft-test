@@ -112,51 +112,53 @@ export function ProductCard({
             >
               {product.title}
             </Text>
-            <div className="flex gap-4">
-              <Text className="flex gap-4 !text-[20px] leading-[130%]">
-                <Money
-                  className="font-bebas tracking-wider leading-[130%]"
-                  withoutTrailingZeros
-                  data={price!}
-                  as="span"
-                />
-                {/* {isDiscounted(price as MoneyV2, compareAtPrice as MoneyV2) && (
+          </div>
+        </div>
+      </Link>
+
+      <div>
+        <div className="flex gap-4">
+          <Text className="flex gap-4 !text-[20px] leading-[130%]">
+            <Money
+              className="font-bebas tracking-wider leading-[130%]"
+              withoutTrailingZeros
+              data={price!}
+              as="span"
+            />
+            {/* {isDiscounted(price as MoneyV2, compareAtPrice as MoneyV2) && (
                   <CompareAtPrice
                     className={'opacity-50'}
                     data={compareAtPrice as MoneyV2}
                   />
                 )} */}
-              </Text>
-            </div>
-          </div>
+          </Text>
         </div>
-      </Link>
-
-      <AddToCartButton
-        lines={[
-          {
-            quantity: 1,
-            merchandiseId: firstVariant.id,
-          },
-        ]}
-        variant="secondary"
-        disabled={!availableForSale}
-        className="mt-2 opacity-0 gt-l:opacity-100 disabled:bg-[#808080ac] flex justify-between items-center bg-c-red w-fit gap-[12px] py-2 px-[16px] text-[#fff]"
-        analytics={{
-          products: [productAnalytics],
-          totalValue: parseFloat(productAnalytics.price),
-        }}
-      >
-        <Text
-          as="span"
-          className="flex items-center justify-center gap-2 uppercase text-[12px] leading-4 font-noto tracking-widest font-bold"
+        <AddToCartButton
+          lines={[
+            {
+              quantity: 1,
+              merchandiseId: firstVariant.id,
+            },
+          ]}
+          variant="secondary"
+          disabled={!availableForSale}
+          className="mt-2 opacity-0 gt-l:opacity-100 disabled:bg-[#808080ac] flex justify-between items-center bg-c-red w-fit gap-[12px] py-2 px-[16px] text-[#fff]"
+          analytics={{
+            products: [productAnalytics],
+            totalValue: parseFloat(productAnalytics.price),
+          }}
         >
-          {availableForSale ? 'Add to Bag' : 'Out of stock'}
-        </Text>
-        {/* {availableForSale && (
+          <Text
+            as="span"
+            className="flex items-center justify-center gap-2 uppercase text-[12px] leading-4 font-noto tracking-widest font-bold"
+          >
+            {availableForSale ? 'Add to Bag' : 'Out of stock'}
+          </Text>
+          {/* {availableForSale && (
           <IconAddToCartBag className="mt-[-4px] ml-[-4px]" />
         )} */}
-      </AddToCartButton>
+        </AddToCartButton>
+      </div>
     </div>
   );
 }
