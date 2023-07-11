@@ -42,16 +42,12 @@ export async function loader({request, context: {storefront}}: LoaderArgs) {
     products: ProductConnection;
   }>(SEARCH_QUERY, {
     variables: {
-      // searchTerm,
-      // ...variables,
+      searchTerm,
+      ...variables,
       country: storefront.i18n.country,
       language: storefront.i18n.language,
     },
   });
-  const filteredProducts = products.nodes?.filter((el) =>
-    el.title.toLowerCase().includes(searchTerm?.toLowerCase()),
-  );
-  products.nodes = filteredProducts;
 
   const getRecommendations = !searchTerm || products?.nodes?.length === 0;
   const seoCollection = {
@@ -231,11 +227,21 @@ export async function getNoResultRecommendations(
 const SEARCH_QUERY = `#graphql
   ${PRODUCT_CARD_FRAGMENT}
   query PaginatedProductsSearch(
-    $country: CountryCode 
+    $country: CountryCode
+    $endCursor: String
+    $first: Int
     $language: LanguageCode
+    $last: Int
+    $searchTerm: String
+    $startCursor: String
   ) @inContext(country: $country, language: $language) {
     products(
-      first: 250,
+      first: $first,
+      last: $last,
+      before: $startCursor,
+      after: $endCursor,
+      sortKey: RELEVANCE,
+      query: $searchTerm
     ) {
       nodes {
         ...ProductCard
